@@ -1,0 +1,18 @@
+.common.addToCartWithPrice: ['price'] | أضيفي للسلة — {price}
+.common.saveAmount: ['amount'] | وفّري {amount}
+.common.saveBulk: ['amount'] | وفّري {amount} على الكمية
+.trust.steel: ['L'] | فولاذ ٣١٦L — ما كيتبهدلش
+.home.feature1Desc: ['L'] | فولاذ مقاوم للصدأ مطلي بالذهب الخالص ٣١٦L — ما كيتبهدلش ولا كيصدّاش. أحجار زركون برّاقة.
+.home.aboutP2: ['L'] | كل قطعة: فولاذ ٣١٦L، أحجار زركون برّاقة، طلاء بالذهب الخالص — ضمان ٣٠ يوم.
+.about.qualityP1: ['L'] | فولاذ ٣١٦L — ما كيحسّسش، مناسب للبشرة الحساسة.
+.cart.title: ['count'] | 🛒 سلتك ({count})
+.checkout.deliveryEstimate: ['date'] | ⏱️ الطلب دابا = توصيل {date}
+.checkout.orderBump: ['price'] | زيدي قطعة بـ {price} د.م
+.upsell.timer: ['seconds'] | ⏱️ عرض خاص — {seconds} ثانية
+.productPage.materialTitle: ['L'] | فولاذ ٣١٦L — جودة المادة
+.productPage.materialP1: ['L'] | ٣١٦L = معيار طبي. ما كيحسّسش. مقاوم للماء والعرق والاستعمال اليومي.
+.products.bague-lien-eternel.benefits[2]: ['L'] | 🔒 فولاذ ٣١٦L — ما كيتبهدلش
+.products.collier-trefle-lumiere.benefits[3]: ['L'] | 🔒 فولاذ مقاوم للصدأ ٣١٦L
+.products.bague-double-signature.benefits[3]: ['L'] | 🔒 فولاذ ٣١٦L
+.productFaq[0].a: ['L'] | لا — فولاذ ٣١٦L مطلي بالذهب الخالص. ما كيصدّاش ولا كيتبهدل. ضمان ٣٠ يوم.
+.productFaq[3].a: ['L'] | نعم — فولاذ ٣١٦L ما كيحسّسش. مناسب للبشرة الحساسة.

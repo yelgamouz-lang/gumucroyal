@@ -1,0 +1,1 @@
+order_number,created_at,customer_name,customer_phone,customer_phone_normalized,products,items_count,subtotal_mad,upsell_accepted,upsell_product,upsell_amount_mad,total_mad,payment_method,status,source_url,event_id,confirmation_status,notes

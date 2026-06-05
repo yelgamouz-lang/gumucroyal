@@ -1,0 +1,232 @@
+{
+  "nav": {
+    "home": "Home",
+    "collection": "Collection",
+    "about": "The Maison",
+    "contact": "Contact",
+    "menu": "Menu",
+    "cart": "Cart"
+  },
+  "common": {
+    "brandTagline": "Radiance revealed. Quality that endures.",
+    "reviews": "reviews",
+    "addToCart": "Add to cart",
+    "addToCartWithPrice": "Add to cart — {price}",
+    "viewDetails": "View details",
+    "shopNow": "Shop now",
+    "discoverCollection": "Discover the collection",
+    "bestSeller": "View best-seller",
+    "readMore": "Read more",
+    "close": "Close",
+    "total": "Total",
+    "totalCod": "Total (COD)",
+    "freeShipping": "✓ Free delivery | ✓ Cash on delivery",
+    "loading": "Loading...",
+    "loadingOrder": "Loading order...",
+    "backToCollection": "← Continue shopping",
+    "backToShop": "← Back to collection",
+    "pieces": "pieces",
+    "piece": "piece",
+    "save": "Save",
+    "saveAmount": "Save {amount}",
+    "saveBulk": "Save {amount} on bulk",
+    "byBrand": "By GUMÜÇROYAL",
+    "orderNumber": "Order number"
+  },
+  "trust": {
+    "cod": "COD — Cash on delivery",
+    "delivery": "Delivery 24H and 48H",
+    "warranty": "30-day warranty",
+    "steel": "316L steel — never tarnishes"
+  },
+  "productTrust": {
+    "cod": "COD",
+    "noRust": "Never rusts",
+    "noAllergy": "Hypoallergenic",
+    "delivery": "Delivery 24H and 48H"
+  },
+  "offers": {
+    "single": "1 piece",
+    "duo": "Duo offer",
+    "trio": "Family offer",
+    "mostPopular": "⭐ Most popular",
+    "bestValue": "Best value",
+    "chooseOffer": "Choose your offer"
+  },
+  "home": {
+    "heroTitle": "Radiance revealed. Quality that endures.",
+    "heroMottoLine1": "GÜZELLİK & GÖRKEM",
+    "heroMottoLine2": "Beauty & Splendor",
+    "heroSubtitle": "Premium jewellery for the discerning Moroccan woman. Exclusive design, cash on delivery only.",
+    "collectionEyebrow": "Collection",
+    "qualityEyebrow": "No compromise",
+    "qualityTitle": "Precise details, noble materials, an exceptional experience",
+    "qualityDescription": "Every piece is designed as a signature: noble materials that never tarnish, a lasting radiance, elegance that accompanies you everywhere. Cash on delivery, for complete peace of mind.",
+    "feature1Title": "Lasting jewellery",
+    "feature1Desc": "Gold-plated 316L steel — never tarnishes, never rusts. Brilliant-cut zircons for royal radiance.",
+    "feature2Title": "Express delivery",
+    "feature2Desc": "Nationwide delivery in 24H and 48H, order tracking and dedicated WhatsApp support.",
+    "feature3Title": "COD exclusive",
+    "feature3Desc": "Pay only when your parcel arrives. No online payment — simplicity and trust.",
+    "collectionTitle": "Our signature collection",
+    "aboutTitle": "The Maison",
+    "aboutP1": "GUMÜÇROYAL is a premium jewellery house dedicated to the Moroccan woman. We don't sell products — we create pieces By GUMÜÇROYAL.",
+    "aboutP2": "Every creation: 316L stainless steel, brilliant-cut zircons, gold-plated finish.",
+    "commitmentTitle": "The GUMÜÇ ROYAL commitment",
+    "commitmentText": "At GUMÜÇ ROYAL, every piece is selected with exacting standards: noble steel that never tarnishes, a radiance designed to last. We believe every woman deserves accessible luxury — safe, uncompromising, an elegance that accompanies her everywhere, day after day.",
+    "commitmentBadge": "316L stainless steel — a radiance that never tarnishes.",
+    "commitmentImageAlt": "GUMÜÇ ROYAL commitment — premium jewellery",
+    "faqTitle": "Frequently asked questions",
+    "faqDescription": "Everything you need to know about ordering, delivery and COD.",
+    "faq1Q": "How do I order?",
+    "faq1A": "Choose your piece, add to cart, enter name and phone. COD delivery across Morocco.",
+    "faq2Q": "What is the delivery time?",
+    "faq2A": "24H and 48H depending on city. Casablanca and Rabat often within 24H. WhatsApp notification included.",
+    "faq3Q": "What payment methods?",
+    "faq3A": "Cash on delivery only. No bank card, no online payment.",
+    "ctaTitle": "Ready to choose your piece?"
+  },
+  "collection": {
+    "title": "Our collection",
+    "subtitle": "3 exclusive pieces. Design By GUMÜÇROYAL — gold-plated steel & zircons."
+  },
+  "about": {
+    "title": "The Maison",
+    "intro": "GUMÜÇROYAL — a premium jewellery house serving the discerning Moroccan woman. We don't sell products — we create pieces By GUMÜÇROYAL.",
+    "missionTitle": "Our mission",
+    "missionP1": "Accessible luxury. Certified quality. Total trust with cash on delivery.",
+    "missionP2": "+2,847 satisfied clients. 4.8/5 rating.",
+    "qualityTitle": "Quality",
+    "qualityP1": "316L stainless steel — hypoallergenic, causes no irritation.",
+    "qualityP2": "Gold-plated finish — never tarnishes, never rusts.",
+    "qualityP3": "Brilliant-cut zircons — premium radiance without compromise."
+  },
+  "contact": {
+    "title": "Contact us",
+    "subtitle": "Our team responds with care — 10am to 8pm",
+    "whatsapp": "Message us on WhatsApp",
+    "cod": "COD: pay only upon delivery",
+    "delivery": "Delivery: 24H and 48H across Morocco"
+  },
+  "footer": {
+    "shop": "Shop",
+    "rings": "Rings",
+    "necklaces": "Necklaces",
+    "contactSection": "Contact",
+    "aboutUs": "The Maison",
+    "contactUs": "Contact us",
+    "whatsapp": "WhatsApp",
+    "copyright": "© 2026 GUMÜÇROYAL. All rights reserved."
+  },
+  "cart": {
+    "title": "🛒 Your cart ({count})",
+    "empty": "Your cart is empty",
+    "crossSell": "💡 Clients also bought:",
+    "add": "+ Add",
+    "socialProof": "★★★★★ 4.8 — +2,847 satisfied clients",
+    "confirmCod": "Checkout — COD"
+  },
+  "checkout": {
+    "title": "📋 Order summary",
+    "deliveryEstimate": "⏱️ Order now = delivery {date}",
+    "fullName": "Full name *",
+    "phone": "Phone number *",
+    "phoneHint": "📱 Moroccan number (06 or 07) only",
+    "nameRequired": "Name is required",
+    "phoneInvalid": "Invalid number",
+    "submitting": "Confirming...",
+    "confirmCod": "✅ Confirm order — COD",
+    "orderBump": "Add a piece for {price} MAD",
+    "orderBumpDesc": "Gold-plated steel — exclusive checkout offer",
+    "error": "An error occurred"
+  },
+  "upsell": {
+    "timer": "⏱️ Special offer — {seconds} seconds",
+    "title": "Add this piece at an exceptional price!",
+    "confirming": "Confirming your order...",
+    "yes": "Yes, add it!",
+    "no": "No thanks"
+  },
+  "thankYou": {
+    "title": "Thank you for your trust! 🎉",
+    "confirmHint": "Confirm your order via WhatsApp to speed up delivery — COD only.",
+    "confirmButton": "💬 Confirm my order",
+    "confirmNote": "Pre-filled message — click to confirm",
+    "callHint": "Our team will call you to confirm your order."
+  },
+  "whatsapp": {
+    "label": "Contact us on WhatsApp",
+    "note": "Free personal styling advice"
+  },
+  "productPage": {
+    "whyTitle": "Why GUMÜÇROYAL?",
+    "whyHighlight": "Gold-plated steel + zircons — royal radiance without breaking the bank.",
+    "materialTitle": "316L stainless steel — material proof",
+    "materialP1": "316L = medical grade. Hypoallergenic. Resists water, sweat and daily wear.",
+    "materialP2": "Gold-plated finish — never tarnishes, never rusts. Brilliant-cut zircons with remarkable sparkle.",
+    "materialP3": "✓ Tested 10,000 cycles",
+    "reviewsTitle": "Client reviews with photos",
+    "whatsappTitle": "WhatsApp messages from our clients",
+    "faqTitle": "Frequently asked questions",
+    "heroCod": "💰 COD · 🚚 Delivery 24H and 48H",
+    "socialProofSuffix": "delighted clients",
+    "zirconHighlight": "gold-plated steel + zircons"
+  },
+  "products": {
+    "bague-lien-eternel": {
+      "subtitle": "A new compliment every day — gold-plated steel that never tarnishes",
+      "benefits": [
+        "✨ Brilliant-cut zircon sparkle",
+        "💎 Solitaire stone + pavé zircons",
+        "🔒 316L steel — never tarnishes",
+        "📐 Adjustable size",
+        "🎁 Premium gift box"
+      ]
+    },
+    "collier-trefle-lumiere": {
+      "subtitle": "A lucky charm that stands out — brilliant-cut zircons at the neck",
+      "benefits": [
+        "🍀 4 lucky clover charms",
+        "✨ Delicate double chain",
+        "💫 Brilliant-cut zircons",
+        "🔒 316L stainless steel",
+        "🎁 Premium gift packaging"
+      ]
+    },
+    "bague-double-signature": {
+      "subtitle": "Your signature — exclusive design By GUMÜÇROYAL",
+      "benefits": [
+        "💎 Unique architectural design",
+        "✨ Pavé zircons",
+        "📐 Adjustable form",
+        "🔒 316L steel",
+        "🎁 Premium gift box"
+      ]
+    }
+  },
+  "reviews": [
+    { "name": "Sarah", "city": "Casablanca", "text": "Arrived in 2 days, the zircons look stunning on the gold-plated steel!", "rating": 5 },
+    { "name": "Nour", "city": "Rabat", "text": "3 months without tarnishing, the gold-plated finish is still perfect.", "rating": 5 },
+    { "name": "Amine", "city": "Marrakech", "text": "Ordered 2 — one for me, one for my sister. COD was seamless.", "rating": 5 },
+    { "name": "Fatima", "city": "Tangier", "text": "Responsive team on WhatsApp, fast delivery.", "rating": 5 },
+    { "name": "Yasmine", "city": "Fez", "text": "Beautiful gift box, perfect for gifting.", "rating": 5 },
+    { "name": "Leila", "city": "Agadir", "text": "Compliments every day since I started wearing it 💫", "rating": 5 }
+  ],
+  "whatsappProofs": [
+    { "name": "Khadija", "city": "Casablanca", "text": "Received today, top quality! Thank you GUMÜÇROYAL 🥰" },
+    { "name": "Meriem", "city": "Rabat", "text": "Confirmed my order — will order again" },
+    { "name": "Salma", "city": "Marrakech", "text": "The gold-plated steel looks as good in person as in photos" }
+  ],
+  "productFaq": [
+    { "q": "Does the gold-plated steel tarnish?", "a": "No — 316L stainless steel with gold-plated finish. Never rusts, never tarnishes." },
+    { "q": "How do I pay?", "a": "Cash on delivery only. Pay when your parcel arrives. No online payment." },
+    { "q": "What is the delivery time?", "a": "24H and 48H nationwide. Casablanca/Rabat often within 24H." },
+    { "q": "Is it hypoallergenic?", "a": "Yes — 316L steel, causes no irritation. Suitable for sensitive skin." },
+    { "q": "Can I return?", "a": "For manufacturing defects, contact us within 30 days for an exchange." }
+  ],
+  "badges": {
+    "Best Seller": "Best Seller",
+    "Porte-Bonheur": "Lucky Charm",
+    "Nouveau": "New"
+  }
+}

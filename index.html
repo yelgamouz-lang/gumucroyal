@@ -1,0 +1,174 @@
+/**
+ * GUMÜÇROYAL — Google Apps Script Webhook
+ * 
+ * Setup:
+ * 1. Create Google Sheet "GUMÜÇROYAL Orders" with headers from sheet-template.csv
+ * 2. Extensions → Apps Script → paste this file
+ * 3. Set Script Property: WEBHOOK_SECRET = your-secret-key
+ * 4. Deploy → New deployment → Web app
+ *    - Execute as: Me
+ *    - Who has access: Anyone
+ * 5. Copy Web App URL → GOOGLE_SHEETS_WEBHOOK_URL in backend .env
+ */
+
+const SHEET_NAME = 'Orders';
+const WEBHOOK_SECRET_PROPERTY = 'WEBHOOK_SECRET';
+
+/**
+ * Handle POST requests from backend
+ */
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+
+    // Validate secret
+    const expectedSecret = PropertiesService.getScriptProperties().getProperty(WEBHOOK_SECRET_PROPERTY);
+    if (!expectedSecret || data.secret !== expectedSecret) {
+      return createResponse({ success: false, error: 'Unauthorized' }, 401);
+    }
+
+    // Validate required fields
+    const required = ['order_number', 'customer_name', 'customer_phone', 'total_mad'];
+    for (const field of required) {
+      if (!data[field]) {
+        return createResponse({ success: false, error: `Missing field: ${field}` }, 400);
+      }
+    }
+
+    // Get or create sheet
+    const sheet = getOrCreateSheet();
+
+    // Format created_at
+    const createdAt = data.created_at
+      ? new Date(data.created_at).toLocaleString('fr-MA', { timeZone: 'Africa/Casablanca' })
+      : new Date().toLocaleString('fr-MA', { timeZone: 'Africa/Casablanca' });
+
+    // Append row
+    const row = [
+      data.order_number,                                    // A: order_number
+      createdAt,                                            // B: created_at
+      data.customer_name,                                   // C: customer_name
+      data.customer_phone,                                  // D: customer_phone
+      data.customer_phone_normalized || '',                 // E: customer_phone_normalized
+      data.products || '',                                  // F: products
+      data.items_count || 0,                                // G: items_count
+      parseFloat(data.subtotal_mad) || 0,                   // H: subtotal_mad
+      data.upsell_accepted ? 'TRUE' : 'FALSE',              // I: upsell_accepted
+      data.upsell_product || '',                            // J: upsell_product
+      parseFloat(data.upsell_amount_mad) || 0,              // K: upsell_amount_mad
+      parseFloat(data.total_mad) || 0,                      // L: total_mad
+      data.payment_method || 'COD',                         // M: payment_method
+      data.status || 'completed',                           // N: status
+      data.source_url || '',                                // O: source_url
+      data.event_id || '',                                  // P: event_id
+      'pending',                                            // Q: confirmation_status
+      '',                                                   // R: notes
+    ];
+
+    sheet.appendRow(row);
+    const rowNumber = sheet.getLastRow();
+
+    return createResponse({
+      success: true,
+      row: rowNumber,
+      order_number: data.order_number,
+    }, 200);
+
+  } catch (error) {
+    return createResponse({
+      success: false,
+      error: error.message,
+    }, 500);
+  }
+}
+
+/**
+ * Handle GET requests (health check)
+ */
+function doGet(e) {
+  return createResponse({
+    status: 'ok',
+    service: 'gumucroyal-sheets-webhook',
+    timestamp: new Date().toISOString(),
+  }, 200);
+}
+
+/**
+ * Get or create the Orders sheet with headers
+ */
+function getOrCreateSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    const headers = [
+      'order_number',
+      'created_at',
+      'customer_name',
+      'customer_phone',
+      'customer_phone_normalized',
+      'products',
+      'items_count',
+      'subtotal_mad',
+      'upsell_accepted',
+      'upsell_product',
+      'upsell_amount_mad',
+      'total_mad',
+      'payment_method',
+      'status',
+      'source_url',
+      'event_id',
+      'confirmation_status',
+      'notes',
+    ];
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+    sheet.setFrozenRows(1);
+  }
+
+  return sheet;
+}
+
+/**
+ * Create JSON response
+ */
+function createResponse(data, statusCode) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Test function — run manually in Apps Script editor
+ */
+function testWebhook() {
+  const testPayload = {
+    secret: PropertiesService.getScriptProperties().getProperty(WEBHOOK_SECRET_PROPERTY),
+    order_number: 'GR-20260602-0001',
+    created_at: new Date().toISOString(),
+    customer_name: 'فاطمة الزهراء',
+    customer_phone: '06 12 34 56 78',
+    customer_phone_normalized: '212612345678',
+    products: 'خاتم الرابط الأبدي x2 (عرض زوجي)',
+    items_count: 2,
+    subtotal_mad: 429.00,
+    upsell_accepted: true,
+    upsell_product: 'قلادة البرسيم المضiء',
+    upsell_amount_mad: 69.00,
+    total_mad: 498.00,
+    payment_method: 'COD',
+    status: 'completed',
+    source_url: 'https://gumucroyal.store/products/bague-lien-eternel',
+    event_id: 'purchase_test_123',
+  };
+
+  const e = {
+    postData: {
+      contents: JSON.stringify(testPayload),
+    },
+  };
+
+  const result = doPost(e);
+  Logger.log(result.getContent());
+}

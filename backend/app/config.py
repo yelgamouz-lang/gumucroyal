@@ -18,8 +18,10 @@ class Settings(BaseSettings):
 
     CORS_ORIGINS: str = '["http://localhost:3000","http://127.0.0.1:3000","https://gumucroyal.store"]'
 
+    ADMIN_USERNAME: str = ""
+    ADMIN_PASSWORD: str = ""
+
     GOOGLE_SHEETS_WEBHOOK_URL: str = ""
-    GOOGLE_SHEETS_WEBHOOK_SECRET: str = ""
 
     META_PIXEL_ID: str = ""
     META_CAPI_ACCESS_TOKEN: str = ""
@@ -31,6 +33,7 @@ class Settings(BaseSettings):
     SNAP_CAPI_ACCESS_TOKEN: str = ""
 
     UPSELL_PRICE_MAD: float = 69.0
+    ADD_PIECE_PRICE_MAD: float = 69.0
 
     @property
     def cors_origins_list(self) -> list[str]:

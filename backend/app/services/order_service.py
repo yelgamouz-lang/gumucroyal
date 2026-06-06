@@ -4,34 +4,29 @@ from uuid import UUID
 from fastapi import HTTPException, Request
 from sqlalchemy.orm import Session, joinedload
 
-from app.config import settings
 from app.models.offer import Offer
 from app.models.order import Order, OrderItem
 from app.models.product import Product
 from app.services.phone_service import format_display_phone, normalize_morocco_phone
+from app.services.sheet_payload import build_sheet_row
 from app.services.sheets_service import sync_order_to_sheet
 from app.services.tracking.capi import fire_all_capi
 from app.utils.order_id import generate_order_number
-
-
-UPSELL_MAP = {
-    "bague-lien-eternel": "collier-trefle-lumiere",
-    "collier-trefle-lumiere": "bague-lien-eternel",
-    "bague-double-signature": "collier-trefle-lumiere",
-}
+from app.product_catalog import get_base_price
+from app.utils.offer_tiers import add_piece_price_mad, tier_total_price
+from app.utils.upsell import is_upsell_eligible, resolve_upsell_product, upsell_price_mad
 
 ORDER_BUMP_LABEL = "زيادة الطلب"
+UPSELL_LABEL = "2ème pièce — offre commande"
 
 
-def _resolve_bump_product(db: Session, cart_product_slugs: list[str]) -> Product | None:
-    main_slug = cart_product_slugs[0] if cart_product_slugs else None
-    bump_slug = UPSELL_MAP.get(main_slug or "", "collier-trefle-lumiere")
-    if bump_slug in cart_product_slugs:
-        for p in db.query(Product).filter(Product.is_active.is_(True)).all():
-            if p.slug not in cart_product_slugs:
-                return p
-        return None
-    return db.query(Product).filter(Product.slug == bump_slug, Product.is_active.is_(True)).first()
+def _resolve_order_bump_product(db: Session, product_id: UUID) -> Product:
+    product = db.query(Product).filter(Product.id == product_id, Product.is_active.is_(True)).first()
+    if not product:
+        raise HTTPException(status_code=422, detail="Produit invalide pour l'offre 2ᵉ pièce")
+    if not is_upsell_eligible(product):
+        raise HTTPException(status_code=422, detail="Produit non éligible à l'offre 2ᵉ pièce")
+    return product
 
 
 def _get_client_ip(request: Request) -> str | None:
@@ -56,23 +51,8 @@ def _build_products_summary(items: list[OrderItem]) -> str:
     return " | ".join(parts)
 
 
-def _resolve_upsell_product(db: Session, cart_product_slugs: list[str]) -> Product | None:
-    main_slug = cart_product_slugs[0] if cart_product_slugs else None
-    upsell_slug = UPSELL_MAP.get(main_slug or "", "collier-trefle-lumiere")
-    if upsell_slug in cart_product_slugs:
-        for slug, target in UPSELL_MAP.items():
-            if target not in cart_product_slugs:
-                upsell_slug = target
-                break
-        else:
-            for p in db.query(Product).filter(Product.is_active.is_(True)).all():
-                if p.slug not in cart_product_slugs:
-                    return p
-            return None
-    return db.query(Product).filter(Product.slug == upsell_slug, Product.is_active.is_(True)).first()
-
-
 def calculate_subtotal(db: Session, items: list[dict]) -> tuple[float, list[dict]]:
+    add_price = add_piece_price_mad()
     resolved = []
     subtotal = 0.0
     for item in items:
@@ -80,14 +60,30 @@ def calculate_subtotal(db: Session, items: list[dict]) -> tuple[float, list[dict
         offer = db.query(Offer).filter(Offer.id == item["offer_id"]).first()
         if not product or not offer:
             raise HTTPException(status_code=422, detail="منتج أو عرض غير صالح")
-        line_total = float(offer.price_mad)
+
+        extra_ids = item.get("extra_product_ids") or []
+        expected_extras = max(0, offer.quantity - 1)
+        if len(extra_ids) != expected_extras:
+            raise HTTPException(status_code=422, detail="اختاري القطع الإضافية لهذا العرض")
+
+        main_base = get_base_price(product.slug)
+        line_total = tier_total_price(main_base, offer.quantity)
         subtotal += line_total
+
+        bundle_lines = [{"product": product, "line_total": main_base, "quantity": 1}]
+        for eid in extra_ids:
+            extra = db.query(Product).filter(Product.id == eid, Product.is_active.is_(True)).first()
+            if not extra:
+                raise HTTPException(status_code=422, detail="منتج إضافي غير صالح")
+            bundle_lines.append({"product": extra, "line_total": add_price, "quantity": 1})
+
         resolved.append(
             {
                 "product": product,
                 "offer": offer,
                 "quantity": offer.quantity,
                 "line_total": line_total,
+                "bundle_lines": bundle_lines,
             }
         )
     return subtotal, resolved
@@ -126,33 +122,39 @@ async def create_order(db: Session, request: Request, data: dict) -> Order:
     db.add(order)
     db.flush()
 
-    cart_slugs = []
     for row in resolved:
         product = row["product"]
         offer = row["offer"]
-        cart_slugs.append(product.slug)
-        db.add(
-            OrderItem(
-                order_id=order.id,
-                product_id=product.id,
-                offer_id=offer.id,
-                product_name_ar=product.name_ar,
-                offer_label_ar=offer.label_ar,
-                quantity=offer.quantity,
-                unit_price_mad=float(offer.price_mad) / offer.quantity,
-                total_price_mad=float(offer.price_mad),
-                is_upsell=False,
+        bundle_lines = row["bundle_lines"]
+        for bl in bundle_lines:
+            bp = bl["product"]
+            db.add(
+                OrderItem(
+                    order_id=order.id,
+                    product_id=bp.id,
+                    offer_id=offer.id if bp.id == product.id else None,
+                    product_name_ar=bp.name_ar,
+                    offer_label_ar=offer.label_ar if bp.id == product.id else None,
+                    quantity=1,
+                    unit_price_mad=float(bl["line_total"]),
+                    total_price_mad=float(bl["line_total"]),
+                    is_upsell=False,
+                )
             )
-        )
 
-    if data.get("order_bump_accepted"):
-        bump_product = _resolve_bump_product(db, cart_slugs)
-        if bump_product:
-            bump_price = float(settings.UPSELL_PRICE_MAD)
+    if data.get("order_bump_accepted") or data.get("order_bump_product_ids"):
+        bump_ids = list(data.get("order_bump_product_ids") or [])
+        if not bump_ids and data.get("order_bump_product_id"):
+            bump_ids = [data["order_bump_product_id"]]
+        if not bump_ids:
+            raise HTTPException(status_code=422, detail="Choisissez une pièce pour l'offre 2ᵉ pièce")
+        if len(bump_ids) > 2:
+            raise HTTPException(status_code=422, detail="Maximum 2 pièces supplémentaires")
+
+        bump_price = add_piece_price_mad()
+        for bump_id in bump_ids:
+            bump_product = _resolve_order_bump_product(db, bump_id)
             subtotal += bump_price
-            order.subtotal_mad = subtotal
-            order.total_mad = subtotal
-            cart_slugs.append(bump_product.slug)
             db.add(
                 OrderItem(
                     order_id=order.id,
@@ -165,59 +167,45 @@ async def create_order(db: Session, request: Request, data: dict) -> Order:
                     is_upsell=False,
                 )
             )
-
-    upsell_product = _resolve_upsell_product(db, cart_slugs)
-    if upsell_product:
-        order.upsell_product_id = upsell_product.id
+        order.subtotal_mad = subtotal
+        order.total_mad = subtotal
 
     db.commit()
     db.refresh(order)
     return order
 
 
-def get_upsell_info(db: Session, order: Order) -> dict | None:
-    if not order.upsell_product_id:
-        return None
-    product = db.query(Product).filter(Product.id == order.upsell_product_id).first()
-    if not product:
-        return None
-    image_url = product.images[0]["url"] if product.images else ""
-    return {
-        "id": str(product.id),
-        "slug": product.slug,
-        "name_ar": product.name_ar,
-        "image_url": image_url,
-        "original_price_mad": float(product.base_price_mad),
-        "upsell_price_mad": float(settings.UPSELL_PRICE_MAD),
-    }
-
-
-async def update_upsell(db: Session, order_id: UUID, accepted: bool) -> Order:
+async def update_upsell(db: Session, order_id: UUID, accepted: bool, upsell_product_id: UUID | None = None) -> Order:
     order = db.query(Order).options(joinedload(Order.items)).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     if order.status == "completed":
         raise HTTPException(status_code=409, detail="Order already confirmed")
 
+    if accepted and any(i.is_upsell for i in order.items):
+        raise HTTPException(status_code=409, detail="Upsell déjà appliqué")
+
     order.upsell_accepted = accepted
-    if accepted and order.upsell_product_id:
-        product = db.query(Product).filter(Product.id == order.upsell_product_id).first()
-        if product:
-            upsell_price = float(settings.UPSELL_PRICE_MAD)
-            order.upsell_amount_mad = upsell_price
-            order.total_mad = float(order.subtotal_mad) + upsell_price
-            db.add(
-                OrderItem(
-                    order_id=order.id,
-                    product_id=product.id,
-                    product_name_ar=product.name_ar,
-                    offer_label_ar="عرض خاص",
-                    quantity=1,
-                    unit_price_mad=upsell_price,
-                    total_price_mad=upsell_price,
-                    is_upsell=True,
-                )
+    if accepted:
+        if not upsell_product_id:
+            raise HTTPException(status_code=422, detail="Choisissez un produit pour l'offre upsell")
+        product = resolve_upsell_product(db, upsell_product_id, order)
+        price = upsell_price_mad()
+        order.upsell_product_id = product.id
+        order.upsell_amount_mad = price
+        order.total_mad = float(order.subtotal_mad) + price
+        db.add(
+            OrderItem(
+                order_id=order.id,
+                product_id=product.id,
+                product_name_ar=product.name_ar,
+                offer_label_ar=UPSELL_LABEL,
+                quantity=1,
+                unit_price_mad=price,
+                total_price_mad=price,
+                is_upsell=True,
             )
+        )
     else:
         order.upsell_amount_mad = 0
         order.total_mad = float(order.subtotal_mad)
@@ -227,7 +215,12 @@ async def update_upsell(db: Session, order_id: UUID, accepted: bool) -> Order:
     return order
 
 
-async def confirm_order(db: Session, order_id: UUID, upsell_accepted: bool | None = None) -> Order:
+async def confirm_order(
+    db: Session,
+    order_id: UUID,
+    upsell_accepted: bool | None = None,
+    upsell_product_id: UUID | None = None,
+) -> Order:
     order = db.query(Order).options(joinedload(Order.items)).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
@@ -235,40 +228,23 @@ async def confirm_order(db: Session, order_id: UUID, upsell_accepted: bool | Non
         return order
 
     if upsell_accepted is not None:
-        await update_upsell(db, order_id, upsell_accepted)
+        await update_upsell(db, order_id, upsell_accepted, upsell_product_id)
         order = db.query(Order).options(joinedload(Order.items)).filter(Order.id == order_id).first()
 
     order.status = "completed"
     order.confirmed_at = datetime.now(timezone.utc)
+
+    sheet_data = build_sheet_row(db, order)
+
+    if await sync_order_to_sheet(sheet_data):
+        order.sheet_synced = True
+        order.sheet_synced_at = datetime.now(timezone.utc)
 
     product_ids = []
     for item in order.items:
         product = db.query(Product).filter(Product.id == item.product_id).first()
         if product:
             product_ids.append(product.sku)
-
-    sheet_data = {
-        "order_number": order.order_number,
-        "created_at": order.created_at.isoformat() if order.created_at else datetime.now(timezone.utc).isoformat(),
-        "customer_name": order.customer_name,
-        "customer_phone": order.phone_display,
-        "customer_phone_normalized": order.customer_phone,
-        "products": _build_products_summary(order.items),
-        "items_count": sum(i.quantity for i in order.items if not i.is_upsell),
-        "subtotal_mad": float(order.subtotal_mad),
-        "upsell_accepted": order.upsell_accepted,
-        "upsell_product": next((i.product_name_ar for i in order.items if i.is_upsell), ""),
-        "upsell_amount_mad": float(order.upsell_amount_mad),
-        "total_mad": float(order.total_mad),
-        "payment_method": order.payment_method,
-        "status": order.status,
-        "source_url": order.source_url or "",
-        "event_id": order.event_id or "",
-    }
-
-    if await sync_order_to_sheet(sheet_data):
-        order.sheet_synced = True
-        order.sheet_synced_at = datetime.now(timezone.utc)
 
     if await fire_all_capi(order, product_ids or ["GUMUCROYAL"]):
         order.capi_synced = True

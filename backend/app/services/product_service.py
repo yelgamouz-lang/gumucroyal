@@ -1,13 +1,24 @@
 from sqlalchemy.orm import Session, joinedload
 
+from app.bootstrap import PRODUCT_PHOTOS
+from app.product_catalog import get_base_price
+from app.utils.offer_tiers import offers_for_display, tier_total_price
 from app.models.offer import Offer
 from app.models.product import Product
 from app.schemas.product import OfferOut, ProductImage, ProductOut
 
 
 def serialize_product(product: Product) -> ProductOut:
-    offers = sorted(product.offers, key=lambda o: o.sort_order)
-    images = [ProductImage(**img) if isinstance(img, dict) else img for img in (product.images or [])]
+    offers = offers_for_display(product)
+    try:
+        base_price = get_base_price(product.slug)
+    except KeyError:
+        base_price = float(product.base_price_mad)
+    local_image = PRODUCT_PHOTOS.get(product.slug)
+    if local_image:
+        images = [ProductImage(**local_image)]
+    else:
+        images = [ProductImage(**img) if isinstance(img, dict) else img for img in (product.images or [])]
     return ProductOut(
         id=product.id,
         slug=product.slug,
@@ -17,15 +28,28 @@ def serialize_product(product: Product) -> ProductOut:
         description_short=product.description_short,
         description_long=product.description_long,
         category=product.category,
-        base_price_mad=float(product.base_price_mad),
-        compare_at_price_mad=float(product.compare_at_price_mad),
+        base_price_mad=base_price,
+        compare_at_price_mad=base_price,
         material=product.material,
         rating=float(product.rating),
         review_count=product.review_count,
         badge=product.badge,
         images=images,
         benefits=product.benefits or [],
-        offers=[OfferOut.model_validate(o) for o in offers],
+        offers=[
+            OfferOut(
+                id=o.id,
+                slug=o.slug,
+                label_ar=o.label_ar,
+                quantity=o.quantity,
+                price_mad=tier_total_price(base_price, o.quantity),
+                compare_at_price_mad=None,
+                savings_mad=None,
+                is_default=o.is_default,
+                badge_ar=o.badge_ar,
+            )
+            for o in offers
+        ],
         cross_sell_slug=product.cross_sell_slug,
         upsell_slug=product.upsell_slug,
     )

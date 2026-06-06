@@ -7,6 +7,7 @@ class OrderItemIn(BaseModel):
     product_id: UUID
     offer_id: UUID
     quantity: int = 1
+    extra_product_ids: list[UUID] = Field(default_factory=list)
 
 
 class TrackingIn(BaseModel):
@@ -24,16 +25,21 @@ class CreateOrderIn(BaseModel):
     customer_phone: str
     items: list[OrderItemIn] = Field(min_length=1)
     order_bump_accepted: bool = False
+    order_bump_product_id: UUID | None = None
+    order_bump_product_ids: list[UUID] = Field(default_factory=list, max_length=2)
     tracking: TrackingIn
 
 
-class UpsellProductOut(BaseModel):
+class UpsellCandidateOut(BaseModel):
     id: str
     slug: str
+    name_fr: str
     name_ar: str
+    sku: str
     image_url: str
-    original_price_mad: float
+    base_price_mad: float
     upsell_price_mad: float
+    savings_mad: float
 
 
 class OrderCreatedOut(BaseModel):
@@ -42,7 +48,8 @@ class OrderCreatedOut(BaseModel):
     status: str
     subtotal_mad: float
     total_mad: float
-    upsell_product: UpsellProductOut | None = None
+    upsell_price_mad: float
+    upsell_candidates: list[UpsellCandidateOut] = []
     event_id: str | None = None
 
 
@@ -52,6 +59,7 @@ class UpsellUpdateIn(BaseModel):
 
 class ConfirmOrderIn(BaseModel):
     upsell_accepted: bool | None = None
+    upsell_product_id: UUID | None = None
 
 
 class OrderItemOut(BaseModel):

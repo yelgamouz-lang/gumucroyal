@@ -7,5 +7,5 @@ pydantic-settings==2.6.1
 httpx==0.28.1
 python-dotenv==1.0.1
 
-# PostgreSQL (production / EasyPanel only — optional for local SQLite dev)
-psycopg2-binary==2.9.10; python_version < "3.14"
+# PostgreSQL (production / EasyPanel — required when DATABASE_URL is postgresql)
+psycopg2-binary==2.9.10

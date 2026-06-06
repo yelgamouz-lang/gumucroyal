@@ -10,7 +10,7 @@ from app.schemas.order import (
     OrderCreatedOut,
     OrderOut,
     OrderItemOut,
-    UpsellProductOut,
+    UpsellCandidateOut,
     UpsellUpdateIn,
 )
 from app.schemas.product import ProductOut, ProductsListOut
@@ -18,10 +18,10 @@ from app.services.order_service import (
     confirm_order,
     create_order,
     get_order_by_number,
-    get_upsell_info,
     update_upsell,
 )
 from app.services.product_service import get_all_products, get_product_by_slug, serialize_product
+from app.utils.upsell import get_upsell_candidates, upsell_price_mad
 
 router = APIRouter()
 
@@ -70,14 +70,15 @@ def _order_to_out(order) -> OrderOut:
 @router.post("/orders", response_model=OrderCreatedOut, status_code=201)
 async def post_order(payload: CreateOrderIn, request: Request, db: Session = Depends(get_db)):
     order = await create_order(db, request, payload.model_dump())
-    upsell = get_upsell_info(db, order)
+    candidates = get_upsell_candidates(db, order)
     return OrderCreatedOut(
         id=order.id,
         order_number=order.order_number,
         status=order.status,
         subtotal_mad=float(order.subtotal_mad),
         total_mad=float(order.total_mad),
-        upsell_product=UpsellProductOut(**upsell) if upsell else None,
+        upsell_price_mad=upsell_price_mad(),
+        upsell_candidates=[UpsellCandidateOut(**c) for c in candidates],
         event_id=order.event_id,
     )
 
@@ -90,7 +91,12 @@ async def patch_order(order_id: UUID, payload: UpsellUpdateIn, db: Session = Dep
 
 @router.post("/orders/{order_id}/confirm", response_model=OrderOut)
 async def post_confirm(order_id: UUID, payload: ConfirmOrderIn, db: Session = Depends(get_db)):
-    order = await confirm_order(db, order_id, payload.upsell_accepted)
+    order = await confirm_order(
+        db,
+        order_id,
+        payload.upsell_accepted,
+        payload.upsell_product_id,
+    )
     return _order_to_out(order)
 
 

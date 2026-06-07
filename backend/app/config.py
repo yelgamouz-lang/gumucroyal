@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite:///./gumucroyal.db"
 
-    CORS_ORIGINS: str = '["http://localhost:3000","http://127.0.0.1:3000","https://gumucroyal.store"]'
+    CORS_ORIGINS: str = '["https://gumucroyal.store"]'
 
     ADMIN_USERNAME: str = ""
     ADMIN_PASSWORD: str = ""

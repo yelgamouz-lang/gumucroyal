@@ -2,11 +2,10 @@
 
 import { OptimizedImage } from "@/components/shared/OptimizedImage";
 import { useTranslation } from "@/i18n/I18nProvider";
-import { PLACEHOLDER_IMAGES } from "@/lib/products";
+import { HOME_SECTION_IMAGES } from "@/lib/products";
 import { cn } from "@/lib/cn";
 
-/** Replace with `/brand-commitment.jpg` once added to `public/brand-commitment.jpg` */
-const COMMITMENT_IMAGE_SRC = PLACEHOLDER_IMAGES.lifestyle;
+const COMMITMENT_IMAGE_SRC = HOME_SECTION_IMAGES.commitment;
 
 export function BrandCommitmentSection() {
   const { t, dir } = useTranslation();

@@ -4,20 +4,28 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getOrder } from "@/lib/api";
-import { Button, SectionWrapper } from "@/components/shared/UI";
-import { formatPrice } from "@/lib/format";
+import { Button, SectionWrapper, PriceDisplay } from "@/components/shared/UI";
 import { trackPurchase } from "@/lib/tracking";
 import { buildWhatsAppConfirmUrl } from "@/lib/whatsapp";
 import { useTranslation } from "@/i18n/I18nProvider";
+import { useCartStore } from "@/stores/cartStore";
+import { useUIStore } from "@/stores/uiStore";
 
 type OrderItem = { product_name_ar: string; offer_label_ar?: string; total_price_mad: number };
 
 export default function ThankYouPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const params = useParams();
   const orderId = params.orderId as string;
   const [order, setOrder] = useState<Awaited<ReturnType<typeof getOrder>> | null>(null);
   const tracked = useRef(false);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const resetCheckoutFlow = useUIStore((s) => s.resetCheckoutFlow);
+
+  useEffect(() => {
+    clearCart();
+    resetCheckoutFlow();
+  }, [clearCart, resetCheckoutFlow]);
 
   useEffect(() => {
     if (orderId) getOrder(orderId).then(setOrder).catch(() => setOrder(null));
@@ -45,8 +53,9 @@ export default function ThankYouPage() {
       orderNumber: order.order_number,
       totalMad: order.total_mad,
       itemsSummary,
+      locale,
     });
-  }, [order, waNumber, itemsSummary]);
+  }, [order, waNumber, itemsSummary, locale]);
 
   return (
     <SectionWrapper dark>
@@ -63,14 +72,14 @@ export default function ThankYouPage() {
                   <span className="font-product">
                     {item.product_name_ar} {item.offer_label_ar && `(${item.offer_label_ar})`}
                   </span>
-                  <span dir="ltr" className="tabular-nums shrink-0">{formatPrice(item.total_price_mad)}</span>
+                  <span dir="ltr" className="shrink-0">
+                    <PriceDisplay amount={item.total_price_mad} compact />
+                  </span>
                 </div>
               ))}
               <div className="flex justify-between font-semibold pt-4 border-t border-brand-gray/30">
                 <span>{t("common.totalCod")}:</span>
-                <span className="tabular-nums text-brand-gold" dir="ltr">
-                  {formatPrice(order.total_mad)}
-                </span>
+                <PriceDisplay amount={order.total_mad} />
               </div>
             </div>
           </>

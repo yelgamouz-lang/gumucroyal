@@ -2,35 +2,36 @@
 
 import { useEffect, useMemo } from "react";
 import { X, Trash2 } from "lucide-react";
-import { computeCartTotal, computeCrossSellProducts, useCartStore } from "@/stores/cartStore";
+import { computeCartTotal, useCartStore } from "@/stores/cartStore";
 import { useUIStore } from "@/stores/uiStore";
-import { getCartItemName, getProductName, STATIC_PRODUCTS } from "@/lib/products";
-import { Button } from "@/components/shared/UI";
+import { getCartItemName } from "@/lib/products";
+import { Button, PriceDisplay } from "@/components/shared/UI";
 import { OptimizedImage } from "@/components/shared/OptimizedImage";
-import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { trackAnalyticsClick } from "@/lib/analytics";
 import { getOfferLabelKey, useTranslation } from "@/i18n/I18nProvider";
 
 export function CartDrawer() {
   const { t, locale, dir } = useTranslation();
   const cartOpen = useUIStore((s) => s.cartOpen);
+  const checkoutOpen = useUIStore((s) => s.checkoutOpen);
+  const upsellOpen = useUIStore((s) => s.upsellOpen);
   const setCartOpen = useUIStore((s) => s.setCartOpen);
-  const setCheckoutOpen = useUIStore((s) => s.setCheckoutOpen);
+  const openCheckout = useUIStore((s) => s.openCheckout);
   const items = useCartStore((s) => s.items);
   const removeItem = useCartStore((s) => s.removeItem);
-  const addItem = useCartStore((s) => s.addItem);
 
-  const crossSells = useMemo(() => computeCrossSellProducts(items, STATIC_PRODUCTS), [items]);
   const total = useMemo(() => computeCartTotal(items), [items]);
 
   useEffect(() => {
-    document.body.style.overflow = cartOpen ? "hidden" : "";
+    const lockScroll = cartOpen && !checkoutOpen && !upsellOpen;
+    document.body.style.overflow = lockScroll ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [cartOpen]);
+  }, [cartOpen, checkoutOpen, upsellOpen]);
 
-  if (!cartOpen) return null;
+  if (!cartOpen || checkoutOpen || upsellOpen) return null;
 
   return (
     <div className="cart-drawer-root fixed inset-0 z-[10002]">
@@ -54,17 +55,25 @@ export function CartDrawer() {
           ) : (
             items.map((item) => {
               const productName = getCartItemName(item, locale);
+              const lines = item.bundleLines?.length ? item.bundleLines : [item];
               return (
                 <div key={item.id} className="flex gap-3 border-b border-brand-gray/20 pb-4">
                   <div className="relative w-20 h-20 shrink-0 overflow-hidden">
                     <OptimizedImage src={item.imageUrl} alt={productName} fill sizes="80px" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-product text-sm line-clamp-2 tracking-wide">{productName}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-product text-sm line-clamp-2 tracking-wide break-words">{productName}</p>
                     <p className="text-brand-white/60 text-sm">{t(getOfferLabelKey(item.offerQuantity))}</p>
-                    <p className="font-semibold tabular-nums text-brand-gold mt-1" dir="ltr">
-                      {formatPrice(item.priceMad)}
-                    </p>
+                    {lines.length > 1 && (
+                      <ul className="text-xs text-brand-white/50 mt-1 space-y-0.5">
+                        {lines.map((line) => (
+                          <li key={line.productId} className="line-clamp-1">
+                            · {getCartItemName(line, locale)}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <PriceDisplay amount={item.priceMad} />
                   </div>
                   <button type="button" onClick={() => removeItem(item.id)} className="text-brand-white/50 hover:text-red-400">
                     <Trash2 size={18} />
@@ -73,47 +82,19 @@ export function CartDrawer() {
               );
             })
           )}
-
-          {items.length > 0 && crossSells.length > 0 && (
-            <div className="pt-4">
-              <h3 className="font-display text-base tracking-wide text-brand-gold mb-3">{t("cart.crossSell")}</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {crossSells.slice(0, 2).map((p) => {
-                  const productName = getProductName(p, locale);
-                  return (
-                    <div key={p.slug} className="border border-brand-gray/30 p-2">
-                      <div className="relative aspect-square w-full overflow-hidden">
-                        <OptimizedImage src={p.images[0]?.url} alt={productName} fill sizes="150px" />
-                      </div>
-                      <p className="font-product text-xs mt-2 line-clamp-2 tracking-wide">{productName}</p>
-                      <p className="font-semibold tabular-nums text-brand-gold text-sm" dir="ltr">
-                        {formatPrice(p.base_price_mad)}
-                      </p>
-                      <Button variant="secondary" fullWidth className="mt-2 text-sm min-h-10" onClick={() => addItem(p)}>
-                        {t("cart.add")}
-                      </Button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
 
         {items.length > 0 && (
           <div className="p-4 border-t border-brand-gray/30 space-y-3">
-            <p className="text-sm text-brand-white/70">{t("cart.socialProof")}</p>
             <div className="flex justify-between text-lg font-semibold">
               <span>{t("common.total")}:</span>
-              <span className="tabular-nums text-brand-gold" dir="ltr">
-                {formatPrice(total)}
-              </span>
+              <PriceDisplay amount={total} className="text-lg" />
             </div>
             <Button
               fullWidth
               onClick={() => {
-                setCartOpen(false);
-                setCheckoutOpen(true);
+                trackAnalyticsClick("/cart/checkout");
+                openCheckout();
               }}
             >
               {t("cart.confirmCod")}

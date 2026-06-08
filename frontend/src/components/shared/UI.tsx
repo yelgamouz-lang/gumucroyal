@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/cn";
-import { formatPrice } from "@/lib/format";
+import { formatPriceNumber, getCurrencyLabel } from "@/lib/format";
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -46,13 +46,87 @@ export function GoldIcon({ icon: Icon, className }: { icon: LucideIcon; classNam
   return <Icon className={cn("w-4 h-4 text-brand-gold stroke-[1.5]", className)} aria-hidden />;
 }
 
-export function Price({ current, compareAt, large }: { current: number; compareAt?: number; large?: boolean }) {
+export function PriceDisplay({
+  amount,
+  large,
+  offer,
+  hero,
+  compact,
+  className,
+}: {
+  amount: number;
+  large?: boolean;
+  offer?: boolean;
+  /** Hero product page — largest royal serif price */
+  hero?: boolean;
+  /** Inline in buttons / tight UI */
+  compact?: boolean;
+  className?: string;
+}) {
+  const { locale } = useTranslation();
   return (
-    <div className={`flex items-center gap-3 ${large ? "text-2xl" : "text-lg"}`}>
-      <span className="font-semibold tabular-nums text-brand-gold tracking-wide" dir="ltr">{formatPrice(current)}</span>
-      {compareAt && compareAt > current && (
-        <span className="text-brand-white/30 line-through text-sm font-light" dir="ltr">{formatPrice(compareAt)}</span>
+    <span className={cn("inline-flex items-baseline gap-2 normal-case", className)} dir="ltr">
+      <span
+        className={cn(
+          "font-price-figures text-brand-gold tracking-[0.06em] leading-none",
+          hero && "text-[2.75rem] md:text-[3.25rem]",
+          large && !hero && "text-4xl",
+          offer && "text-2xl",
+          compact && "text-base",
+          !large && !offer && !hero && !compact && "text-xl"
+        )}
+      >
+        {formatPriceNumber(amount)}
+      </span>
+      <span
+        className={cn(
+          "font-price-currency text-brand-gold/45 tracking-normal leading-none",
+          hero && "text-base md:text-lg pb-0.5",
+          large && !hero && "text-lg pb-px",
+          offer && "text-sm pb-px",
+          compact && "text-xs pb-px",
+          !large && !offer && !hero && !compact && "text-xs pb-px"
+        )}
+      >
+        {getCurrencyLabel(locale)}
+      </span>
+    </span>
+  );
+}
+
+/** CTA label: "Ajouter au panier — 129 Dhs" with royal lining figures on the price. */
+export function AddToCartLabel({ amount }: { amount: number }) {
+  const { t } = useTranslation();
+  return (
+    <span className="inline-flex items-center justify-center gap-2 flex-wrap">
+      <span>{t("common.addToCart")}</span>
+      <span className="opacity-50 font-light" aria-hidden>
+        —
+      </span>
+      <PriceDisplay amount={amount} compact />
+    </span>
+  );
+}
+
+/** Short desire phrase under the hero price — one line per product in i18n. */
+export function PriceDesireLine({ text, className }: { text: string; className?: string }) {
+  if (!text) return null;
+  return (
+    <p
+      className={cn(
+        "mt-3 font-display text-sm md:text-[0.9375rem] italic text-brand-gold/50 tracking-[0.02em] leading-snug",
+        className
       )}
+    >
+      {text}
+    </p>
+  );
+}
+
+export function Price({ current, large }: { current: number; large?: boolean }) {
+  return (
+    <div className={large ? "text-2xl" : "text-lg"}>
+      <PriceDisplay amount={current} large={large} />
     </div>
   );
 }

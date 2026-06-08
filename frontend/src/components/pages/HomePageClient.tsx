@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Gem, ShieldCheck, Truck } from "lucide-react";
 import type { Product } from "@/types/product";
-import { fetchProducts, PLACEHOLDER_IMAGES } from "@/lib/products";
+import { fetchProducts, HOME_SECTION_IMAGES } from "@/lib/products";
 import { ProductCard } from "@/components/product/ProductComponents";
 import { HeroVideoBackground } from "@/components/home/HeroVideoBackground";
 import { BrandCommitmentSection } from "@/components/home/BrandCommitmentSection";
+import { ReassuranceBar } from "@/components/shared/ReassuranceBar";
 import {
   Button,
-  TrustBar,
   SectionWrapper,
   AlternatingSection,
   SectionHeader,
@@ -40,10 +40,6 @@ export function HomePageClient() {
           <h1 className="font-display text-4xl md:text-6xl mb-5 md:mb-6 text-brand-white font-normal tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             {t("home.heroTitle")}
           </h1>
-          <div className="hero-motto mb-6 md:mb-8">
-            <p className="hero-motto-tr">{t("home.heroMottoLine1")}</p>
-            <p className="hero-motto-sub">{t("home.heroMottoLine2")}</p>
-          </div>
           <p className="text-brand-white/75 text-base md:text-lg mb-10 font-light tracking-wide leading-relaxed max-w-xl mx-auto">
             {t("home.heroSubtitle")}
           </p>
@@ -56,7 +52,7 @@ export function HomePageClient() {
       </section>
 
       {/* 2. Bande réassurance */}
-      <TrustBar />
+      <ReassuranceBar />
 
       {/* 3. Nos produits */}
       <SectionWrapper compact className="pt-6 md:pt-8">
@@ -65,7 +61,9 @@ export function HomePageClient() {
         </div>
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
           {products.map((p) => (
-            <ProductCard key={p.slug} product={p} premium />
+            <div key={p.slug} className="min-w-0">
+              <ProductCard product={p} premium />
+            </div>
           ))}
         </div>
       </SectionWrapper>
@@ -86,7 +84,7 @@ export function HomePageClient() {
       </SectionWrapper>
 
       <SectionWrapper compact>
-        <AlternatingSection title={t("home.aboutTitle")} image={PLACEHOLDER_IMAGES.lifestyle} imageAlt="GUMÜÇROYAL">
+        <AlternatingSection title={t("home.aboutTitle")} image={HOME_SECTION_IMAGES.about} imageAlt="GUMÜÇROYAL">
           <p className="font-light tracking-wide">{t("home.aboutP1")}</p>
           <p className="font-light tracking-wide">{t("home.aboutP2")}</p>
           <Link href="/about" className="inline-block mt-6 text-brand-gold text-sm uppercase tracking-[0.2em] hover:text-brand-gold-light transition-colors">

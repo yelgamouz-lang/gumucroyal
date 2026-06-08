@@ -8,18 +8,19 @@
     "cart": "Panier"
   },
   "common": {
-    "brandTagline": "L'éclat se voit. La qualité reste.",
+    "brandTagline": "Une élégance qui se voit, un éclat qui dure.",
     "reviews": "avis",
     "addToCart": "Ajouter au panier",
     "addToCartWithPrice": "Ajouter au panier — {price}",
     "viewDetails": "Voir les détails",
+    "discoverPiece": "Découvrir la pièce →",
     "shopNow": "Commander",
     "discoverCollection": "Découvrir la collection",
-    "bestSeller": "Voir le best-seller",
+    "bestSeller": "Nouveau",
     "readMore": "En savoir plus",
     "close": "Fermer",
     "total": "Total",
-    "totalCod": "Total (COD)",
+    "totalCod": "Total (paiement à la livraison)",
     "freeShipping": "✓ Livraison offerte | ✓ Paiement à la livraison",
     "loading": "Chargement...",
     "loadingOrder": "Chargement de la commande...",
@@ -30,83 +31,98 @@
     "save": "Économisez",
     "saveAmount": "Économisez {amount}",
     "saveBulk": "Économisez {amount} en gros",
-    "byBrand": "By GUMÜÇROYAL",
+    "byBrand": "By GUMÜÇ Royal",
     "orderNumber": "N° de commande"
   },
   "trust": {
-    "cod": "COD — Paiement à la livraison",
-    "delivery": "Livraison 24H et 48H",
+    "cod": "Paiement à la livraison",
+    "delivery": "Livraison 24–48h",
     "warranty": "Garantie 30 jours",
-    "steel": "Acier 316L — ne ternit pas"
+    "steel": "Acier inoxydable — ne ternit pas"
   },
   "productTrust": {
-    "cod": "COD",
+    "cod": "Paiement à la livraison",
     "noRust": "Ne rouille pas",
-    "noAllergy": "Hypoallergénique",
-    "delivery": "Livraison 24H et 48H"
+    "noAllergy": "Pensé pour le quotidien",
+    "delivery": "Livraison 24–48h"
   },
   "offers": {
-    "single": "1 pièce",
-    "duo": "Offre duo",
-    "trio": "Offre famille",
-    "mostPopular": "⭐ La plus demandée",
-    "bestValue": "Meilleure valeur",
-    "chooseOffer": "Choisissez votre offre"
+    "single": "Rien que pour vous",
+    "singleSubtitle": "1 pièce",
+    "duo": "Duo — une pour vous, une à offrir",
+    "duoSubtitle": "2 pièces",
+    "packUltimate": "Pack complet",
+    "packSubtitle": "3 pièces",
+    "bestForGift": "Meilleur pour offrir",
+    "duoSubtext": "Ajoutez une 2ᵉ pièce de votre choix pour seulement {addPrice} — et gagnez {savings}",
+    "packSubtext": "2 pièces de plus à {addPrice} chacune — gagnez {savings} au total",
+    "pickPieceN": "Pièce {n}",
+    "chooseOffer": "Choisissez votre offre",
+    "completeSelection": "Choisissez toutes les pièces pour continuer"
+  },
+  "reassurance": {
+    "cod": "Paiement à la livraison — réglez à réception",
+    "delivery": "Livraison entre 24h et 48h dans toutes les villes du Maroc ; en cas de retard, nous vous informons.",
+    "steel": "Acier inoxydable finition dorée — ne ternit jamais"
+  },
+  "crossSell": {
+    "title": "Complétez la parure",
+    "add": "Ajouter au panier",
+    "addHint": "Ajoutez la pièce complémentaire à son prix unitaire réel.",
+    "singlePiece": "1 pièce — prix d'ajout"
   },
   "home": {
-    "heroTitle": "L'éclat se voit. La qualité reste.",
-    "heroMottoLine1": "GÜZELLİK & GÖRKEM",
-    "heroMottoLine2": "Beauté & Splendeur",
-    "heroSubtitle": "Joaillerie premium au service de la femme marocaine exigeante. Design exclusif, paiement à la livraison uniquement.",
+    "heroTitle": "Une élégance qui se voit, un éclat qui dure.",
+    "heroSubtitle": "Une collection de bijoux marocaine au design raffiné. Paiement à la livraison.",
     "collectionEyebrow": "Collection",
     "qualityEyebrow": "Sans compromis",
-    "qualityTitle": "Des détails précis, des matières nobles, une expérience d'exception",
-    "qualityDescription": "Chaque pièce est pensée comme une signature : des matières nobles qui ne ternissent pas, un éclat qui dure, une élégance qui vous accompagne partout. Paiement à la livraison, pour une sérénité absolue.",
+    "qualityTitle": "Des détails précis, une matière qui dure, une expérience d'exception",
+    "qualityDescription": "Chaque pièce est pensée comme une signature : une matière durable qui ne rouille pas, un éclat qui dure, une élégance qui vous accompagne partout. Paiement à la livraison, pour une sérénité totale.",
     "feature1Title": "Joaillerie durable",
-    "feature1Desc": "Acier doré à l'or fin 316L — ne ternit pas, ne rouille pas. Zircons taille brillant pour un éclat royal.",
+    "feature1Desc": "Acier inoxydable finition dorée — ne ternit pas, ne rouille pas. Zircons taille brillant pour un éclat royal.",
     "feature2Title": "Livraison express",
-    "feature2Desc": "Livraison nationale en 24H et 48H, suivi de commande et assistance WhatsApp dédiée.",
-    "feature3Title": "COD exclusif",
-    "feature3Desc": "Vous ne payez qu'à la réception de votre colis. Aucun paiement en ligne — simplicité et confiance.",
+    "feature2Desc": "Livraison entre 24h et 48h dans toutes les villes du Maroc ; en cas de retard, nous vous informons.",
+    "feature3Title": "Paiement à la livraison",
+    "feature3Desc": "Vous ne payez qu'à la réception de votre commande. Aucun paiement en ligne — simplicité et confiance.",
     "collectionTitle": "Nos pièces signature",
     "aboutTitle": "La Maison",
-    "aboutP1": "GUMÜÇROYAL est une maison de joaillerie premium dédiée à la femme marocaine. Nous ne vendons pas des produits — nous créons des pièces By GUMÜÇROYAL.",
-    "aboutP2": "Chaque création : acier inoxydable 316L, zircons taille brillant, dorure à l'or fin.",
+    "aboutP1": "GUMÜÇ ROYAL est une maison de joaillerie au service de la femme marocaine exigeante. Nous ne vendons pas des produits — nous contribuons à votre éclat.",
+    "aboutP2": "Acier inoxydable, zircons taille brillant, finition dorée. Relation directe avec vous, du choix à la livraison.",
     "commitmentTitle": "L'engagement GUMÜÇ ROYAL",
-    "commitmentText": "Chez GUMÜÇ ROYAL, chaque pièce est sélectionnée avec exigence : un acier noble qui ne ternit jamais, un éclat pensé pour durer. Nous croyons qu'une femme mérite un luxe accessible, sûr et sans compromis — une élégance qui l'accompagne partout, jour après jour.",
-    "commitmentBadge": "Acier inoxydable 316L — un éclat qui ne ternit jamais.",
+    "commitmentText": "Chez GUMÜÇ ROYAL, chaque pièce est sélectionnée avec exigence : un acier inoxydable qui ne ternit jamais, un éclat pensé pour durer. Nous croyons qu'une femme mérite un luxe accessible, sûr et sans compromis — une élégance qui l'accompagne partout, jour après jour.",
+    "commitmentBadge": "Acier inoxydable — un éclat qui ne ternit jamais.",
     "commitmentImageAlt": "Engagement GUMÜÇ ROYAL — joaillerie premium",
-    "faqTitle": "Questions fréquentes",
-    "faqDescription": "Tout ce qu'il faut savoir sur la commande, la livraison et le COD.",
+    "faqTitle": "Pour être rassurée avant de commander",
+    "faqDescription": "Tout ce qu'il faut savoir sur la commande, la livraison et le paiement à la livraison.",
     "faq1Q": "Comment passer commande ?",
-    "faq1A": "Choisissez votre pièce, ajoutez-la au panier, renseignez nom et téléphone. Livraison COD dans tout le Maroc.",
+    "faq1A": "Choisissez votre pièce, ajoutez-la au panier, renseignez nom et téléphone. Livraison avec paiement à la réception dans tout le Maroc.",
     "faq2Q": "Quel délai de livraison ?",
-    "faq2A": "24H et 48H selon la ville. Casablanca et Rabat souvent en 24H. Notification WhatsApp incluse.",
+    "faq2A": "Livraison entre 24h et 48h dans toutes les villes du Maroc ; en cas de retard, nous vous informons.",
     "faq3Q": "Quels modes de paiement ?",
     "faq3A": "Paiement à la livraison uniquement. Aucune carte bancaire, aucun paiement en ligne.",
-    "ctaTitle": "Prête à choisir votre pièce ?"
+    "ctaTitle": "Choisissez votre pièce, on vous la livre à domicile."
   },
   "collection": {
     "title": "Notre collection",
-    "subtitle": "3 pièces exclusives. Design By GUMÜÇROYAL — acier doré à l'or fin & zircons."
+    "subtitle": "3 pièces exclusives. Design By GUMÜÇ Royal — acier inoxydable finition dorée & zircons."
   },
   "about": {
     "title": "La Maison",
-    "intro": "GUMÜÇROYAL — maison de joaillerie premium au service de la femme marocaine exigeante. Nous ne vendons pas des produits — nous créons des pièces By GUMÜÇROYAL.",
+    "intro": "GUMÜÇ ROYAL — maison de joaillerie accessible pour la femme marocaine qui connaît la valeur. Nous ne vendons pas des produits — nous contribuons à votre éclat.",
     "missionTitle": "Notre mission",
-    "missionP1": "Le luxe accessible. Une qualité certifiée. Une confiance totale avec le paiement à la livraison.",
-    "missionP2": "+2 847 clientes satisfaites. Note 4,8/5.",
+    "missionP1": "Offrir une joaillerie élégante et durable à prix justes — sans prix fictifs ni fausses promotions.",
+    "missionP2": "Une relation directe avec vous : conseil WhatsApp, livraison 24-48h, paiement à la réception uniquement.",
     "qualityTitle": "La qualité",
-    "qualityP1": "Acier inoxydable 316L — hypoallergénique, ne provoque aucune irritation.",
-    "qualityP2": "Dorure à l'or fin — ne ternit pas, ne rouille pas.",
+    "qualityP1": "Acier inoxydable.",
+    "qualityP2": "Finition dorée — ne ternit pas, ne rouille pas.",
     "qualityP3": "Zircons taille brillant — un éclat premium sans compromis."
   },
   "contact": {
     "title": "Contactez-nous",
     "subtitle": "Notre équipe vous répond avec attention — 10h à 20h",
     "whatsapp": "Nous écrire sur WhatsApp",
-    "cod": "COD : vous payez uniquement à la livraison",
-    "delivery": "Livraison : 24H et 48H dans tout le Maroc"
+    "cod": "Paiement à la livraison : vous payez uniquement à la réception",
+    "delivery": "Livraison entre 24h et 48h dans toutes les villes du Maroc ; en cas de retard, nous vous informons."
   },
   "footer": {
     "shop": "Boutique",
@@ -116,15 +132,15 @@
     "aboutUs": "La Maison",
     "contactUs": "Nous contacter",
     "whatsapp": "WhatsApp",
-    "copyright": "© 2026 GUMÜÇROYAL. Tous droits réservés."
+    "copyright": "© 2026 GUMÜÇ ROYAL — Maison de joaillerie accessible. Tous droits réservés.",
+    "tagline": "Acier inoxydable finition dorée · Livraison 24-48h · Paiement à la livraison"
   },
   "cart": {
     "title": "🛒 Votre panier ({count})",
     "empty": "Votre panier est vide",
-    "crossSell": "💡 Nos clientes ont aussi aimé :",
+    "crossSell": "Complétez la parure",
     "add": "+ Ajouter",
-    "socialProof": "★★★★★ 4,8 — +2 847 clientes satisfaites",
-    "confirmCod": "Commander — COD"
+    "confirmCod": "Commander — paiement à la livraison"
   },
   "checkout": {
     "title": "📋 Récapitulatif",
@@ -135,21 +151,32 @@
     "nameRequired": "Le nom est requis",
     "phoneInvalid": "Numéro invalide",
     "submitting": "Confirmation en cours...",
-    "confirmCod": "✅ Confirmer — COD",
-    "orderBump": "Ajouter une pièce à {price} dhs",
-    "orderBumpDesc": "Acier doré à l'or fin — offre exclusive au checkout",
+    "confirmCod": "✅ Confirmer — paiement à la livraison",
+    "continueSinglePiece": "Ou continuez avec une seule pièce",
     "error": "Une erreur est survenue"
   },
+  "addPiece": {
+    "headlinePrefix": "Ajoutez une pièce de votre choix pour seulement",
+    "maxSavings": "Et gagnez jusqu'à {amount}",
+    "pickSubtitle": "Touchez une photo pour choisir votre pièce — seulement 69 Dhs.",
+    "onlyPrice": "seulement {price}",
+    "takenInPack": "Déjà dans ce pack",
+    "savings": "Vous gagnez {amount}",
+    "cumulativeSavings": "Vous gagnez au total {amount}",
+    "totalSavings": "Gain total : {amount}",
+    "newTotal": "Nouveau total :",
+    "remove": "Retirer la pièce ajoutée",
+    "carouselLabel": "Pièces disponibles à ajouter"
+  },
   "upsell": {
-    "timer": "⏱️ Offre exclusive — {seconds} secondes",
-    "title": "Ajoutez cette pièce à un tarif exceptionnel !",
-    "confirming": "Confirmation de votre commande...",
-    "yes": "Oui, j'ajoute !",
-    "no": "Non merci"
+    "oneTime": "Offre disponible uniquement avec cette commande",
+    "yesAdd": "Oui, ajouter cette pièce",
+    "yesPickProduct": "Choisissez une pièce ci-dessus",
+    "no": "Non merci, continuer"
   },
   "thankYou": {
     "title": "Merci pour votre confiance ! 🎉",
-    "confirmHint": "Confirmez votre commande via WhatsApp pour accélérer la livraison — COD uniquement.",
+    "confirmHint": "Confirmez votre commande via WhatsApp pour accélérer la livraison — paiement à la livraison uniquement.",
     "confirmButton": "💬 Confirmer ma commande",
     "confirmNote": "Message pré-rempli — cliquez pour confirmer",
     "callHint": "Notre équipe vous contactera pour confirmer votre commande."
@@ -159,74 +186,74 @@
     "note": "Conseil personnalisé offert"
   },
   "productPage": {
-    "whyTitle": "Pourquoi GUMÜÇROYAL ?",
-    "whyHighlight": "Acier doré à l'or fin + zircons — un éclat royal sans compromettre votre budget.",
-    "materialTitle": "Acier inoxydable 316L — preuve matière",
-    "materialP1": "316L = standard médical. Hypoallergénique. Résiste à l'eau, à la transpiration et au quotidien.",
-    "materialP2": "Dorure à l'or fin — ne ternit pas, ne rouille pas. Zircons taille brillant d'un éclat remarquable.",
-    "materialP3": "✓ Testé 10 000 cycles",
-    "reviewsTitle": "Avis clientes avec photos",
-    "whatsappTitle": "Messages WhatsApp de nos clientes",
-    "faqTitle": "Questions fréquentes",
-    "heroCod": "💰 COD · 🚚 Livraison 24H et 48H",
+    "whyTitle": "Pourquoi GUMÜÇ Royal ?",
+    "whyHighlight": "Finition dorée et zircons — un éclat luxueux à votre portée.",
+    "materialTitle": "Acier inoxydable — preuve matière",
+    "materialImageAlt": "Acier inoxydable",
+    "materialP1": "Acier inoxydable. Résiste à l'eau, à la transpiration et au quotidien.",
+    "materialP2": "Finition dorée — ne ternit pas, ne rouille pas. Zircons taille brillant d'un éclat remarquable.",
+    "materialP3": "✓ Acier inoxydable — ne ternit pas",
+    "faqTitle": "Pour être rassurée avant de commander",
+    "heroCod": "💰 Paiement à la livraison · 🚚 Livraison 24–48h",
+    "desire_line": "Pour une touche dorée élégante, qui ne quitte jamais votre allure.",
     "socialProofSuffix": "clientes conquises",
-    "zirconHighlight": "acier doré à l'or fin + zircons"
+    "zirconHighlight": "Acier inoxydable finition dorée + zircons"
   },
   "products": {
     "bague-lien-eternel": {
-      "subtitle": "Un compliment chaque jour — acier doré à l'or fin qui ne ternit jamais",
+      "subtitle": "Un éclat discret qui sublime chaque jour. Acier inoxydable à finition dorée, pensé pour être porté au quotidien sans jamais ternir. À garder pour soi, ou à offrir à celle qui compte.",
+      "desire_line": "Pour une touche dorée élégante, qui ne quitte jamais votre allure.",
       "benefits": [
         "✨ Éclat zircons taille brillant",
         "💎 Pierre solitaire + zircons pavés",
-        "🔒 Acier 316L — ne ternit pas",
-        "📐 Taille ajustable",
-        "🎁 Écrin cadeau premium"
+        "🔒 Acier inoxydable — ne ternit pas",
+        "📐 Taille ajustable"
       ]
     },
     "collier-trefle-lumiere": {
-      "subtitle": "Un porte-bonheur qui se remarque — zircons taille brillant au cou",
+      "subtitle": "Une présence délicate au cou, entre élégance et charme. Acier inoxydable finition dorée et zircons taille brillant — conçu pour durer, jour après jour. Pour vous, ou pour celle à qui vous pensez en la voyant.",
+      "desire_line": "Pour une touche dorée élégante, qui ne quitte jamais votre allure.",
       "benefits": [
-        "🍀 4 trèfles porte-bonheur",
+        "🍀 4 trèfles symboliques",
         "✨ Double chaîne délicate",
         "💫 Zircons taille brillant",
-        "🔒 Acier inoxydable 316L",
-        "🎁 Emballage cadeau premium"
+        "🔒 Acier inoxydable — ne ternit pas"
       ]
     },
     "bague-double-signature": {
-      "subtitle": "Votre signature — design exclusif By GUMÜÇROYAL",
+      "subtitle": "Un design affirmé, deux extrémités pavées de lumière. Acier inoxydable finition dorée, ajustable et pensé pour le quotidien. Votre signature — ou celle que vous choisissez d'offrir.",
+      "desire_line": "Pour une touche dorée élégante, qui ne quitte jamais votre allure.",
       "benefits": [
         "💎 Design architectural unique",
         "✨ Zircons pavés",
         "📐 Forme ajustable",
-        "🔒 Acier 316L",
-        "🎁 Écrin cadeau premium"
+        "🔒 Acier inoxydable — ne ternit pas"
       ]
     }
   },
   "reviews": [
     { "name": "Sarah", "city": "Casablanca", "text": "Reçu en 2 jours, les zircons sont magnifiques sur l'acier doré !", "rating": 5 },
     { "name": "Nour", "city": "Rabat", "text": "3 mois sans ternir, l'éclat de l'acier doré est intact.", "rating": 5 },
-    { "name": "Amine", "city": "Marrakech", "text": "Commandé 2 pièces — une pour moi, une pour ma sœur. COD parfait.", "rating": 5 },
+    { "name": "Amine", "city": "Marrakech", "text": "Commandé 2 pièces — une pour moi, une pour ma sœur. Paiement à la livraison parfait.", "rating": 5 },
     { "name": "Fatima", "city": "Tanger", "text": "Équipe réactive sur WhatsApp, livraison rapide.", "rating": 5 },
-    { "name": "Yasmine", "city": "Fès", "text": "Écrin sublime, parfait pour offrir.", "rating": 5 },
+    { "name": "Yasmine", "city": "Fès", "text": "Qualité soignée, parfait pour offrir.", "rating": 5 },
     { "name": "Leila", "city": "Agadir", "text": "Des compliments chaque jour depuis que je le porte 💫", "rating": 5 }
   ],
   "whatsappProofs": [
-    { "name": "Khadija", "city": "Casablanca", "text": "Reçu aujourd'hui, qualité exceptionnelle ! Merci GUMÜÇROYAL 🥰" },
+    { "name": "Khadija", "city": "Casablanca", "text": "Reçu aujourd'hui, qualité exceptionnelle ! Merci GUMÜÇ Royal 🥰" },
     { "name": "Meriem", "city": "Rabat", "text": "Commande confirmée — je recommanderai à nouveau" },
     { "name": "Salma", "city": "Marrakech", "text": "L'acier doré est aussi beau en vrai qu'en photo" }
   ],
   "productFaq": [
-    { "q": "L'acier doré à l'or fin ternit-il ?", "a": "Non — acier inoxydable 316L avec dorure à l'or fin. Ne rouille pas, ne ternit pas." },
+    { "q": "L'acier doré ternit-il ?", "a": "Non — acier inoxydable avec finition dorée. Ne rouille pas, ne ternit pas." },
     { "q": "Comment payer ?", "a": "Paiement à la livraison uniquement. Vous payez à réception. Aucun paiement en ligne." },
-    { "q": "Quel délai de livraison ?", "a": "24H et 48H dans tout le Maroc. Casablanca/Rabat souvent en 24H." },
-    { "q": "Est-ce hypoallergénique ?", "a": "Oui — acier 316L, ne provoque aucune irritation. Adapté aux peaux sensibles." },
+    { "q": "Quel délai de livraison ?", "a": "Livraison entre 24h et 48h dans toutes les villes du Maroc ; en cas de retard, nous vous informons." },
+    { "q": "Est-ce adapté au quotidien ?", "a": "Oui — acier inoxydable, pensé pour être porté au quotidien." },
     { "q": "Puis-je retourner ?", "a": "En cas de défaut de fabrication, contactez-nous sous 30 jours pour un échange." }
   ],
   "badges": {
-    "Best Seller": "Best-seller",
-    "Porte-Bonheur": "Porte-bonheur",
+    "Best Seller": "Nouveau",
+    "Porte-Bonheur": "Nouveau",
     "Nouveau": "Nouveau"
   }
 }

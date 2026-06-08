@@ -33,6 +33,7 @@
   --font-display-ar: var(--font-amiri);
   --font-body: var(--font-dm-sans);
   --font-body-ar: var(--font-tajawal);
+  --font-price: var(--font-playfair);
 }
 
 html[dir="ltr"] body {
@@ -74,6 +75,33 @@ html[dir="rtl"] .font-product {
   letter-spacing: 0;
 }
 
+/* Royal price figures — Playfair/Cormorant serif, uniform lining numerals */
+.font-price-figures {
+  font-family: var(--font-playfair), var(--font-cormorant), Georgia, "Times New Roman", serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "lnum" 1, "onum" 0, "pnum" 1, "liga" 1, "kern" 1;
+  font-weight: 500;
+  font-style: normal;
+  text-shadow: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+html[dir="rtl"] .font-price-figures {
+  font-family: var(--font-playfair), var(--font-cormorant), Georgia, serif;
+}
+
+html[dir="rtl"] .font-price-figures .font-price-currency {
+  font-family: var(--font-tajawal), ui-sans-serif, sans-serif;
+  font-weight: 400;
+}
+
+.font-price-currency {
+  font-family: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "lnum" 1, "onum" 0;
+  font-weight: 400;
+}
+
 button,
 input,
 textarea,
@@ -81,8 +109,8 @@ select {
   font-family: inherit;
 }
 
-/* Brilliant gold — shimmer on text & accents */
-.text-brand-gold,
+/* Brilliant gold — shimmer on text & accents (not on price figures) */
+.text-brand-gold:not(.font-price-figures):not(:has(.font-price-figures)),
 .text-brand-gold\/80,
 .text-brand-gold\/70 {
   text-shadow: 0 0 22px rgba(var(--brand-gold-rgb), 0.45);
@@ -145,11 +173,167 @@ select {
   box-shadow: 0 0 12px rgba(var(--brand-gold-rgb), 0.2);
 }
 
+/* Offer tiers — identical thin gold border on all; soft pulse on Duo (middle) only */
+.offer-tier-card {
+  border: 1px solid rgba(var(--brand-gold-rgb), 0.58);
+  background: transparent;
+}
+
+.offer-tier-card.offer-tier-selected {
+  background: rgba(var(--brand-gold-rgb), 0.05);
+}
+
+.offer-tier-card:not(.offer-tier-duo-pulse):hover {
+  border-color: rgba(var(--brand-gold-rgb), 0.72);
+}
+
+@keyframes offerTierDuoPulse {
+  0%,
+  100% {
+    border-color: rgba(var(--brand-gold-rgb), 0.58);
+    box-shadow:
+      0 0 6px rgba(var(--brand-gold-rgb), 0.18),
+      0 0 14px rgba(var(--brand-gold-rgb), 0.08);
+  }
+  50% {
+    border-color: rgba(var(--brand-gold-rgb), 0.92);
+    box-shadow:
+      0 0 12px rgba(var(--brand-gold-rgb), 0.42),
+      0 0 24px rgba(var(--brand-gold-rgb), 0.24),
+      0 0 36px rgba(var(--brand-gold-rgb), 0.1);
+  }
+}
+
+.offer-tier-duo-pulse {
+  animation: offerTierDuoPulse 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offer-tier-duo-pulse {
+    animation: none;
+    border-color: rgba(var(--brand-gold-rgb), 0.72);
+    box-shadow: 0 0 10px rgba(var(--brand-gold-rgb), 0.22);
+  }
+}
+
 .gold-brilliant-logo {
   background: linear-gradient(145deg, #fff8e0 0%, #ffd378 50%, #ffc850 100%);
   box-shadow:
     0 0 22px rgba(var(--brand-gold-rgb), 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+/* Checkout add-piece impulse panel — golden halo, high contrast */
+.add-piece-offer-panel {
+  background: linear-gradient(155deg, #2a1f08 0%, #1a1204 40%, #0f0a03 100%);
+  border: 2px solid rgba(255, 210, 100, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(255, 232, 168, 0.5),
+    0 0 32px rgba(var(--brand-gold-rgb), 0.75),
+    0 0 64px rgba(var(--brand-gold-rgb), 0.35),
+    0 0 96px rgba(var(--brand-gold-rgb), 0.15),
+    inset 0 1px 0 rgba(255, 240, 200, 0.25);
+  position: relative;
+}
+
+.add-piece-offer-panel::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 3px;
+  background: linear-gradient(145deg, #fff8e0, #ffd378, #ffc850, #ffe8a8, #ffd378);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 1;
+}
+
+@keyframes addPiecePanelOpenFlash {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 232, 168, 0.5),
+      0 0 32px rgba(var(--brand-gold-rgb), 0.75),
+      0 0 64px rgba(var(--brand-gold-rgb), 0.35),
+      inset 0 1px 0 rgba(255, 240, 200, 0.25);
+  }
+  15%,
+  45%,
+  75% {
+    box-shadow:
+      0 0 0 3px rgba(255, 240, 200, 0.95),
+      0 0 48px rgba(var(--brand-gold-rgb), 1),
+      0 0 88px rgba(var(--brand-gold-rgb), 0.65),
+      0 0 120px rgba(var(--brand-gold-rgb), 0.35),
+      inset 0 0 24px rgba(255, 210, 80, 0.2);
+  }
+  30%,
+  60% {
+    box-shadow:
+      0 0 0 2px rgba(255, 232, 168, 0.7),
+      0 0 40px rgba(var(--brand-gold-rgb), 0.85),
+      0 0 72px rgba(var(--brand-gold-rgb), 0.45),
+      inset 0 1px 0 rgba(255, 240, 200, 0.3);
+  }
+}
+
+.add-piece-offer-panel-open-flash {
+  animation: addPiecePanelOpenFlash 2.8s ease-in-out;
+}
+
+.add-piece-price-shimmer {
+  background: linear-gradient(
+    105deg,
+    #fff8e0 0%,
+    #ffd378 25%,
+    #ffc850 50%,
+    #ffe8a8 75%,
+    #ffd378 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: addPiecePriceShimmer 3s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(var(--brand-gold-rgb), 0.8));
+}
+
+.add-piece-max-savings {
+  background: linear-gradient(90deg, #fff8e0, #ffd378, #ffe8a8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 6px rgba(var(--brand-gold-rgb), 0.5));
+}
+
+@keyframes addPiecePriceShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes addPieceLineFlash {
+  0% {
+    background-color: rgba(var(--brand-gold-rgb), 0.35);
+    box-shadow: 0 0 12px rgba(var(--brand-gold-rgb), 0.4);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.add-piece-line-flash {
+  animation: addPieceLineFlash 0.65s ease-out;
+  border-radius: 4px;
+  margin-inline: -4px;
+  padding-inline: 4px;
 }
 
 @keyframes slide-in-start {

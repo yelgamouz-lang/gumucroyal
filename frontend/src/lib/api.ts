@@ -6,15 +6,17 @@ async function apiFetch(path: string, init?: RequestInit) {
   try {
     return await fetch(`${API_BASE}${path}`, init);
   } catch {
-    throw new Error("ما قدرناش نتصلو بالسيرفر. تأكد أن backend خدام على port 8000.");
+    throw new Error("ما قدرناش نتصلو بالسيرفر. جرّبي من بعد شوية.");
   }
 }
 
 export async function createOrder(payload: {
   customer_name: string;
   customer_phone: string;
-  items: { product_id: string; offer_id: string; quantity: number }[];
+  items: { product_id: string; offer_id: string; quantity: number; extra_product_ids?: string[] }[];
   order_bump_accepted?: boolean;
+  order_bump_product_id?: string;
+  order_bump_product_ids?: string[];
   tracking: TrackingParams;
 }): Promise<OrderResponse> {
   const res = await apiFetch("/api/v1/orders", {
@@ -29,11 +31,14 @@ export async function createOrder(payload: {
   return res.json();
 }
 
-export async function confirmOrder(orderId: string, upsellAccepted: boolean) {
+export async function confirmOrder(orderId: string, upsellAccepted: boolean, upsellProductId?: string) {
   const res = await apiFetch(`/api/v1/orders/${orderId}/confirm`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ upsell_accepted: upsellAccepted }),
+    body: JSON.stringify({
+      upsell_accepted: upsellAccepted,
+      upsell_product_id: upsellAccepted && upsellProductId ? upsellProductId : null,
+    }),
   });
   if (!res.ok) throw new Error("وقع خطأ");
   return res.json();

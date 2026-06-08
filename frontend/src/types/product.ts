@@ -48,15 +48,26 @@ export interface CartItem {
   offerQuantity: number;
   priceMad: number;
   imageUrl: string;
+  extraProductIds?: string[];
+  bundleLines?: {
+    productId: string;
+    productSlug: string;
+    productNameFr: string;
+    productNameAr?: string;
+    imageUrl: string;
+  }[];
 }
 
-export interface UpsellProduct {
+export interface UpsellCandidate {
   id: string;
   slug: string;
+  name_fr: string;
   name_ar: string;
+  sku: string;
   image_url: string;
-  original_price_mad: number;
+  base_price_mad: number;
   upsell_price_mad: number;
+  savings_mad: number;
 }
 
 export interface OrderResponse {
@@ -65,7 +76,8 @@ export interface OrderResponse {
   status: string;
   subtotal_mad: number;
   total_mad: number;
-  upsell_product?: UpsellProduct | null;
+  upsell_price_mad?: number;
+  upsell_candidates?: UpsellCandidate[];
   event_id?: string | null;
 }
 

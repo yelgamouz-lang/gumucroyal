@@ -3,12 +3,24 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { Offer, Product } from "@/types/product";
-import { Badge, Button, Price } from "@/components/shared/UI";
+import { Badge, Button, AddToCartLabel, Price, PriceDesireLine, PriceDisplay } from "@/components/shared/UI";
 import { OptimizedImage } from "@/components/shared/OptimizedImage";
+import { PieceThumbnailPicker } from "@/components/shared/PieceThumbnailPicker";
 import { formatPrice } from "@/lib/format";
+import { ProductHeroReassurance } from "@/components/shared/ReassuranceBar";
 import { cn } from "@/lib/cn";
-import { getOfferBadgeKey, getOfferLabelKey, useTranslation } from "@/i18n/I18nProvider";
+import { useTranslation } from "@/i18n/I18nProvider";
+import {
+  ADD_PIECE_PRICE_MAD,
+  bundleSavings,
+  emptyExtraSlugs,
+  extrasComplete,
+  offersDisplayOrder,
+  resolveExtraProducts,
+  tierTotalPrice,
+} from "@/lib/offerTiers";
 import { getProductName } from "@/lib/products";
+import { getOfferSubtitleKey } from "@/i18n/I18nProvider";
 
 export function ProductCard({ product, premium }: { product: Product; premium?: boolean }) {
   const { t, locale } = useTranslation();
@@ -19,7 +31,7 @@ export function ProductCard({ product, premium }: { product: Product; premium?: 
     <Link
       href={`/products/${product.slug}`}
       className={cn(
-        "group block overflow-hidden transition-all duration-500",
+        "group block min-w-0 w-full overflow-hidden transition-all duration-500",
         premium
           ? "bg-brand-black border border-brand-gold/10 rounded-lg hover:border-brand-gold/45 hover:shadow-[0_0_40px_rgba(201,169,39,0.06)]"
           : "bg-brand-black border border-brand-gold/10 rounded-lg hover:border-brand-gold/30"
@@ -40,13 +52,13 @@ export function ProductCard({ product, premium }: { product: Product; premium?: 
           </div>
         )}
       </div>
-      <div className="p-5 md:p-6">
-        <h3 className="font-display text-lg md:text-xl text-brand-white mb-2 line-clamp-2 tracking-wide font-normal group-hover:text-brand-gold/90 transition-colors">
+      <div className="p-5 md:p-6 min-w-0">
+        <h3 className="font-display text-lg md:text-xl text-brand-white mb-2 line-clamp-2 tracking-wide font-normal group-hover:text-brand-gold/90 transition-colors break-words [overflow-wrap:anywhere]">
           {productName}
         </h3>
-        <Price current={product.base_price_mad} compareAt={product.compare_at_price_mad} />
+        <Price current={product.base_price_mad} />
         <Button variant={premium ? "primary" : "secondary"} fullWidth className="mt-5 pointer-events-none text-xs">
-          {t("common.viewDetails")}
+          {t("common.discoverPiece")}
         </Button>
       </div>
     </Link>
@@ -102,106 +114,146 @@ export function ProductGallery({
 export function ProductHeroCard({
   product,
   subtitle,
+  desireLine,
   selectedOffer,
-  savings,
   onAddToCart,
 }: {
   product: Product;
   subtitle: string;
+  desireLine: string;
   selectedOffer: Offer;
-  savings: number;
   onAddToCart: () => void;
 }) {
   const { t, locale } = useTranslation();
   const productName = getProductName(product, locale);
 
   return (
-    <div className="flex flex-col">
-      <p className="text-brand-gold/80 text-sm uppercase tracking-widest mb-2">{t("common.byBrand")}</p>
-      <h1 className="font-display text-3xl md:text-4xl text-brand-white mb-3">{productName}</h1>
-      <p className="text-brand-white/70 text-lg mb-4 leading-relaxed">{subtitle}</p>
-      <div className="mt-6 p-5 border border-brand-gold/30 bg-brand-black/40">
-        {selectedOffer.compare_at_price_mad && selectedOffer.compare_at_price_mad > selectedOffer.price_mad && (
-          <p className="text-brand-white/40 line-through text-lg mb-1" dir="ltr">
-            {formatPrice(selectedOffer.compare_at_price_mad)}
-          </p>
-        )}
-        <p className="text-4xl font-bold tabular-nums text-brand-gold" dir="ltr">
-          {formatPrice(selectedOffer.price_mad)}
-        </p>
-        {savings > 0 && (
-          <p className="text-color-trust font-semibold mt-2">
-            {t("common.saveAmount", { amount: formatPrice(savings) })} — {t("productPage.zirconHighlight")}
-          </p>
-        )}
+    <div className="flex flex-col min-w-0">
+      <h1 className="font-display text-3xl md:text-4xl text-brand-white mb-4 break-words [overflow-wrap:anywhere] leading-tight">
+        {productName}
+      </h1>
+      <p className="text-brand-white/65 text-base md:text-lg mb-6 leading-relaxed break-words [overflow-wrap:anywhere]">
+        {subtitle}
+      </p>
+      <div className="p-5 md:p-6 border border-brand-gold/25 bg-brand-black/40">
+        <PriceDisplay amount={product.base_price_mad} hero />
+        <PriceDesireLine text={desireLine} />
+        <ProductHeroReassurance />
       </div>
       <Button fullWidth className="mt-6 hidden md:flex" onClick={onAddToCart}>
-        {t("common.addToCartWithPrice", { price: formatPrice(selectedOffer.price_mad) })}
+        <AddToCartLabel amount={selectedOffer.price_mad} />
       </Button>
-      <p className="text-sm text-brand-white/50 mt-4 text-center">{t("productPage.heroCod")}</p>
     </div>
   );
 }
 
 export function OfferSelector({
   offers,
+  allProducts,
+  basePriceMad,
   selectedId,
   onSelect,
+  extraSlugs,
+  onExtraChange,
 }: {
   offers: Offer[];
+  allProducts: Product[];
+  basePriceMad: number;
   selectedId: string;
   onSelect: (id: string) => void;
+  extraSlugs: string[];
+  onExtraChange: (index: number, slug: string | null) => void;
 }) {
-  const { t, dir } = useTranslation();
+  const { t, dir, locale } = useTranslation();
+  const [activeSlot, setActiveSlot] = useState(0);
+  const ordered = offersDisplayOrder(offers);
 
   return (
     <div className="space-y-3">
-      {offers.map((offer) => {
+      {ordered.map((offer) => {
         const selected = offer.id === selectedId;
-        const savings = offer.savings_mad || (offer.compare_at_price_mad ? offer.compare_at_price_mad - offer.price_mad : 0);
-        const badgeKey = getOfferBadgeKey(offer.badge_ar);
-        const pieceLabel = offer.quantity === 1 ? t("common.piece") : t("common.pieces");
+        const tierKey =
+          offer.quantity === 1 ? "offers.single" : offer.quantity === 2 ? "offers.duo" : "offers.packUltimate";
+
+        const extrasNeeded = Math.max(0, offer.quantity - 1);
+        const slotSlugs = extraSlugs.slice(0, extrasNeeded).map((s) => s || null);
+        const extras = resolveExtraProducts(extraSlugs.slice(0, extrasNeeded), allProducts);
+        const savings = extras.length > 0 ? bundleSavings(extras) : 0;
+        const displayPrice = tierTotalPrice(basePriceMad, offer.quantity as 1 | 2 | 3);
+        const isFeaturedTier = offer.quantity === 2;
 
         return (
-          <button
+          <div
             key={offer.id}
-            type="button"
-            onClick={() => onSelect(offer.id)}
             className={cn(
-              "w-full p-4 border transition-all relative",
-              dir === "rtl" ? "text-right" : "text-left",
-              selected ? "border-brand-gold bg-brand-gold/5 shadow-lg shadow-brand-gold/10" : "border-brand-gray hover:border-brand-gold/50"
+              "offer-tier-card w-full transition-colors relative min-w-0 rounded-lg",
+              isFeaturedTier && "offer-tier-duo-pulse",
+              selected && "offer-tier-selected"
             )}
           >
-            {badgeKey && (
-              <span className="absolute top-0 start-4 -translate-y-1/2 gold-brilliant-btn text-brand-black text-xs font-bold px-3 py-0.5">
-                {t(badgeKey)}
-              </span>
+            {isFeaturedTier && (
+              <div className="absolute top-0 inset-x-0 z-10 flex justify-center px-3 -translate-y-1/2 pointer-events-none">
+                <span className="gold-brilliant-btn text-brand-black text-[11px] sm:text-xs font-bold px-3 py-1 leading-snug text-center whitespace-normal max-w-[min(100%,20rem)]">
+                  {t("offers.bestForGift")}
+                </span>
+              </div>
             )}
-            <div className="flex justify-between items-center gap-4">
-              <div>
-                <p className="font-display text-lg tracking-wide">{t(getOfferLabelKey(offer.quantity))}</p>
-                <p className="text-sm text-brand-white/60 mt-1">
-                  {offer.quantity} {pieceLabel}
-                </p>
-                {savings > 0 && (
-                  <p className="text-color-trust text-sm font-semibold mt-2">
-                    {t("common.saveBulk", { amount: formatPrice(savings) })}
-                  </p>
+            <button
+              type="button"
+              onClick={() => {
+                onSelect(offer.id);
+                if (extrasNeeded > 0) setActiveSlot(0);
+              }}
+              className={cn(
+                "w-full p-4 min-w-0",
+                isFeaturedTier && "pt-6 sm:pt-7",
+                dir === "rtl" ? "text-right" : "text-left"
+              )}
+            >
+              <div className="flex justify-between items-start gap-4 min-w-0">
+                <div className="min-w-0 flex-1">
+                  <p className="font-display text-lg tracking-wide break-words">{t(tierKey)}</p>
+                  <p className="text-sm text-brand-white/60 mt-1">{t(getOfferSubtitleKey(offer.quantity))}</p>
+                  {selected && extrasNeeded > 0 && savings > 0 && (
+                    <p className="text-sm text-emerald-400/95 mt-2 font-price-figures font-medium">
+                      {t("addPiece.cumulativeSavings", { amount: formatPrice(savings, locale) })}
+                    </p>
+                  )}
+                  {!selected && offer.quantity >= 2 && (
+                    <p className="text-xs text-brand-gold/70 mt-2 font-price-figures">
+                      {t("addPiece.onlyPrice", { price: formatPrice(ADD_PIECE_PRICE_MAD, locale) })}
+                      {offer.quantity === 3 ? ` × 2` : ""}
+                    </p>
+                  )}
+                </div>
+                <div className={cn("shrink-0", dir === "rtl" ? "text-left" : "text-right")}>
+                  <PriceDisplay amount={displayPrice} offer />
+                </div>
+              </div>
+            </button>
+
+            {selected && extrasNeeded > 0 && allProducts.length > 0 && (
+              <div
+                className="px-4 pb-4 pt-1 border-t border-brand-gold/15 transition-all duration-300"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-xs text-brand-white/60 mb-3">{t("addPiece.pickSubtitle")}</p>
+                <PieceThumbnailPicker
+                  products={allProducts}
+                  slots={slotSlugs}
+                  onSlotsChange={(slots) => {
+                    slots.forEach((slug, i) => onExtraChange(i, slug));
+                    for (let i = slots.length; i < extrasNeeded; i++) onExtraChange(i, null);
+                  }}
+                  activeSlot={activeSlot}
+                  onActiveSlotChange={setActiveSlot}
+                />
+                {extrasNeeded > 0 && !extrasComplete(extraSlugs, extrasNeeded) && (
+                  <p className="text-xs text-amber-400/90 mt-3">{t("offers.completeSelection")}</p>
                 )}
               </div>
-              <div className={cn("shrink-0", dir === "rtl" ? "text-left" : "text-right")}>
-                {offer.compare_at_price_mad && offer.compare_at_price_mad > offer.price_mad && (
-                  <p className="text-brand-white/40 line-through text-sm" dir="ltr">
-                    {formatPrice(offer.compare_at_price_mad)}
-                  </p>
-                )}
-                <p className="font-bold tabular-nums text-brand-gold text-xl" dir="ltr">
-                  {formatPrice(offer.price_mad)}
-                </p>
-              </div>
-            </div>
-          </button>
+            )}
+          </div>
         );
       })}
     </div>

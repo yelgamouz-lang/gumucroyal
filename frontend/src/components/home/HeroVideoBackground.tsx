@@ -1,18 +1,33 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { HERO_DESKTOP_MP4, HERO_MOBILE_MP4, HERO_POSTER } from "@/lib/heroMedia";
 
-const POSTER_SRC = "/videos/hero-poster.jpg";
-const DESKTOP_MP4 = process.env.NEXT_PUBLIC_HERO_VIDEO_URL || "/videos/hero.mp4";
-const MOBILE_MP4 = process.env.NEXT_PUBLIC_HERO_MOBILE_VIDEO_URL || "/videos/hero-mobile.mp4";
+const POSTER_SRC = HERO_POSTER;
+const DESKTOP_MP4 = process.env.NEXT_PUBLIC_HERO_VIDEO_URL || HERO_DESKTOP_MP4;
+const MOBILE_MP4 = process.env.NEXT_PUBLIC_HERO_MOBILE_VIDEO_URL || HERO_MOBILE_MP4;
 const MOBILE_MQ = "(max-width: 767px)";
+
+function subscribeMobileMq(onChange: () => void) {
+  const mq = window.matchMedia(MOBILE_MQ);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getMobileMqSnapshot() {
+  return window.matchMedia(MOBILE_MQ).matches;
+}
+
+function getMobileMqServerSnapshot() {
+  return false;
+}
 
 export function HeroVideoBackground() {
   const desktopRef = useRef<HTMLVideoElement>(null);
   const mobileRef = useRef<HTMLVideoElement>(null);
   const playRequested = useRef(false);
   const [posterVisible, setPosterVisible] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useSyncExternalStore(subscribeMobileMq, getMobileMqSnapshot, getMobileMqServerSnapshot);
 
   const revealVideo = useCallback(() => {
     setPosterVisible(false);
@@ -40,14 +55,6 @@ export function HeroVideoBackground() {
     },
     [revealVideo]
   );
-
-  useEffect(() => {
-    const mq = window.matchMedia(MOBILE_MQ);
-    const syncViewport = () => setIsMobile(mq.matches);
-    syncViewport();
-    mq.addEventListener("change", syncViewport);
-    return () => mq.removeEventListener("change", syncViewport);
-  }, []);
 
   useEffect(() => {
     const video = isMobile ? mobileRef.current : desktopRef.current;

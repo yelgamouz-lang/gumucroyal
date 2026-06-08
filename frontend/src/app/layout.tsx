@@ -8,6 +8,7 @@ import { PixelProvider } from "@/components/tracking/PixelProvider";
 import { AnalyticsTracker } from "@/components/tracking/AnalyticsTracker";
 import { WhatsAppCTA } from "@/components/shared/UI";
 import { AppProviders } from "@/components/providers/AppProviders";
+import { HERO_DESKTOP_MP4, HERO_MOBILE_MP4, HERO_POSTER } from "@/lib/heroMedia";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -78,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="google" content="notranslate" />
         <link
           rel="preload"
-          href="/videos/hero-mobile.mp4"
+          href={HERO_MOBILE_MP4}
           as="video"
           type="video/mp4"
           media="(max-width: 767px)"
@@ -86,13 +87,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <link
           rel="preload"
-          href="/videos/hero.mp4"
+          href={HERO_DESKTOP_MP4}
           as="video"
           type="video/mp4"
           media="(min-width: 768px)"
           fetchPriority="high"
         />
-        <link rel="preload" href="/videos/hero-poster.jpg" as="image" type="image/jpeg" fetchPriority="high" />
+        <link rel="preload" href={HERO_POSTER} as="image" type="image/jpeg" fetchPriority="high" />
       </head>
       <body className="min-h-screen flex flex-col bg-brand-black text-brand-white antialiased notranslate" translate="no">
         <AppProviders>

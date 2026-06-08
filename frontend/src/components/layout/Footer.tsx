@@ -13,7 +13,7 @@ export function Footer() {
         <div className="grid md:grid-cols-3 gap-10">
           <div>
             <h3 className="font-display text-xl tracking-widest text-brand-gold mb-3">GUMÜÇROYAL</h3>
-            <p className="text-brand-white/70">{t("common.brandTagline")}</p>
+            <p className="text-brand-white/70">{t("footer.tagline")}</p>
           </div>
           <div>
             <h3 className="font-display text-base tracking-wide text-brand-gold mb-4">{t("footer.shop")}</h3>

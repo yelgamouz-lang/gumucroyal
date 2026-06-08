@@ -22,7 +22,9 @@ export function CollectionPageClient() {
       <p className="text-brand-white/70 mb-10">{t("collection.subtitle")}</p>
       <div className="grid md:grid-cols-3 gap-8">
         {products.map((p) => (
-          <ProductCard key={p.slug} product={p} />
+          <div key={p.slug} className="min-w-0">
+            <ProductCard product={p} />
+          </div>
         ))}
       </div>
     </SectionWrapper>

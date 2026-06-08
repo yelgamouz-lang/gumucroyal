@@ -115,20 +115,31 @@ export function useWhatsAppProofs(): WhatsAppProof[] {
 export function getOfferLabelKey(quantity: number): string {
   if (quantity === 1) return "offers.single";
   if (quantity === 2) return "offers.duo";
-  return "offers.trio";
+  return "offers.packUltimate";
 }
 
-export function getOfferBadgeKey(badgeAr?: string | null): string | null {
+export function getOfferSubtitleKey(quantity: number): string {
+  if (quantity === 1) return "offers.singleSubtitle";
+  if (quantity === 2) return "offers.duoSubtitle";
+  return "offers.packSubtitle";
+}
+
+export function getOfferBadgeKey(badgeAr?: string | null, isHighlighted?: boolean): string | null {
+  if (isHighlighted) return "offers.bestForGift";
   if (!badgeAr) return null;
-  if (badgeAr.includes("الأكثر") || badgeAr.includes("⭐")) return "offers.mostPopular";
-  if (badgeAr.includes("أفضل") || badgeAr.includes("Meilleure") || badgeAr.includes("Best value")) return "offers.bestValue";
+  if (badgeAr.includes("للهدية") || badgeAr.includes("Meilleur") || badgeAr.includes("offrir")) return "offers.bestForGift";
   return null;
 }
 
 export function useProductContent(slug: string) {
   const { messages, t } = useTranslation();
+  const perProduct =
+    (getNestedValue(messages, `products.${slug}.desire_line`) as string | undefined) ||
+    (getNestedValue(messages, `products.${slug}.desireLine`) as string | undefined);
+  const desireLine = perProduct || t("productPage.desire_line");
   return {
     subtitle: t(`products.${slug}.subtitle`),
+    desireLine,
     benefits: (getNestedValue(messages, `products.${slug}.benefits`) as string[]) || [],
   };
 }

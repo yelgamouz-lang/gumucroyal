@@ -1,10 +1,11 @@
-import { Amiri, Cinzel, Cormorant_Garamond, DM_Sans, Tajawal } from "next/font/google";
+import { Amiri, Cinzel, Cormorant_Garamond, DM_Sans, Playfair_Display, Tajawal } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { CheckoutPopup } from "@/components/checkout/CheckoutFlow";
 import { UpsellModal } from "@/components/checkout/UpsellModal";
 import { PixelProvider } from "@/components/tracking/PixelProvider";
+import { AnalyticsTracker } from "@/components/tracking/AnalyticsTracker";
 import { WhatsAppCTA } from "@/components/shared/UI";
 import { AppProviders } from "@/components/providers/AppProviders";
 import "./globals.css";
@@ -20,6 +21,13 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-cormorant",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -45,8 +53,16 @@ const amiri = Amiri({
 });
 
 export const metadata = {
-  title: "GUMÜÇROYAL — أنوثة كتحس، فخامة كتبان",
-  description: "Bijouterie premium pour la femme marocaine. COD, livraison 24H et 48H.",
+  title: "GUMÜÇ ROYAL — Maison de joaillerie",
+  description: "Maison de joaillerie accessible — acier inoxydable finition dorée. Paiement à la livraison, livraison 24-48h au Maroc.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -54,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
-      className={`notranslate ${cormorant.variable} ${cinzel.variable} ${dmSans.variable} ${tajawal.variable} ${amiri.variable}`}
+      className={`notranslate ${cormorant.variable} ${playfair.variable} ${cinzel.variable} ${dmSans.variable} ${tajawal.variable} ${amiri.variable}`}
       translate="no"
       suppressHydrationWarning
     >
@@ -88,6 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <UpsellModal />
           <WhatsAppCTA />
           <PixelProvider />
+          <AnalyticsTracker />
         </AppProviders>
       </body>
     </html>

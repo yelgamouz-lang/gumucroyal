@@ -1,5 +1,18 @@
-export function formatPrice(amount: number): string {
-  return `${amount.toLocaleString("fr-MA")} د.م.`;
+import type { Locale } from "@/i18n/types";
+
+/** Locale-aware number formatting (no currency). */
+export function formatPriceNumber(amount: number): string {
+  return amount.toLocaleString("fr-MA", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+}
+
+/** Currency suffix only — FR/EN: "Dhs", AR: "د.م". */
+export function getCurrencyLabel(locale: Locale): string {
+  return locale === "ar" ? "د.م" : "Dhs";
+}
+
+/** Full price string: "129 Dhs" (fr/en) or "129 د.م" (ar). */
+export function formatPrice(amount: number, locale: Locale = "fr"): string {
+  return `${formatPriceNumber(amount)} ${getCurrencyLabel(locale)}`;
 }
 
 export function formatPhoneInput(value: string): string {

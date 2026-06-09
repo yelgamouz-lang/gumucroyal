@@ -24,28 +24,19 @@ export function OptimizedImage({
   height = 800,
   fill,
 }: OptimizedImageProps) {
+  const shared = {
+    src,
+    alt,
+    priority,
+    sizes,
+    loading: priority ? ("eager" as const) : ("lazy" as const),
+    decoding: "async" as const,
+    className: cn("object-cover", className),
+  };
+
   if (fill) {
-    return (
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        priority={priority}
-        sizes={sizes}
-        className={cn("object-cover", className)}
-      />
-    );
+    return <Image {...shared} fill />;
   }
 
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      priority={priority}
-      sizes={sizes}
-      className={cn("object-cover", className)}
-    />
-  );
+  return <Image {...shared} width={width} height={height} />;
 }

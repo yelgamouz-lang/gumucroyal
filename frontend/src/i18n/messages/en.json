@@ -175,11 +175,18 @@
     "no": "No thanks, continue"
   },
   "thankYou": {
-    "title": "Thank you for your trust! 🎉",
-    "confirmHint": "Confirm your order via WhatsApp to speed up delivery — cash on delivery only.",
-    "confirmButton": "💬 Confirm my order",
-    "confirmNote": "Pre-filled message — click to confirm",
-    "callHint": "Our team will call you to confirm your order."
+    "title": "Thank you for your trust",
+    "callBannerNow": "We will call you shortly to confirm your order, between 9am and 9pm.",
+    "callBannerLater": "Ordered outside business hours? We will call you tomorrow morning to confirm, between 9am and 9pm.",
+    "recapTitle": "Order summary",
+    "waitTitle": "While you wait for our call",
+    "reassuranceCod": "Cash on delivery — no online payment",
+    "reassuranceDelivery": "Delivery within 24–48h across Morocco",
+    "reassuranceSteel": "Gold-tone stainless steel that never tarnishes",
+    "completeTitle": "Complete your order",
+    "completeSubtitle": "There is still time before we call — add a piece if you like",
+    "viewPiece": "View piece ←",
+    "callHint": "We will call to confirm your address and delivery. Keep your phone nearby."
   },
   "whatsapp": {
     "label": "Contact us on WhatsApp",

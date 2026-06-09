@@ -81,6 +81,55 @@ html[dir="rtl"] .font-product {
   contain-intrinsic-size: auto 520px;
 }
 
+/* Thank You — premium COD confirmation */
+.thank-you-page {
+  background: linear-gradient(180deg, var(--brand-black) 0%, #080809 100%);
+}
+
+.thank-you-order-id {
+  box-shadow: 0 0 24px rgba(255, 211, 120, 0.06);
+}
+
+.thank-you-call-banner {
+  position: relative;
+  padding: 1.75rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 211, 120, 0.38);
+  background: linear-gradient(165deg, rgba(255, 211, 120, 0.11) 0%, rgba(255, 211, 120, 0.03) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 211, 120, 0.06) inset,
+    0 8px 40px rgba(255, 211, 120, 0.1),
+    0 0 60px rgba(255, 211, 120, 0.05);
+}
+
+@media (min-width: 768px) {
+  .thank-you-call-banner {
+    padding: 2rem 2rem;
+  }
+}
+
+.thank-you-recap {
+  padding: 1.5rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 211, 120, 0.12);
+  background: rgba(11, 11, 13, 0.85);
+}
+
+@media (min-width: 768px) {
+  .thank-you-recap {
+    padding: 1.75rem 1.75rem;
+  }
+}
+
+.thank-you-reassurance {
+  padding: 0 0.25rem;
+}
+
+.thank-you-suggestion:focus-visible {
+  outline: 2px solid rgba(255, 211, 120, 0.45);
+  outline-offset: 4px;
+}
+
 /* Royal price figures — Playfair/Cormorant serif, uniform lining numerals */
 .font-price-figures {
   font-family: var(--font-playfair), var(--font-cormorant), Georgia, "Times New Roman", serif;

@@ -18,6 +18,8 @@ type PieceThumbnailPickerProps = {
   activeSlot: number;
   onActiveSlotChange?: (index: number) => void;
   compact?: boolean;
+  /** Mobile: all products selectable (no grayed-out items). */
+  allowAllProducts?: boolean;
   className?: string;
 };
 
@@ -32,13 +34,16 @@ export function PieceThumbnailPicker({
   activeSlot,
   onActiveSlotChange,
   compact,
+  allowAllProducts = false,
   className,
 }: PieceThumbnailPickerProps) {
   const { t, locale, dir } = useTranslation();
 
+  const isSelectable = (basePriceMad: number) => allowAllProducts || isAddPieceEligible(basePriceMad);
+
   const handleProductClick = (slug: string) => {
     const product = products.find((p) => p.slug === slug);
-    if (!product || !isAddPieceEligible(product.base_price_mad)) return;
+    if (!product || !isSelectable(product.base_price_mad)) return;
 
     const next = [...slots];
     if (next[activeSlot] === slug) {
@@ -92,7 +97,7 @@ export function PieceThumbnailPicker({
       >
         {products.map((p) => {
           const name = getProductName(p, locale);
-          const eligible = isAddPieceEligible(p.base_price_mad);
+          const eligible = isSelectable(p.base_price_mad);
           const isSelectedInActive = slots[activeSlot] === p.slug;
 
           return (

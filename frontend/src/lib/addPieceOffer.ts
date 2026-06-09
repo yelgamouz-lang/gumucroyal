@@ -50,6 +50,11 @@ export interface AddPieceCandidate {
 
 export function productToAddPieceCandidate(product: Product): AddPieceCandidate | null {
   if (!isAddPieceEligible(product.base_price_mad)) return null;
+  return productToAddPieceCandidateAlways(product);
+}
+
+/** Every catalog product can be picked as an add-on (mobile free choice). */
+export function productToAddPieceCandidateAlways(product: Product): AddPieceCandidate {
   return {
     id: product.id,
     slug: product.slug,
@@ -67,6 +72,10 @@ export function buildAddPieceCandidates(products: Product[]): AddPieceCandidate[
   return products
     .map(productToAddPieceCandidate)
     .filter((c): c is AddPieceCandidate => c != null);
+}
+
+export function buildAllAddPieceCandidates(products: Product[]): AddPieceCandidate[] {
+  return products.map(productToAddPieceCandidateAlways);
 }
 
 export function findAddPieceCandidate(

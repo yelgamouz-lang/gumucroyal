@@ -27,6 +27,7 @@ import { getCartItemName } from "@/lib/products";
 import { getOfferLabelKey, useTranslation } from "@/i18n/I18nProvider";
 import { AddPieceOfferPanel } from "@/components/checkout/AddPieceOfferPanel";
 import { cn } from "@/lib/cn";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 function addPieceDisplayName(candidate: AddPieceCandidate, locale: string): string {
   return locale === "ar" ? candidate.name_ar : candidate.name_fr;
@@ -34,6 +35,7 @@ function addPieceDisplayName(candidate: AddPieceCandidate, locale: string): stri
 
 export function CheckoutPopup() {
   const { t, locale } = useTranslation();
+  const isMobile = useIsMobile();
   const router = useRouter();
   const checkoutOpen = useUIStore((s) => s.checkoutOpen);
   const upsellOpen = useUIStore((s) => s.upsellOpen);
@@ -49,11 +51,13 @@ export function CheckoutPopup() {
   const [phone, setPhone] = useState("");
   const [addPieces, setAddPieces] = useState<AddPieceCandidate[]>([]);
   const [addPanelDismissed, setAddPanelDismissed] = useState(false);
+  const [addPanelExpanded, setAddPanelExpanded] = useState(false);
   const [flashLineKeys, setFlashLineKeys] = useState<Set<string>>(new Set());
   const [panelFlash, setPanelFlash] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
   const [loading, setLoading] = useState(false);
+  const confirmFooterRef = useRef<HTMLDivElement>(null);
   const initiateTracked = useRef(false);
   const prevAddCount = useRef(0);
 
@@ -84,15 +88,20 @@ export function CheckoutPopup() {
       setError("");
       setAddPieces([]);
       setAddPanelDismissed(false);
+      setAddPanelExpanded(false);
       setPanelFlash(false);
       prevAddCount.current = 0;
       return;
     }
     setPanelFlash(true);
+    if (isMobile) {
+      setAddPanelDismissed(true);
+      setAddPanelExpanded(false);
+    }
     if (initiateTracked.current) return;
     initiateTracked.current = true;
     trackInitiateCheckout(cartTotal, generateEventId("InitiateCheckout"));
-  }, [checkoutOpen, cartTotal]);
+  }, [checkoutOpen, cartTotal, isMobile]);
 
   useEffect(() => {
     if (addPieces.length > maxAddSlots) {
@@ -158,11 +167,27 @@ export function CheckoutPopup() {
     }
   };
 
+  const skipAddOnOffer = () => {
+    setAddPieces([]);
+    setAddPanelDismissed(true);
+    setAddPanelExpanded(false);
+    window.setTimeout(() => confirmFooterRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+  };
+
+  const showAddPanel = maxAddSlots > 0 && !addPanelDismissed && (!isMobile || addPanelExpanded);
+  const showMobileAddTeaser = isMobile && maxAddSlots > 0 && addPanelDismissed && !addPanelExpanded;
+
   return (
-    <div className="fixed inset-0 z-[10003] flex items-center justify-center p-4">
+    <div className={cn("fixed inset-0 z-[10003] flex justify-center", isMobile ? "items-end p-0" : "items-center p-4")}>
       <div className="absolute inset-0 bg-black/60" onClick={() => setCheckoutOpen(false)} />
-      <div className="relative bg-brand-charcoal border border-brand-gray/30 w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 flex flex-col">
-        <button type="button" className="absolute top-4 start-4" onClick={() => setCheckoutOpen(false)} aria-label={t("common.close")}>
+      <div
+        className={cn(
+          "relative bg-brand-charcoal border border-brand-gray/30 w-full max-w-lg flex flex-col overflow-hidden",
+          isMobile ? "max-h-[92dvh] rounded-t-xl border-b-0" : "max-h-[90vh] rounded-none"
+        )}
+      >
+        <div className={cn("overflow-y-auto flex-1 p-6", isMobile && "pb-4")}>
+        <button type="button" className="absolute top-4 start-4 z-10" onClick={() => setCheckoutOpen(false)} aria-label={t("common.close")}>
           <X />
         </button>
         <h2 className="font-display text-xl tracking-wide text-brand-gold mb-4">{t("checkout.title")}</h2>
@@ -226,8 +251,21 @@ export function CheckoutPopup() {
         <p className="text-sm text-color-trust mb-4">{t("common.freeShipping")}</p>
         <p className="text-sm text-brand-gold/90 mb-5">{t("checkout.deliveryEstimate", { date: getDeliveryEstimate() })}</p>
 
-        {/* 2) Carré ajout pièce */}
-        {maxAddSlots > 0 && !addPanelDismissed && (
+        {/* 2) Carré ajout pièce — optionnel */}
+        {showMobileAddTeaser && (
+          <button
+            type="button"
+            onClick={() => {
+              setAddPanelDismissed(false);
+              setAddPanelExpanded(true);
+            }}
+            className="mb-5 w-full text-center text-sm text-brand-gold/85 hover:text-brand-gold border border-brand-gold/25 rounded-lg py-3 transition-colors"
+          >
+            {t("addPiece.headlinePrefix")}{" "}
+            <span className="font-price-figures">{formatPrice(ADD_PIECE_PRICE_MAD, locale)}</span>
+          </button>
+        )}
+        {showAddPanel && (
           <div className="mb-5">
             <AddPieceOfferPanel
               maxSlots={maxAddSlots}
@@ -235,13 +273,11 @@ export function CheckoutPopup() {
               onSelectedChange={setAddPieces}
               baseTotal={cartTotal}
               flashOnOpen={panelFlash}
+              mobileFreeChoice={isMobile}
             />
             <button
               type="button"
-              onClick={() => {
-                setAddPieces([]);
-                setAddPanelDismissed(true);
-              }}
+              onClick={skipAddOnOffer}
               className="mt-3 w-full text-center text-sm text-brand-white/45 hover:text-brand-white/75 underline underline-offset-2 transition-colors"
             >
               {t("checkout.continueSinglePiece")}
@@ -250,8 +286,7 @@ export function CheckoutPopup() {
         )}
 
         {/* 3) Champs client */}
-        <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-4 flex-1">
-          <div>
+        <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-4">          <div>
             <label className="block text-sm mb-2">{t("checkout.fullName")}</label>
             <input
               value={name}
@@ -286,18 +321,26 @@ export function CheckoutPopup() {
           </div>
           {error && !fieldErrors.name && !fieldErrors.phone && <p className="text-red-400 text-sm">{error}</p>}
         </form>
+        </div>
 
-        {/* 4) Confirmer — tout en bas */}
-        <Button
-          type="submit"
-          form="checkout-form"
-          fullWidth
-          disabled={loading}
-          aria-disabled={loading}
-          className="mt-5 shrink-0"
+        {/* 4) Confirmer — fixé en bas sur mobile */}
+        <div
+          ref={confirmFooterRef}
+          className={cn(
+            "shrink-0 p-4 md:p-6 pt-3 bg-brand-charcoal border-t border-brand-gray/30 safe-area-pb",
+            isMobile && "sticky bottom-0"
+          )}
         >
-          {loading ? t("checkout.submitting") : t("checkout.confirmCod")}
-        </Button>
+          <Button
+            type="submit"
+            form="checkout-form"
+            fullWidth
+            disabled={loading}
+            aria-disabled={loading}
+          >
+            {loading ? t("checkout.submitting") : t("checkout.confirmCod")}
+          </Button>
+        </div>
       </div>
     </div>
   );

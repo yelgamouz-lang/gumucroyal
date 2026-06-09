@@ -21,6 +21,7 @@ import {
 } from "@/lib/offerTiers";
 import { getProductName } from "@/lib/products";
 import { getOfferSubtitleKey } from "@/i18n/I18nProvider";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 export function ProductCard({ product, premium }: { product: Product; premium?: boolean }) {
   const { t, locale } = useTranslation();
@@ -165,6 +166,7 @@ export function OfferSelector({
   onExtraChange: (index: number, slug: string | null) => void;
 }) {
   const { t, dir, locale } = useTranslation();
+  const isMobile = useIsMobile();
   const [activeSlot, setActiveSlot] = useState(0);
   const ordered = offersDisplayOrder(offers);
 
@@ -232,7 +234,13 @@ export function OfferSelector({
               </div>
             </button>
 
-            {selected && extrasNeeded > 0 && allProducts.length > 0 && (
+            {selected && extrasNeeded > 0 && isMobile && (
+              <p className="px-4 pb-3 text-xs text-brand-white/60 border-t border-brand-gold/15 pt-3">
+                {t("addPiece.pickSubtitle")}
+              </p>
+            )}
+
+            {selected && extrasNeeded > 0 && allProducts.length > 0 && !isMobile && (
               <div
                 className="px-4 pb-4 pt-1 border-t border-brand-gold/15 transition-all duration-300"
                 onClick={(e) => e.stopPropagation()}
@@ -247,8 +255,10 @@ export function OfferSelector({
                   }}
                   activeSlot={activeSlot}
                   onActiveSlotChange={setActiveSlot}
+                  compact={isMobile}
+                  allowAllProducts={isMobile}
                 />
-                {extrasNeeded > 0 && !extrasComplete(extraSlugs, extrasNeeded) && (
+                {extrasNeeded > 0 && !extrasComplete(extraSlugs, extrasNeeded) && !isMobile && (
                   <p className="text-xs text-amber-400/90 mt-3">{t("offers.completeSelection")}</p>
                 )}
               </div>

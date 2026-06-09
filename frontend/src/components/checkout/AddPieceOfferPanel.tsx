@@ -7,6 +7,7 @@ import { PriceDisplay } from "@/components/shared/UI";
 import {
   ADD_PIECE_PRICE_MAD,
   buildAddPieceCandidates,
+  buildAllAddPieceCandidates,
   checkoutAddOnTotal,
   maxAddPieceSavings,
   totalAddPieceSavings,
@@ -25,6 +26,8 @@ type AddPieceOfferPanelProps = {
   className?: string;
   /** Golden pulse when checkout recap opens (2–3 s). */
   flashOnOpen?: boolean;
+  /** Mobile: all 3 products selectable with thumbnails. */
+  mobileFreeChoice?: boolean;
 };
 
 export function AddPieceOfferPanel({
@@ -34,6 +37,7 @@ export function AddPieceOfferPanel({
   baseTotal,
   className,
   flashOnOpen = false,
+  mobileFreeChoice = false,
 }: AddPieceOfferPanelProps) {
   const { t, locale } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
@@ -51,7 +55,10 @@ export function AddPieceOfferPanel({
     return () => window.clearTimeout(timer);
   }, [flashOnOpen]);
 
-  const candidates = useMemo(() => buildAddPieceCandidates(products), [products]);
+  const candidates = useMemo(
+    () => (mobileFreeChoice ? buildAllAddPieceCandidates(products) : buildAddPieceCandidates(products)),
+    [products, mobileFreeChoice]
+  );
   const candidateBySlug = useMemo(() => new Map(candidates.map((c) => [c.slug, c])), [candidates]);
   const maxSavings = useMemo(() => maxAddPieceSavings(products), [products]);
 
@@ -99,6 +106,7 @@ export function AddPieceOfferPanel({
         activeSlot={activeSlot}
         onActiveSlotChange={setActiveSlot}
         compact
+        allowAllProducts={mobileFreeChoice}
       />
 
       {selected.length > 0 && totalSavings > 0 && (

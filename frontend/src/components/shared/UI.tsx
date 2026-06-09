@@ -1,5 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import { useIsMobile } from "@/lib/useIsMobile";
+
 import { cn } from "@/lib/cn";
 import { formatPriceNumber, getCurrencyLabel } from "@/lib/format";
 import { useState } from "react";
@@ -334,7 +337,12 @@ export function FAQItem({ question, answer }: { question: string; answer: string
 
 export function WhatsAppCTA() {
   const { t, dir } = useTranslation();
+  const pathname = usePathname();
+  const isMobile = useIsMobile();
   const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212600000000";
+
+  if (isMobile && pathname?.startsWith("/products/")) return null;
+
   return (
     <div className="fixed bottom-4 start-4 z-50 rounded-full border border-brand-gold/30 bg-brand-black/95 shadow-2xl shadow-black/40 p-4 backdrop-blur-lg">
       <a

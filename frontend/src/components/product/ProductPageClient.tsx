@@ -17,10 +17,16 @@ import { Button, SectionWrapper, AlternatingSection, FAQItem, ProductTrustBar, P
 import { generateEventId } from "@/lib/format";
 import { trackAddToCart, trackViewContent } from "@/lib/tracking";
 import { trackAnalyticsClick } from "@/lib/analytics";
+import { cn } from "@/lib/cn";
 import { useProductContent, useProductFaq, useTranslation } from "@/i18n/I18nProvider";
+import { PieceThumbnailPicker } from "@/components/shared/PieceThumbnailPicker";
+import { useIsMobile } from "@/lib/useIsMobile";
+import { ADD_PIECE_PRICE_MAD, bundleSavings } from "@/lib/offerTiers";
+import { formatPrice } from "@/lib/format";
 
 export function ProductPageClient({ product }: { product: Product }) {
   const { t, locale } = useTranslation();
+  const isMobile = useIsMobile();
   const { subtitle, desireLine, benefits } = useProductContent(product.slug);
   const faq = useProductFaq();
 
@@ -28,6 +34,7 @@ export function ProductPageClient({ product }: { product: Product }) {
   const [selectedOfferId, setSelectedOfferId] = useState(defaultOffer.id);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [extraSlugs, setExtraSlugs] = useState<string[]>(() => emptyExtraSlugs(2));
+  const [mobilePickerSlot, setMobilePickerSlot] = useState(0);
   const addItem = useCartStore((s) => s.addItem);
   const setCartOpen = useUIStore((s) => s.setCartOpen);
   const viewTracked = useRef(false);
@@ -59,8 +66,10 @@ export function ProductPageClient({ product }: { product: Product }) {
   };
 
   const extrasNeeded = Math.max(0, selectedOffer.quantity - 1);
-  const canAddToCart = extrasComplete(extraSlugs, extrasNeeded);
+  const canAddToCart = extrasNeeded === 0 || extrasComplete(extraSlugs, extrasNeeded);
   const displayPrice = tierTotalPrice(product.base_price_mad, selectedOffer.quantity as 1 | 2 | 3);
+  const mobileSlotSlugs = extraSlugs.slice(0, extrasNeeded).map((s) => s || null);
+  const mobileBundleSavings = bundleSavings(resolveExtraProducts(extraSlugs.slice(0, extrasNeeded), allProducts));
 
   const handleAddToCart = () => {
     if (!canAddToCart) return;
@@ -136,19 +145,51 @@ export function ProductPageClient({ product }: { product: Product }) {
         <div className="max-w-xl mx-auto text-center border border-brand-gold/30 p-8 bg-brand-black/50 min-w-0">
           <h3 className="font-display text-2xl text-brand-gold mb-6">{t("offers.chooseOffer")}</h3>
           <OfferSelector {...offerSelectorProps} />
-          <Button fullWidth className="mt-6" onClick={handleAddToCart} disabled={!canAddToCart}>
+          <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
             <AddToCartLabel amount={displayPrice} />
           </Button>
         </div>
       </SectionWrapper>
 
-      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-brand-black/95 backdrop-blur border-t border-brand-gray/30 p-3 flex items-center gap-3 safe-area-pb min-w-0">
-        <div className="shrink-0 min-w-0">
-          <PriceDisplay amount={displayPrice} />
+      <div className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-brand-black/95 backdrop-blur border-t border-brand-gray/30 safe-area-pb min-w-0">
+        {isMobile && extrasNeeded > 0 && allProducts.length > 0 && (
+          <div className="px-3 pt-3 border-b border-brand-gray/20">
+            <p className="text-xs text-brand-white/60 mb-2">{t("addPiece.pickSubtitle")}</p>
+            <PieceThumbnailPicker
+              products={allProducts}
+              slots={mobileSlotSlugs}
+              onSlotsChange={(slots) => {
+                slots.forEach((slug, i) => handleExtraChange(i, slug));
+                for (let i = slots.length; i < extrasNeeded; i++) handleExtraChange(i, null);
+              }}
+              activeSlot={mobilePickerSlot}
+              onActiveSlotChange={setMobilePickerSlot}
+              compact
+              allowAllProducts
+            />
+            {mobileBundleSavings > 0 && extrasComplete(extraSlugs, extrasNeeded) && (
+              <p className="text-xs text-emerald-400/95 font-price-figures mt-2 mb-1">
+                {t("addPiece.cumulativeSavings", { amount: formatPrice(mobileBundleSavings, locale) })}
+              </p>
+            )}
+          </div>
+        )}
+        <div className="p-3 flex items-center gap-3 min-w-0">
+          <div className="shrink-0 min-w-0">
+            <PriceDisplay amount={displayPrice} />
+            {isMobile && extrasNeeded > 0 && !canAddToCart && (
+              <p className="text-[10px] text-brand-white/50 mt-0.5">
+                {t("addPiece.onlyPrice", { price: formatPrice(ADD_PIECE_PRICE_MAD, locale) })}
+                {extrasNeeded > 1 ? ` × ${extrasNeeded}` : ""}
+              </p>
+            )}
+          </div>
+          <Button fullWidth onClick={handleAddToCart} disabled={!canAddToCart}>
+            {t("common.addToCart")}
+          </Button>
         </div>
-        <Button fullWidth onClick={handleAddToCart} disabled={!canAddToCart}>{t("common.addToCart")}</Button>
       </div>
-      <div className="h-24 md:hidden" aria-hidden />
+      <div className={cn("md:hidden", isMobile && extrasNeeded > 0 ? "h-52" : "h-24")} aria-hidden />
     </>
   );
 }

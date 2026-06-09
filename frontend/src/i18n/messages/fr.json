@@ -175,18 +175,17 @@
     "no": "Non merci, continuer"
   },
   "thankYou": {
-    "title": "Merci pour votre confiance",
-    "callBannerNow": "Nous vous appelons sous peu pour confirmer votre commande, entre 9h et 21h.",
-    "callBannerLater": "Commande hors horaires ? Nous vous appellerons demain matin pour confirmer, entre 9h et 21h.",
+    "title": "Votre commande est bien enregistrée",
+    "orderLabel": "N° de commande",
+    "callHeadline": "Nous vous appelons rapidement pour confirmer votre commande.",
+    "callHours": "Entre 9h et 21h. Si vous commandez en dehors de ces horaires, nous vous appellerons demain matin.",
+    "unknownNumber": "Un numéro marocain vous appellera pour confirmer l'adresse.",
     "recapTitle": "Récapitulatif",
-    "waitTitle": "En attendant notre appel",
-    "reassuranceCod": "Paiement à la livraison — aucun paiement en ligne",
-    "reassuranceDelivery": "Livraison 24–48h dans tout le Maroc",
+    "reassuranceCod": "Paiement à la livraison",
+    "reassuranceDelivery": "Livraison 24–48h dans toutes les villes",
     "reassuranceSteel": "Acier finition dorée qui ne ternit pas",
-    "completeTitle": "Complétez votre commande",
-    "completeSubtitle": "Il reste du temps avant notre appel — ajoutez une pièce si vous le souhaitez",
-    "viewPiece": "Voir la pièce ←",
-    "callHint": "Nous vous appellerons pour confirmer l'adresse et la livraison. Gardez votre téléphone à portée de main."
+    "completeTitle": "Vous pouvez ajouter une pièce avant notre appel",
+    "whatsappHint": "Une question ? Écrivez-nous sur WhatsApp."
   },
   "whatsapp": {
     "label": "Contactez-nous sur WhatsApp",

@@ -1,14 +1,8 @@
 import { Amiri, Cinzel, Cormorant_Garamond, DM_Sans, Playfair_Display, Tajawal } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { CartDrawer } from "@/components/cart/CartDrawer";
-import { CheckoutPopup } from "@/components/checkout/CheckoutFlow";
-import { UpsellModal } from "@/components/checkout/UpsellModal";
-import { PixelProvider } from "@/components/tracking/PixelProvider";
-import { AnalyticsTracker } from "@/components/tracking/AnalyticsTracker";
-import { WhatsAppCTA } from "@/components/shared/UI";
 import { AppProviders } from "@/components/providers/AppProviders";
-import { HERO_DESKTOP_MP4, HERO_MOBILE_MP4, HERO_POSTER } from "@/lib/heroMedia";
+import { ClientOverlays } from "@/components/layout/ClientOverlays";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -77,35 +71,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <meta name="google" content="notranslate" />
-        <link
-          rel="preload"
-          href={HERO_MOBILE_MP4}
-          as="video"
-          type="video/mp4"
-          media="(max-width: 767px)"
-          fetchPriority="high"
-        />
-        <link
-          rel="preload"
-          href={HERO_DESKTOP_MP4}
-          as="video"
-          type="video/mp4"
-          media="(min-width: 768px)"
-          fetchPriority="high"
-        />
-        <link rel="preload" href={HERO_POSTER} as="image" type="image/jpeg" fetchPriority="high" />
       </head>
       <body className="min-h-screen flex flex-col bg-brand-black text-brand-white antialiased notranslate" translate="no">
         <AppProviders>
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
-          <CartDrawer />
-          <CheckoutPopup />
-          <UpsellModal />
-          <WhatsAppCTA />
-          <PixelProvider />
-          <AnalyticsTracker />
+          <ClientOverlays />
         </AppProviders>
       </body>
     </html>

@@ -25,7 +25,7 @@ export function BrandCommitmentSection() {
 
       <div
         className={cn(
-          "relative aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-lg border border-[rgba(201,162,39,0.28)]",
+          "relative aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] overflow-hidden rounded-lg border border-[rgba(201,162,39,0.28)] min-h-[320px] md:min-h-[480px]",
           dir === "rtl" ? "md:order-1" : "md:order-2"
         )}
       >

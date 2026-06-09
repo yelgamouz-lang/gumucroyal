@@ -38,13 +38,13 @@ export function ProductCard({ product, premium }: { product: Product; premium?: 
           : "bg-brand-black border border-brand-gold/10 rounded-lg hover:border-brand-gold/30"
       )}
     >
-      <div className="aspect-square overflow-hidden relative">
+      <div className="aspect-square md:aspect-[4/5] overflow-hidden relative min-h-[260px] md:min-h-[320px]">
         <OptimizedImage
           src={product.images[0]?.url}
           alt={productName}
-          width={600}
-          height={600}
-          sizes="(max-width: 768px) 100vw, 25vw"
+          width={720}
+          height={900}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
           className="w-full h-full group-hover:scale-[1.03] transition-transform duration-700 ease-out"
         />
         {product.badge && (

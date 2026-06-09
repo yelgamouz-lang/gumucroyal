@@ -75,6 +75,12 @@ html[dir="rtl"] .font-product {
   letter-spacing: 0;
 }
 
+/* Defer off-screen section paint for smoother scroll */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+
 /* Royal price figures — Playfair/Cormorant serif, uniform lining numerals */
 .font-price-figures {
   font-family: var(--font-playfair), var(--font-cormorant), Georgia, "Times New Roman", serif;

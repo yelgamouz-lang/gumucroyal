@@ -175,11 +175,18 @@
     "no": "Non merci, continuer"
   },
   "thankYou": {
-    "title": "Merci pour votre confiance ! 🎉",
-    "confirmHint": "Confirmez votre commande via WhatsApp pour accélérer la livraison — paiement à la livraison uniquement.",
-    "confirmButton": "💬 Confirmer ma commande",
-    "confirmNote": "Message pré-rempli — cliquez pour confirmer",
-    "callHint": "Notre équipe vous contactera pour confirmer votre commande."
+    "title": "Merci pour votre confiance",
+    "callBannerNow": "Nous vous appelons sous peu pour confirmer votre commande, entre 9h et 21h.",
+    "callBannerLater": "Commande hors horaires ? Nous vous appellerons demain matin pour confirmer, entre 9h et 21h.",
+    "recapTitle": "Récapitulatif",
+    "waitTitle": "En attendant notre appel",
+    "reassuranceCod": "Paiement à la livraison — aucun paiement en ligne",
+    "reassuranceDelivery": "Livraison 24–48h dans tout le Maroc",
+    "reassuranceSteel": "Acier finition dorée qui ne ternit pas",
+    "completeTitle": "Complétez votre commande",
+    "completeSubtitle": "Il reste du temps avant notre appel — ajoutez une pièce si vous le souhaitez",
+    "viewPiece": "Voir la pièce ←",
+    "callHint": "Nous vous appellerons pour confirmer l'adresse et la livraison. Gardez votre téléphone à portée de main."
   },
   "whatsapp": {
     "label": "Contactez-nous sur WhatsApp",

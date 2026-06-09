@@ -221,7 +221,7 @@ export function ReviewCardPhoto({
 }) {
   return (
     <div className="bg-brand-card border border-brand-gold/10 rounded-lg overflow-hidden h-full flex flex-col">
-      <div className="aspect-[4/3] relative">
+      <div className="aspect-[4/3] md:aspect-[5/6] relative min-h-[220px] md:min-h-[360px]">
         <OptimizedImage src={photo} alt={`avis ${name}`} fill sizes="(max-width:768px) 100vw, 33vw" />
       </div>
       <div className="p-6 flex-1 flex flex-col">
@@ -379,13 +379,18 @@ export function AlternatingSection({
   priority?: boolean;
 }) {
   return (
-    <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+    <div className="grid md:grid-cols-2 gap-10 md:gap-14 lg:gap-16 items-center">
       <div className={reverse ? "md:order-2" : "md:order-1"}>
         {title && <h2 className="font-display text-3xl md:text-4xl mb-6 text-brand-gold tracking-wide font-normal">{title}</h2>}
         <div className="space-y-4 text-brand-white/60 leading-relaxed font-light tracking-wide text-sm md:text-base">{children}</div>
       </div>
-      <div className={cn("aspect-square overflow-hidden relative rounded-lg border border-brand-gold/10", reverse ? "md:order-1" : "md:order-2")}>
-        <OptimizedImage src={image} alt={imageAlt} fill sizes="(max-width:768px) 100vw, 50vw" priority={priority} />
+      <div
+        className={cn(
+          "aspect-[4/5] md:aspect-[5/6] lg:aspect-square overflow-hidden relative rounded-lg border border-brand-gold/10 min-h-[280px] md:min-h-[440px] lg:min-h-[480px]",
+          reverse ? "md:order-1" : "md:order-2"
+        )}
+      >
+        <OptimizedImage src={image} alt={imageAlt} fill sizes="(max-width:768px) 100vw, 45vw" priority={priority} />
       </div>
     </div>
   );

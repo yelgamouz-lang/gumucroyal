@@ -55,7 +55,7 @@ export function HomePageClient() {
       <ReassuranceBar />
 
       {/* 3. Nos produits */}
-      <SectionWrapper compact className="pt-6 md:pt-8">
+      <SectionWrapper compact className="pt-6 md:pt-8 cv-auto">
         <div className="text-center mb-8 md:mb-10">
           <h2 className="luxury-title">{t("home.collectionTitle")}</h2>
         </div>
@@ -69,7 +69,7 @@ export function HomePageClient() {
       </SectionWrapper>
 
       {/* 4. Bénéfices / marque */}
-      <SectionWrapper compact>
+      <SectionWrapper compact className="cv-auto">
         <SectionHeader
           eyebrow={t("home.qualityEyebrow")}
           title={t("home.qualityTitle")}
@@ -97,7 +97,7 @@ export function HomePageClient() {
         <BrandCommitmentSection />
       </SectionWrapper>
 
-      <SectionWrapper compact>
+      <SectionWrapper compact className="cv-auto">
         <SectionHeader title={t("home.faqTitle")} description={t("home.faqDescription")} premium />
         <div className="mt-8 space-y-4 max-w-3xl mx-auto">
           <FAQItem question={t("home.faq1Q")} answer={t("home.faq1A")} />

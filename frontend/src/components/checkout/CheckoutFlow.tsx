@@ -23,7 +23,8 @@ import {
   totalAddPieceSavings,
   type AddPieceCandidate,
 } from "@/lib/addPieceOffer";
-import { getCartItemName } from "@/lib/products";
+import { getCartItemName, fetchProducts } from "@/lib/products";
+import type { Product } from "@/types/product";
 import { getOfferLabelKey, useTranslation } from "@/i18n/I18nProvider";
 import { AddPieceOfferPanel } from "@/components/checkout/AddPieceOfferPanel";
 import { cn } from "@/lib/cn";
@@ -51,9 +52,10 @@ export function CheckoutPopup() {
   const [phone, setPhone] = useState("");
   const [addPieces, setAddPieces] = useState<AddPieceCandidate[]>([]);
   const [addPanelDismissed, setAddPanelDismissed] = useState(false);
-  const [addPanelExpanded, setAddPanelExpanded] = useState(false);
   const [flashLineKeys, setFlashLineKeys] = useState<Set<string>>(new Set());
   const [panelFlash, setPanelFlash] = useState(false);
+  const [upsellMountKey, setUpsellMountKey] = useState(0);
+  const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
   const [loading, setLoading] = useState(false);
@@ -88,20 +90,17 @@ export function CheckoutPopup() {
       setError("");
       setAddPieces([]);
       setAddPanelDismissed(false);
-      setAddPanelExpanded(false);
       setPanelFlash(false);
       prevAddCount.current = 0;
       return;
     }
     setPanelFlash(true);
-    if (isMobile) {
-      setAddPanelDismissed(true);
-      setAddPanelExpanded(false);
-    }
+    setUpsellMountKey((k) => k + 1);
+    void fetchProducts().then(setCatalogProducts);
     if (initiateTracked.current) return;
     initiateTracked.current = true;
     trackInitiateCheckout(cartTotal, generateEventId("InitiateCheckout"));
-  }, [checkoutOpen, cartTotal, isMobile]);
+  }, [checkoutOpen, cartTotal]);
 
   useEffect(() => {
     if (addPieces.length > maxAddSlots) {
@@ -170,12 +169,32 @@ export function CheckoutPopup() {
   const skipAddOnOffer = () => {
     setAddPieces([]);
     setAddPanelDismissed(true);
-    setAddPanelExpanded(false);
     window.setTimeout(() => confirmFooterRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
   };
 
-  const showAddPanel = maxAddSlots > 0 && !addPanelDismissed && (!isMobile || addPanelExpanded);
-  const showMobileAddTeaser = isMobile && maxAddSlots > 0 && addPanelDismissed && !addPanelExpanded;
+  const showAddPanel = maxAddSlots > 0 && !addPanelDismissed;
+
+  const addPieceBlock = (variant: "mobile" | "desktop") => (
+    <>
+      <AddPieceOfferPanel
+        key={variant === "mobile" ? `mobile-${upsellMountKey}` : `desktop-${upsellMountKey}`}
+        maxSlots={maxAddSlots}
+        selected={addPieces}
+        onSelectedChange={setAddPieces}
+        baseTotal={cartTotal}
+        flashOnOpen={panelFlash}
+        mobileFreeChoice={variant === "mobile"}
+        catalogProducts={catalogProducts}
+      />
+      <button
+        type="button"
+        onClick={skipAddOnOffer}
+        className="mt-3 w-full text-center text-sm text-brand-white/45 hover:text-brand-white/75 underline underline-offset-2 transition-colors"
+      >
+        {t("checkout.continueSinglePiece")}
+      </button>
+    </>
+  );
 
   return (
     <div className={cn("fixed inset-0 z-[10003] flex justify-center", isMobile ? "items-end p-0" : "items-center p-4")}>
@@ -251,42 +270,21 @@ export function CheckoutPopup() {
         <p className="text-sm text-color-trust mb-4">{t("common.freeShipping")}</p>
         <p className="text-sm text-brand-gold/90 mb-5">{t("checkout.deliveryEstimate", { date: getDeliveryEstimate() })}</p>
 
-        {/* 2) Carré ajout pièce — optionnel */}
-        {showMobileAddTeaser && (
-          <button
-            type="button"
-            onClick={() => {
-              setAddPanelDismissed(false);
-              setAddPanelExpanded(true);
-            }}
-            className="mb-5 w-full text-center text-sm text-brand-gold/85 hover:text-brand-gold border border-brand-gold/25 rounded-lg py-3 transition-colors"
-          >
-            {t("addPiece.headlinePrefix")}{" "}
-            <span className="font-price-figures">{formatPrice(ADD_PIECE_PRICE_MAD, locale)}</span>
-          </button>
+        {/* 2) Carré ajout pièce — mobile: CSS md:hidden (déplié d'emblée, sans JS isMobile) */}
+        {showAddPanel && (
+          <div className="mb-5 md:hidden checkout-add-piece-mobile">
+            {addPieceBlock("mobile")}
+          </div>
         )}
         {showAddPanel && (
-          <div className="mb-5">
-            <AddPieceOfferPanel
-              maxSlots={maxAddSlots}
-              selected={addPieces}
-              onSelectedChange={setAddPieces}
-              baseTotal={cartTotal}
-              flashOnOpen={panelFlash}
-              mobileFreeChoice={isMobile}
-            />
-            <button
-              type="button"
-              onClick={skipAddOnOffer}
-              className="mt-3 w-full text-center text-sm text-brand-white/45 hover:text-brand-white/75 underline underline-offset-2 transition-colors"
-            >
-              {t("checkout.continueSinglePiece")}
-            </button>
+          <div className="mb-5 hidden md:block">
+            {addPieceBlock("desktop")}
           </div>
         )}
 
         {/* 3) Champs client */}
-        <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-4">          <div>
+        <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-4">
+          <div>
             <label className="block text-sm mb-2">{t("checkout.fullName")}</label>
             <input
               value={name}

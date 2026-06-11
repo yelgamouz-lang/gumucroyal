@@ -28,6 +28,8 @@ type AddPieceOfferPanelProps = {
   flashOnOpen?: boolean;
   /** Mobile: all 3 products selectable with thumbnails. */
   mobileFreeChoice?: boolean;
+  /** Prefetched catalog — thumbnails show immediately on checkout open. */
+  catalogProducts?: Product[];
 };
 
 export function AddPieceOfferPanel({
@@ -38,15 +40,20 @@ export function AddPieceOfferPanel({
   className,
   flashOnOpen = false,
   mobileFreeChoice = false,
+  catalogProducts,
 }: AddPieceOfferPanelProps) {
   const { t, locale } = useTranslation();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(catalogProducts ?? []);
   const [activeSlot, setActiveSlot] = useState(0);
   const [openFlash, setOpenFlash] = useState(flashOnOpen);
 
   useEffect(() => {
+    if (catalogProducts?.length) {
+      setProducts(catalogProducts);
+      return;
+    }
     fetchProducts().then(setProducts);
-  }, []);
+  }, [catalogProducts]);
 
   useEffect(() => {
     if (!flashOnOpen) return;
@@ -66,7 +73,7 @@ export function AddPieceOfferPanel({
   const totalSavings = totalAddPieceSavings(selected);
   const previewTotal = baseTotal != null ? baseTotal + checkoutAddOnTotal(selected.length) : null;
 
-  if (maxSlots <= 0 || products.length === 0) return null;
+  if (maxSlots <= 0) return null;
 
   const handleSlotsChange = (nextSlots: (string | null)[]) => {
     const next: AddPieceCandidate[] = [];
@@ -99,15 +106,19 @@ export function AddPieceOfferPanel({
       )}
       <p className="text-sm text-white/80 mb-4 leading-relaxed">{t("addPiece.pickSubtitle")}</p>
 
-      <PieceThumbnailPicker
-        products={products}
-        slots={slots}
-        onSlotsChange={handleSlotsChange}
-        activeSlot={activeSlot}
-        onActiveSlotChange={setActiveSlot}
-        compact
-        allowAllProducts={mobileFreeChoice}
-      />
+      {products.length === 0 ? (
+        <p className="text-sm text-white/50 py-4 text-center">{t("common.loading")}</p>
+      ) : (
+        <PieceThumbnailPicker
+          products={products}
+          slots={slots}
+          onSlotsChange={handleSlotsChange}
+          activeSlot={activeSlot}
+          onActiveSlotChange={setActiveSlot}
+          compact
+          allowAllProducts={mobileFreeChoice}
+        />
+      )}
 
       {selected.length > 0 && totalSavings > 0 && (
         <div className="mt-4 pt-3 border-t border-white/20 text-center space-y-1">

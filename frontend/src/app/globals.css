@@ -384,11 +384,18 @@ select {
   }
 }
 
-.add-piece-line-flash {
-  animation: addPieceLineFlash 0.65s ease-out;
-  border-radius: 4px;
-  margin-inline: -4px;
-  padding-inline: 4px;
+.checkout-add-piece-mobile .add-piece-offer-panel {
+  display: block;
+}
+
+.checkout-add-piece-mobile .add-piece-offer-panel-open-flash {
+  animation: addPiecePanelOpenFlash 2.8s ease-in-out;
+}
+
+@media (max-width: 767px) {
+  .checkout-add-piece-mobile .add-piece-offer-panel {
+    min-height: 12rem;
+  }
 }
 
 @keyframes slide-in-start {

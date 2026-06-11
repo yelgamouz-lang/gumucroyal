@@ -9,6 +9,7 @@ import { useUIStore } from "@/stores/uiStore";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { cn } from "@/lib/cn";
+import { prefetchCartDrawer } from "@/lib/prefetchOverlays";
 
 export function Header() {
   const { t, dir } = useTranslation();
@@ -66,6 +67,8 @@ export function Header() {
           <button
             type="button"
             className="header-mobile-action header-mobile-cart-btn header-cart-btn"
+            onPointerEnter={prefetchCartDrawer}
+            onTouchStart={prefetchCartDrawer}
             onClick={() => {
               setMenuOpen(false);
               setCartOpen(true);
@@ -105,6 +108,8 @@ export function Header() {
           <button
             type="button"
             className="relative p-2.5 header-cart-btn"
+            onPointerEnter={prefetchCartDrawer}
+            onFocus={prefetchCartDrawer}
             onClick={() => setCartOpen(true)}
             aria-label={t("nav.cart")}
           >

@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Gem, ShieldCheck, Truck } from "lucide-react";
 import type { Product } from "@/types/product";
-import { fetchProducts, HOME_SECTION_IMAGES } from "@/lib/products";
+import { HOME_SECTION_IMAGES } from "@/lib/products";
 import { ProductCard } from "@/components/product/ProductComponents";
 import { HeroVideoBackground } from "@/components/home/HeroVideoBackground";
 import { BrandCommitmentSection } from "@/components/home/BrandCommitmentSection";
@@ -19,13 +18,9 @@ import {
 } from "@/components/shared/UI";
 import { useTranslation } from "@/i18n/I18nProvider";
 
-export function HomePageClient() {
+export function HomePageClient({ initialProducts }: { initialProducts: Product[] }) {
   const { t } = useTranslation();
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    fetchProducts().then(setProducts);
-  }, []);
+  const products = initialProducts;
 
   return (
     <div className="bg-brand-black">

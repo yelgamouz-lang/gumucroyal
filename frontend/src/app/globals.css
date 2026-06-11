@@ -570,6 +570,11 @@ select {
   }
 }
 
+html[data-page-hidden="true"] .header-premium-shine,
+html[data-page-hidden="true"] .header-premium-lines {
+  animation-play-state: paused;
+}
+
 /* Header — mobile bar (single row) */
 .header-mobile-bar {
   display: none;
@@ -730,7 +735,7 @@ select {
 
 .header-brand-gumuc,
 .header-brand-royal {
-  font-family: "Perpetua Titling MT", "Perpetua Titling", var(--font-cinzel), var(--font-cormorant), Georgia, serif;
+  font-family: "Perpetua Titling MT", "Perpetua Titling", var(--font-cormorant), Georgia, serif;
 }
 
 .header-brand-gumuc {
@@ -767,7 +772,7 @@ select {
 
 /* Home — luxury section typography */
 .luxury-eyebrow {
-  font-family: var(--font-cormorant), var(--font-cinzel), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, serif;
   font-size: 0.8125rem;
   font-weight: 400;
   font-style: normal;
@@ -824,7 +829,7 @@ html[dir="rtl"] .luxury-description {
 }
 
 .luxury-description--royal {
-  font-family: var(--font-cormorant), var(--font-cinzel), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, serif;
   font-size: clamp(1.0625rem, 2.2vw, 1.1875rem);
   font-weight: 400;
   font-style: normal;
@@ -980,7 +985,7 @@ html[dir="rtl"] .luxury-description--royal {
 
 .hero-brand-gumuc,
 .hero-brand-royal {
-  font-family: var(--font-cormorant), var(--font-cinzel), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, serif;
   font-weight: 400;
   line-height: 1.05;
   background: linear-gradient(135deg, #e6c766 0%, #c9a227 50%, #e6c766 100%);
@@ -1010,7 +1015,7 @@ html[dir="rtl"] .luxury-description--royal {
 }
 
 .hero-motto-tr {
-  font-family: var(--font-cormorant), var(--font-cinzel), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, serif;
   font-size: clamp(1.35rem, 3.2vw, 1.6875rem);
   font-weight: 300;
   letter-spacing: 0.46em;
@@ -1055,7 +1060,7 @@ html[dir="ltr"] .hero-motto-sub {
 
 /* Home — brand commitment section */
 .brand-commitment-title {
-  font-family: var(--font-cormorant), var(--font-cinzel), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, serif;
   font-size: clamp(1.75rem, 4vw, 2.625rem);
   font-weight: 400;
   line-height: 1.2;
@@ -1073,7 +1078,7 @@ html[dir="rtl"] .brand-commitment-title {
 }
 
 .brand-commitment-text {
-  font-family: var(--font-cormorant), var(--font-cinzel), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, serif;
   font-size: clamp(1rem, 2vw, 1.125rem);
   font-weight: 400;
   line-height: 1.9;
@@ -1093,7 +1098,7 @@ html[dir="rtl"] .brand-commitment-text {
   padding: 0.625rem 1.25rem;
   border: 1px solid rgba(201, 162, 39, 0.38);
   border-radius: 9999px;
-  font-family: var(--font-cormorant), var(--font-cinzel), Georgia, serif;
+  font-family: var(--font-cormorant), Georgia, serif;
   font-size: 0.8125rem;
   font-weight: 400;
   letter-spacing: 0.06em;

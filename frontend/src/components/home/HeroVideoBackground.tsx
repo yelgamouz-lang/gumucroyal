@@ -185,7 +185,7 @@ export function HeroVideoBackground() {
       <video
         ref={mobileRef}
         className="hero-video-element hero-video-element--mobile"
-        preload={isMobile ? "auto" : "none"}
+        preload={isMobile ? "metadata" : "auto"}
         {...sharedVideoProps}
       >
         <source src={MOBILE_MP4} type="video/mp4" />

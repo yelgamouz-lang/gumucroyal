@@ -9,6 +9,7 @@ import { Button, PriceDisplay } from "@/components/shared/UI";
 import { OptimizedImage } from "@/components/shared/OptimizedImage";
 import { cn } from "@/lib/cn";
 import { trackAnalyticsClick } from "@/lib/analytics";
+import { prefetchCheckoutPopup } from "@/lib/prefetchOverlays";
 import { getOfferLabelKey, useTranslation } from "@/i18n/I18nProvider";
 
 export function CartDrawer() {
@@ -92,6 +93,8 @@ export function CartDrawer() {
             </div>
             <Button
               fullWidth
+              onPointerEnter={prefetchCheckoutPopup}
+              onFocus={prefetchCheckoutPopup}
               onClick={() => {
                 trackAnalyticsClick("/cart/checkout");
                 openCheckout();

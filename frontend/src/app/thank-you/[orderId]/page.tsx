@@ -1,10 +1,8 @@
-"use client";
-
-import { ThankYouPageClient } from "@/components/thank-you/ThankYouPageClient";
-import { useParams } from "next/navigation";
-
-export default function ThankYouPage() {
-  const params = useParams();
-  const orderId = params.orderId as string;
-  return <ThankYouPageClient orderId={orderId} />;
-}
+import { ThankYouPageClient } from "@/components/thank-you/ThankYouPageClient";
+import { fetchProducts } from "@/lib/products";
+
+export default async function ThankYouPage({ params }: { params: Promise<{ orderId: string }> }) {
+  const { orderId } = await params;
+  const products = await fetchProducts();
+  return <ThankYouPageClient orderId={orderId} initialProducts={products} />;
+}

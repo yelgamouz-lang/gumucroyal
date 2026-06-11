@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { Product } from "@/types/product";
 
-import { fetchProducts, getDefaultOffer, getProductName, PLACEHOLDER_IMAGES } from "@/lib/products";
+import { getDefaultOffer, getProductName, PLACEHOLDER_IMAGES } from "@/lib/products";
 
 import {
 
@@ -19,8 +19,6 @@ import {
   tierTotalPrice,
 
   bundleSavings,
-
-  ADD_PIECE_PRICE_MAD,
 
 } from "@/lib/offerTiers";
 
@@ -41,12 +39,17 @@ import { generateEventId } from "@/lib/format";
 import { trackAddToCart, trackViewContent } from "@/lib/tracking";
 
 import { trackAnalyticsClick } from "@/lib/analytics";
+import { prefetchCartDrawer } from "@/lib/prefetchOverlays";
 
 import { useProductContent, useProductFaq, useTranslation } from "@/i18n/I18nProvider";
 
 
 
-export function ProductPageClient({ product }: { product: Product }) {
+import { LazyWhenVisible } from "@/components/shared/LazyWhenVisible";
+
+
+
+export function ProductPageClient({ product, allProducts }: { product: Product; allProducts: Product[] }) {
 
   const { t, locale } = useTranslation();
 
@@ -62,8 +65,6 @@ export function ProductPageClient({ product }: { product: Product }) {
 
   const [selectedOfferId, setSelectedOfferId] = useState(defaultOffer.id);
 
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-
   const [extraSlugs, setExtraSlugs] = useState<string[]>(() => emptyExtraSlugs(2));
 
   const addItem = useCartStore((s) => s.addItem);
@@ -75,14 +76,6 @@ export function ProductPageClient({ product }: { product: Product }) {
 
 
   const selectedOffer = product.offers.find((o) => o.id === selectedOfferId) || defaultOffer;
-
-
-
-  useEffect(() => {
-
-    fetchProducts().then(setAllProducts);
-
-  }, []);
 
 
 
@@ -141,6 +134,8 @@ export function ProductPageClient({ product }: { product: Product }) {
   const handleAddToCart = () => {
 
     if (!canAddToCart) return;
+
+    prefetchCartDrawer();
 
     const eventId = generateEventId("AddToCart");
 
@@ -288,15 +283,19 @@ export function ProductPageClient({ product }: { product: Product }) {
 
         <div className="max-w-xl mx-auto text-center border border-brand-gold/30 p-8 bg-brand-black/50 min-w-0">
 
-          <h3 className="font-display text-2xl text-brand-gold mb-6">{t("offers.chooseOffer")}</h3>
+          <LazyWhenVisible minHeight="22rem">
 
-          <OfferSelector {...offerSelectorProps} />
+            <h3 className="font-display text-2xl text-brand-gold mb-6">{t("offers.chooseOffer")}</h3>
 
-          <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
+            <OfferSelector {...offerSelectorProps} />
 
-            <AddToCartLabel amount={displayPrice} />
+            <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
 
-          </Button>
+              <AddToCartLabel amount={displayPrice} />
+
+            </Button>
+
+          </LazyWhenVisible>
 
         </div>
 

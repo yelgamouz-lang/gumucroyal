@@ -1,41 +1,34 @@
-import { Amiri, Cinzel, Cormorant_Garamond, DM_Sans, Playfair_Display, Tajawal } from "next/font/google";
+import { Amiri, Cormorant_Garamond, DM_Sans, Playfair_Display, Tajawal } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { AppProviders } from "@/components/providers/AppProviders";
 import { ClientOverlays } from "@/components/layout/ClientOverlays";
 import "./globals.css";
 
-const cinzel = Cinzel({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600"],
-  variable: "--font-cinzel",
-  display: "swap",
-});
-
 const cormorant = Cormorant_Garamond({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   variable: "--font-cormorant",
   display: "swap",
 });
 
 const playfair = Playfair_Display({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   variable: "--font-playfair",
   display: "swap",
 });
 
 const dmSans = DM_Sans({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-dm-sans",
   display: "swap",
 });
 
 const tajawal = Tajawal({
   subsets: ["arabic", "latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "700"],
   variable: "--font-tajawal",
   display: "swap",
 });
@@ -65,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
-      className={`notranslate ${cormorant.variable} ${playfair.variable} ${cinzel.variable} ${dmSans.variable} ${tajawal.variable} ${amiri.variable}`}
+      className={`notranslate ${cormorant.variable} ${playfair.variable} ${dmSans.variable} ${tajawal.variable} ${amiri.variable}`}
       translate="no"
       suppressHydrationWarning
     >

@@ -10,15 +10,16 @@ import {
   type ReactNode,
 } from "react";
 import ar from "./messages/ar.json";
-import fr from "./messages/fr.json";
-import en from "./messages/en.json";
 import { DEFAULT_LOCALE, getDir, getHtmlLang, LOCALE_STORAGE_KEY } from "./config";
 import type { FaqItem, Locale, ReviewMessage, WhatsAppProof } from "./types";
 import { getNestedValue, interpolate } from "./utils";
 
-const allMessages = { ar, fr, en } as const;
-
 type Messages = typeof ar;
+
+const localeLoaders: Record<Exclude<Locale, "ar">, () => Promise<{ default: Messages }>> = {
+  fr: () => import("./messages/fr.json"),
+  en: () => import("./messages/en.json"),
+};
 
 interface I18nContextValue {
   locale: Locale;
@@ -40,6 +41,7 @@ function readStoredLocale(): Locale | null {
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+  const [messages, setMessages] = useState<Messages>(ar);
 
   useLayoutEffect(() => {
     const stored = readStoredLocale();
@@ -47,6 +49,20 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       setLocaleState(stored);
     }
   }, []);
+
+  useLayoutEffect(() => {
+    if (locale === "ar") {
+      setMessages(ar);
+      return;
+    }
+    let cancelled = false;
+    void localeLoaders[locale]().then((mod) => {
+      if (!cancelled) setMessages(mod.default);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [locale]);
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
@@ -63,8 +79,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.documentElement.classList.add("notranslate");
     document.documentElement.setAttribute("translate", "no");
   }, [locale]);
-
-  const messages = allMessages[locale];
 
   const t = useCallback(
     (key: string, vars?: Record<string, string | number>) => {

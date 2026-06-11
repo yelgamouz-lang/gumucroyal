@@ -7,7 +7,7 @@ import { getOrder } from "@/lib/api";
 import { SectionWrapper, PriceDisplay, GoldIcon } from "@/components/shared/UI";
 import { OptimizedImage } from "@/components/shared/OptimizedImage";
 import { trackPurchase } from "@/lib/tracking";
-import { fetchProducts, getProductName } from "@/lib/products";
+import { getProductName } from "@/lib/products";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { useCartStore } from "@/stores/cartStore";
 import { useUIStore } from "@/stores/uiStore";
@@ -87,10 +87,10 @@ function SuggestionCard({ product, locale }: { product: Product; locale: string 
   );
 }
 
-export function ThankYouPageClient({ orderId }: { orderId: string }) {
+export function ThankYouPageClient({ orderId, initialProducts }: { orderId: string; initialProducts: Product[] }) {
   const { t, locale } = useTranslation();
   const [order, setOrder] = useState<OrderData | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const products = initialProducts;
   const tracked = useRef(false);
   const clearCart = useCartStore((s) => s.clearCart);
   const resetCheckoutFlow = useUIStore((s) => s.resetCheckoutFlow);
@@ -104,7 +104,6 @@ export function ThankYouPageClient({ orderId }: { orderId: string }) {
 
   useEffect(() => {
     if (orderId) getOrder(orderId).then(setOrder).catch(() => setOrder(null));
-    fetchProducts().then(setProducts);
   }, [orderId]);
 
   useEffect(() => {

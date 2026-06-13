@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.rate_limit import limiter
 from app.schemas.order import (
     ConfirmOrderIn,
     CreateOrderIn,
@@ -68,7 +69,9 @@ def _order_to_out(order) -> OrderOut:
 
 
 @router.post("/orders", response_model=OrderCreatedOut, status_code=201)
-async def post_order(payload: CreateOrderIn, request: Request, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+@limiter.limit("30/hour")
+async def post_order(request: Request, payload: CreateOrderIn, db: Session = Depends(get_db)):
     order = await create_order(db, request, payload.model_dump())
     candidates = get_upsell_candidates(db, order)
     return OrderCreatedOut(

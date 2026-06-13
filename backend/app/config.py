@@ -16,7 +16,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite:///./gumucroyal.db"
 
-    CORS_ORIGINS: str = '["https://gumucroyal.store"]'
+    CORS_ORIGINS: str = '["https://gumucroyal.store"]'  # JSON array or comma-separated; production only
 
     ADMIN_USERNAME: str = ""
     ADMIN_PASSWORD: str = ""

@@ -6,10 +6,14 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.api.router import api_router
 from app.config import settings
+from app.middleware.security import HTTPSRedirectMiddleware, SecurityHeadersMiddleware
 from app.models import AnalyticsEvent  # noqa: F401 — register table for create_all
+from app.rate_limit import limiter
 from app.startup import run_migrations
 
 logging.basicConfig(
@@ -49,12 +53,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="GUMÜÇROYAL API", version="1.0.0", lifespan=lifespan)
 
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(HTTPSRedirectMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Accept"],
 )
 
 app.include_router(api_router, prefix="/api/v1")

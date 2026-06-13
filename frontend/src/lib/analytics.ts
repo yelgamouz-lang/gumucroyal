@@ -67,6 +67,7 @@ export async function adminLogin(username: string, password: string) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   });
+  if (res.status === 429) throw new Error("Trop de tentatives. Réessayez dans une minute.");
   if (!res.ok) throw new Error("Identifiants invalides");
   const data = await res.json();
   setAdminToken(data.token);

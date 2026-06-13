@@ -25,6 +25,9 @@ export async function createOrder(payload: {
     body: JSON.stringify(payload),
   });
   if (!res.ok) {
+    if (res.status === 429) {
+      throw new Error("طلبات كثيرة. عاودي من بعد دقيقة.");
+    }
     const err = await res.json().catch(() => ({}));
     throw new Error(typeof err.detail === "string" ? err.detail : "وقع خطأ ف تأكيد الطلب");
   }

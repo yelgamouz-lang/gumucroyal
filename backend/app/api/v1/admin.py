@@ -1,10 +1,11 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session, joinedload
 
 from app.database import get_db
 from app.models.order import Order
+from app.rate_limit import limiter
 from app.schemas.admin import AdminLoginIn, AdminLoginOut
 from app.services.admin_auth import create_admin_token, require_admin, verify_admin_credentials
 from app.services.analytics_service import get_dashboard_metrics, list_orders, serialize_order
@@ -13,7 +14,8 @@ router = APIRouter(prefix="/admin")
 
 
 @router.post("/login", response_model=AdminLoginOut)
-def admin_login(payload: AdminLoginIn):
+@limiter.limit("5/minute")
+def admin_login(request: Request, payload: AdminLoginIn):
     if not verify_admin_credentials(payload.username, payload.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     return AdminLoginOut(token=create_admin_token(payload.username))

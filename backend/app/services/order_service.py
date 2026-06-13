@@ -29,13 +29,7 @@ def _resolve_order_bump_product(db: Session, product_id: UUID) -> Product:
     return product
 
 
-def _get_client_ip(request: Request) -> str | None:
-    forwarded = request.headers.get("X-Forwarded-For")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
-    if request.client:
-        return request.client.host
-    return None
+from app.utils.client_ip import get_client_ip
 
 
 def _build_products_summary(items: list[OrderItem]) -> str:
@@ -52,6 +46,7 @@ def _build_products_summary(items: list[OrderItem]) -> str:
 
 
 def calculate_subtotal(db: Session, items: list[dict]) -> tuple[float, list[dict]]:
+    """Server-side pricing only — ignores any client-sent amounts."""
     add_price = add_piece_price_mad()
     resolved = []
     subtotal = 0.0
@@ -115,7 +110,7 @@ async def create_order(db: Session, request: Request, data: dict) -> Order:
         fbc=tracking.get("fbc"),
         ttclid=tracking.get("ttclid"),
         sc_click_id=tracking.get("sc_click_id"),
-        client_ip=_get_client_ip(request),
+        client_ip=get_client_ip(request),
         user_agent=tracking.get("user_agent") or request.headers.get("User-Agent"),
         source_url=tracking.get("source_url"),
     )

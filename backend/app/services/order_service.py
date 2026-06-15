@@ -93,6 +93,10 @@ async def create_order(db: Session, request: Request, data: dict) -> Order:
     if len(name) < 2:
         raise HTTPException(status_code=422, detail="الاسم مطلوب")
 
+    city = (data.get("customer_city") or "").strip()
+    if len(city) < 2:
+        raise HTTPException(status_code=422, detail="المدينة مطلوبة")
+
     subtotal, resolved = calculate_subtotal(db, data["items"])
     tracking = data.get("tracking") or {}
 
@@ -101,6 +105,7 @@ async def create_order(db: Session, request: Request, data: dict) -> Order:
         customer_name=name,
         customer_phone=normalized,
         phone_display=format_display_phone(normalized),
+        customer_city=city,
         subtotal_mad=subtotal,
         upsell_amount_mad=0,
         total_mad=subtotal,

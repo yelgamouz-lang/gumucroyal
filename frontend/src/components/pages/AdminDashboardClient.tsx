@@ -42,6 +42,7 @@ type OrderRow = {
   status: string;
   customer_name: string;
   customer_phone: string;
+  customer_city?: string;
   products_summary: string;
   total_mad: number;
   created_at: string;
@@ -107,7 +108,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function KpiCard({ label, value, hint }: { label: string; value: React.ReactNode; hint?: string }) {
   return (
-    <div className="border border-brand-gold/20 p-4 bg-brand-charcoal rounded-lg">
+    <div className="admin-kpi-card border border-brand-gold/20 p-4 bg-brand-charcoal rounded-lg">
       <p className="text-xs text-brand-white/50 uppercase tracking-wider">{label}</p>
       <p className="text-2xl font-semibold text-brand-gold mt-1 font-price-figures">{value}</p>
       {hint && <p className="text-xs text-brand-white/40 mt-1">{hint}</p>}
@@ -223,14 +224,14 @@ export function AdminDashboardClient() {
   if (!token) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-4" dir="ltr">
-        <form onSubmit={handleLogin} className="w-full max-w-sm border border-brand-gold/30 p-8 bg-brand-charcoal space-y-4 rounded-lg">
+        <form onSubmit={handleLogin} className="admin-login-panel w-full max-w-sm border border-brand-gold/30 p-8 bg-brand-charcoal space-y-4 rounded-lg">
           <h1 className="font-display text-2xl text-brand-gold text-center">Admin GUMÜÇ ROYAL</h1>
           <p className="text-xs text-brand-white/50 text-center">Accès réservé — identifiants définis dans le backend.</p>
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Utilisateur"
-            className="w-full bg-brand-black border border-brand-gray/50 p-3 rounded"
+            className="luxury-input w-full bg-brand-black border border-brand-gray/50 p-3 rounded"
             autoComplete="username"
             required
           />
@@ -239,7 +240,7 @@ export function AdminDashboardClient() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Mot de passe"
-            className="w-full bg-brand-black border border-brand-gray/50 p-3 rounded"
+            className="luxury-input w-full bg-brand-black border border-brand-gray/50 p-3 rounded"
             autoComplete="current-password"
             required
           />
@@ -443,6 +444,12 @@ export function AdminDashboardClient() {
                     {selected.customer_phone}
                   </dd>
                 </div>
+                {selected.customer_city ? (
+                  <div className="col-span-2">
+                    <dt className="text-brand-white/50 text-xs">Ville</dt>
+                    <dd>{selected.customer_city}</dd>
+                  </div>
+                ) : null}
                 <div>
                   <dt className="text-brand-white/50 text-xs">Paiement</dt>
                   <dd>{selected.payment_method === "cod" ? "COD (à la livraison)" : selected.payment_method}</dd>

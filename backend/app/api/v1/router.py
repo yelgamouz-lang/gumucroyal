@@ -48,6 +48,7 @@ def _order_to_out(order) -> OrderOut:
         status=order.status,
         customer_name=order.customer_name,
         customer_phone_display=order.phone_display,
+        customer_city=order.customer_city or "",
         items=[
             OrderItemOut(
                 product_name_ar=i.product_name_ar,

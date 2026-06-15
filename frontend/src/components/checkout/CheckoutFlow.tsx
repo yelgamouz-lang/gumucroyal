@@ -29,6 +29,12 @@ import { getOfferLabelKey, useTranslation } from "@/i18n/I18nProvider";
 import { AddPieceOfferPanel } from "@/components/checkout/AddPieceOfferPanel";
 import { cn } from "@/lib/cn";
 import { useIsMobile } from "@/lib/useIsMobile";
+import {
+  CITY_OTHER,
+  MOROCCO_CITIES,
+  cityOptionLabel,
+  resolveCustomerCity,
+} from "@/lib/moroccoCities";
 
 function addPieceDisplayName(candidate: AddPieceCandidate, locale: string): string {
   return locale === "ar" ? candidate.name_ar : candidate.name_fr;
@@ -50,6 +56,8 @@ export function CheckoutPopup() {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [citySelect, setCitySelect] = useState("");
+  const [customCity, setCustomCity] = useState("");
   const [addPieces, setAddPieces] = useState<AddPieceCandidate[]>([]);
   const [addPanelDismissed, setAddPanelDismissed] = useState(false);
   const [flashLineKeys, setFlashLineKeys] = useState<Set<string>>(new Set());
@@ -57,7 +65,7 @@ export function CheckoutPopup() {
   const [upsellMountKey, setUpsellMountKey] = useState(0);
   const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
   const [error, setError] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; phone?: string; city?: string; cityOther?: string }>({});
   const [loading, setLoading] = useState(false);
   const confirmFooterRef = useRef<HTMLDivElement>(null);
   const initiateTracked = useRef(false);
@@ -91,6 +99,8 @@ export function CheckoutPopup() {
       setAddPieces([]);
       setAddPanelDismissed(false);
       setPanelFlash(false);
+      setCitySelect("");
+      setCustomCity("");
       prevAddCount.current = 0;
       return;
     }
@@ -120,7 +130,7 @@ export function CheckoutPopup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const nextFieldErrors: { name?: string; phone?: string } = {};
+    const nextFieldErrors: { name?: string; phone?: string; city?: string; cityOther?: string } = {};
 
     if (name.trim().length < 2) {
       nextFieldErrors.name = t("checkout.nameRequired");
@@ -130,9 +140,24 @@ export function CheckoutPopup() {
       nextFieldErrors.phone = phoneCheck.error || t("checkout.phoneInvalid");
     }
 
-    if (nextFieldErrors.name || nextFieldErrors.phone) {
+    const resolvedCity = resolveCustomerCity(citySelect, customCity);
+    if (!citySelect) {
+      nextFieldErrors.city = t("checkout.cityRequired");
+    } else if (citySelect === CITY_OTHER && !resolvedCity) {
+      nextFieldErrors.cityOther = t("checkout.cityOtherRequired");
+    } else if (!resolvedCity) {
+      nextFieldErrors.city = t("checkout.cityRequired");
+    }
+
+    if (nextFieldErrors.name || nextFieldErrors.phone || nextFieldErrors.city || nextFieldErrors.cityOther) {
       setFieldErrors(nextFieldErrors);
-      setError(nextFieldErrors.name || nextFieldErrors.phone || t("checkout.error"));
+      setError(
+        nextFieldErrors.name ||
+          nextFieldErrors.phone ||
+          nextFieldErrors.city ||
+          nextFieldErrors.cityOther ||
+          t("checkout.error")
+      );
       return;
     }
 
@@ -145,6 +170,7 @@ export function CheckoutPopup() {
       const order = await createOrder({
         customer_name: name.trim(),
         customer_phone: phone,
+        customer_city: resolvedCity!,
         items: items.map((i) => ({
           product_id: i.productId,
           offer_id: i.offerId,
@@ -198,10 +224,10 @@ export function CheckoutPopup() {
 
   return (
     <div className={cn("fixed inset-0 z-[10003] flex justify-center", isMobile ? "items-end p-0" : "items-center p-4")}>
-      <div className="absolute inset-0 bg-black/60" onClick={() => setCheckoutOpen(false)} />
+      <div className="absolute inset-0 bg-black/60 checkout-backdrop" onClick={() => setCheckoutOpen(false)} />
       <div
         className={cn(
-          "relative bg-brand-charcoal border border-brand-gray/30 w-full max-w-lg flex flex-col overflow-hidden",
+          "checkout-sheet relative bg-brand-charcoal border border-brand-gray/30 w-full max-w-lg flex flex-col overflow-hidden",
           isMobile ? "max-h-[92dvh] rounded-t-xl border-b-0" : "max-h-[90vh] rounded-none"
         )}
       >
@@ -293,7 +319,7 @@ export function CheckoutPopup() {
                 if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: undefined }));
               }}
               className={cn(
-                "w-full bg-brand-black border p-3 focus:border-brand-gold outline-none",
+                "luxury-input w-full bg-brand-black border p-3 focus:border-brand-gold outline-none",
                 fieldErrors.name ? "border-red-400" : "border-brand-gray/50"
               )}
             />
@@ -308,7 +334,7 @@ export function CheckoutPopup() {
                 if (fieldErrors.phone) setFieldErrors((prev) => ({ ...prev, phone: undefined }));
               }}
               className={cn(
-                "w-full bg-brand-black border p-3 focus:border-brand-gold outline-none",
+                "luxury-input w-full bg-brand-black border p-3 focus:border-brand-gold outline-none",
                 fieldErrors.phone ? "border-red-400" : "border-brand-gray/50"
               )}
               placeholder="06 12 34 56 78"
@@ -317,7 +343,53 @@ export function CheckoutPopup() {
             <p className="text-xs text-brand-white/50 mt-1">{t("checkout.phoneHint")}</p>
             {fieldErrors.phone && <p className="text-red-400 text-xs mt-1">{fieldErrors.phone}</p>}
           </div>
-          {error && !fieldErrors.name && !fieldErrors.phone && <p className="text-red-400 text-sm">{error}</p>}
+          <div>
+            <label className="block text-sm mb-2">{t("checkout.city")}</label>
+            <select
+              value={citySelect}
+              onChange={(e) => {
+                setCitySelect(e.target.value);
+                if (e.target.value !== CITY_OTHER) setCustomCity("");
+                if (fieldErrors.city || fieldErrors.cityOther) {
+                  setFieldErrors((prev) => ({ ...prev, city: undefined, cityOther: undefined }));
+                }
+              }}
+              className={cn(
+                "luxury-input w-full bg-brand-black border p-3 focus:border-brand-gold outline-none",
+                fieldErrors.city ? "border-red-400" : "border-brand-gray/50"
+              )}
+            >
+              <option value="">{t("checkout.cityPlaceholder")}</option>
+              {MOROCCO_CITIES.map((city) => (
+                <option key={city.value} value={city.value}>
+                  {cityOptionLabel(city, locale)}
+                </option>
+              ))}
+              <option value={CITY_OTHER}>{t("checkout.cityOther")}</option>
+            </select>
+            {fieldErrors.city && <p className="text-red-400 text-xs mt-1">{fieldErrors.city}</p>}
+          </div>
+          {citySelect === CITY_OTHER && (
+            <div>
+              <label className="block text-sm mb-2">{t("checkout.cityOther")}</label>
+              <input
+                value={customCity}
+                onChange={(e) => {
+                  setCustomCity(e.target.value);
+                  if (fieldErrors.cityOther) setFieldErrors((prev) => ({ ...prev, cityOther: undefined }));
+                }}
+                className={cn(
+                  "luxury-input w-full bg-brand-black border p-3 focus:border-brand-gold outline-none",
+                  fieldErrors.cityOther ? "border-red-400" : "border-brand-gray/50"
+                )}
+                placeholder={t("checkout.cityOtherPlaceholder")}
+              />
+              {fieldErrors.cityOther && <p className="text-red-400 text-xs mt-1">{fieldErrors.cityOther}</p>}
+            </div>
+          )}
+          {error && !fieldErrors.name && !fieldErrors.phone && !fieldErrors.city && !fieldErrors.cityOther && (
+            <p className="text-red-400 text-sm">{error}</p>
+          )}
         </form>
         </div>
 

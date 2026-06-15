@@ -217,6 +217,7 @@ def serialize_order(order: Order, db: Session | None = None) -> dict:
         "status": order.status,
         "customer_name": order.customer_name,
         "customer_phone": order.phone_display,
+        "customer_city": order.customer_city or "",
         "products_summary": products_summary,
         "subtotal_mad": float(order.subtotal_mad),
         "upsell_amount_mad": float(order.upsell_amount_mad),

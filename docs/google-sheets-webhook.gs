@@ -1,8 +1,8 @@
 /**
  * GUMÜÇ ROYAL — Google Apps Script
  *
- * 1. Créez un Google Sheet avec ces en-têtes en ligne 1 (A→K) :
- *    date | order_id | country | name | phone | product | sku | quantity | total_price | currency | status
+ * 1. Créez un Google Sheet avec ces en-têtes en ligne 1 (A→L) :
+ *    date | order_id | country | name | phone | city | product | sku | quantity | total_price | currency | status
  * 2. Extensions → Apps Script → collez ce code
  * 3. Paramètres du projet → Propriétés du script → ajoutez :
  *    WEBHOOK_SECRET = <même valeur que GOOGLE_SHEETS_WEBHOOK_SECRET sur EasyPanel>
@@ -35,6 +35,7 @@ function doPost(e) {
       data.country || "Maroc",
       data.name || "",
       data.phone || "",
+      data.city || "",
       data.product || "",
       data.sku || "",
       data.quantity || "",

@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     ADMIN_PASSWORD: str = ""
 
     GOOGLE_SHEETS_WEBHOOK_URL: str = ""
+    GOOGLE_SHEETS_WEBHOOK_SECRET: str = ""
 
     META_PIXEL_ID: str = ""
     META_CAPI_ACCESS_TOKEN: str = ""

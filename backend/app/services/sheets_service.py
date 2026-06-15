@@ -12,9 +12,13 @@ async def sync_order_to_sheet(order_data: dict) -> bool:
         logger.warning("Google Sheets webhook URL not configured")
         return False
 
+    payload = dict(order_data)
+    if settings.GOOGLE_SHEETS_WEBHOOK_SECRET:
+        payload["webhook_secret"] = settings.GOOGLE_SHEETS_WEBHOOK_SECRET
+
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.post(settings.GOOGLE_SHEETS_WEBHOOK_URL, json=order_data)
+            response = await client.post(settings.GOOGLE_SHEETS_WEBHOOK_URL, json=payload)
             if response.status_code >= 400:
                 logger.error("Sheet sync failed: %s", response.text)
                 return False

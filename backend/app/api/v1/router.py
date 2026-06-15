@@ -104,6 +104,7 @@ async def post_confirm(order_id: UUID, payload: ConfirmOrderIn, db: Session = De
 
 
 @router.get("/orders/{order_number}", response_model=OrderOut)
-def get_order(order_number: str, db: Session = Depends(get_db)):
+@limiter.limit("30/minute")
+def get_order(request: Request, order_number: str, db: Session = Depends(get_db)):
     order = get_order_by_number(db, order_number)
     return _order_to_out(order)

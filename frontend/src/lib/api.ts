@@ -13,6 +13,7 @@ async function apiFetch(path: string, init?: RequestInit) {
 export async function createOrder(payload: {
   customer_name: string;
   customer_phone: string;
+  customer_city: string;
   items: { product_id: string; offer_id: string; quantity: number; extra_product_ids?: string[] }[];
   order_bump_accepted?: boolean;
   order_bump_product_id?: string;

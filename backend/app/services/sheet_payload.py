@@ -43,6 +43,7 @@ def build_sheet_row(db: Session, order: Order) -> dict:
         "country": "Maroc",
         "name": order.customer_name,
         "phone": phone,
+        "city": order.customer_city or "",
         "product": "/".join(names) if names else "",
         "sku": "/".join(skus) if skus else "",
         "quantity": "/".join(quantities) if quantities else "",

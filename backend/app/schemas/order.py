@@ -42,6 +42,7 @@ class CreateOrderIn(BaseModel):
 
     customer_name: str = Field(min_length=2, max_length=100)
     customer_phone: str = Field(min_length=8, max_length=20)
+    customer_city: str = Field(min_length=2, max_length=100)
     items: list[OrderItemIn] = Field(min_length=1, max_length=10)
     order_bump_accepted: bool = False
     order_bump_product_id: UUID | None = None
@@ -66,6 +67,18 @@ class CreateOrderIn(BaseModel):
         if not normalize_morocco_phone(value):
             raise ValueError("Invalid Moroccan phone number (06/07 or +212 required)")
         return value.strip()
+
+    @field_validator("customer_city")
+    @classmethod
+    def validate_customer_city(cls, value: str) -> str:
+        cleaned = " ".join(value.strip().split())
+        if len(cleaned) < 2:
+            raise ValueError("City is too short")
+        if len(cleaned) > 100:
+            raise ValueError("City is too long")
+        if not NAME_PATTERN.match(cleaned):
+            raise ValueError("City contains invalid characters")
+        return cleaned
 
 
 class UpsellCandidateOut(BaseModel):
@@ -118,6 +131,7 @@ class OrderOut(BaseModel):
     status: str
     customer_name: str
     customer_phone_display: str
+    customer_city: str = ""
     items: list[OrderItemOut]
     upsell_accepted: bool
     subtotal_mad: float

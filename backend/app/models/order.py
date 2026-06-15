@@ -15,6 +15,7 @@ class Order(Base):
     customer_name: Mapped[str] = mapped_column(String(255), nullable=False)
     customer_phone: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
     phone_display: Mapped[str] = mapped_column(String(20), nullable=False)
+    customer_city: Mapped[str] = mapped_column(String(100), nullable=False, default="")
     subtotal_mad: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     upsell_amount_mad: Mapped[float] = mapped_column(Numeric(10, 2), default=0)
     total_mad: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)

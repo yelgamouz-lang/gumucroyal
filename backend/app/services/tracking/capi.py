@@ -52,11 +52,11 @@ async def send_meta_purchase(order: Order, content_ids: list[str]) -> bool:
     }
 
     url = f"https://graph.facebook.com/v21.0/{settings.META_PIXEL_ID}/events"
-    params = {"access_token": settings.META_CAPI_ACCESS_TOKEN}
+    headers = {"Authorization": f"Bearer {settings.META_CAPI_ACCESS_TOKEN}"}
 
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
-            resp = await client.post(url, params=params, json=payload)
+            resp = await client.post(url, json=payload, headers=headers)
             if resp.status_code >= 400:
                 logger.error("Meta CAPI error: %s", resp.text)
                 return False

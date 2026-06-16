@@ -14,6 +14,7 @@ from app.config import settings
 from app.middleware.security import HTTPSRedirectMiddleware, SecurityHeadersMiddleware
 from app.models import AnalyticsEvent  # noqa: F401 — register table for create_all
 from app.rate_limit import limiter
+from app.security_check import validate_production_settings
 from app.startup import run_migrations
 
 logging.basicConfig(
@@ -32,6 +33,9 @@ async def lifespan(app: FastAPI):
     No sys.exit, no swallowed exceptions — failures print full traceback to stderr.
     """
     print("[lifespan] Waiting for application startup — begin", flush=True)
+    logger.info("Application startup: validating configuration")
+    validate_production_settings()
+
     logger.info("Application startup: running database migrations")
 
     try:
@@ -51,7 +55,16 @@ async def lifespan(app: FastAPI):
     print("[lifespan] Application shutdown", flush=True)
 
 
-app = FastAPI(title="GUMÜÇROYAL API", version="1.0.0", lifespan=lifespan)
+_is_prod = settings.APP_ENV.lower() == "production"
+
+app = FastAPI(
+    title="GUMÜÇROYAL API",
+    version="1.0.0",
+    lifespan=lifespan,
+    docs_url=None if _is_prod else "/docs",
+    redoc_url=None if _is_prod else "/redoc",
+    openapi_url=None if _is_prod else "/openapi.json",
+)
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
@@ -63,7 +76,7 @@ app.add_middleware(
     allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "Accept"],
+    allow_headers=["Content-Type", "Authorization", "Accept", "X-Checkout-Token"],
 )
 
 app.include_router(api_router, prefix="/api/v1")

@@ -55,6 +55,10 @@ def calculate_subtotal(db: Session, items: list[dict]) -> tuple[float, list[dict
         offer = db.query(Offer).filter(Offer.id == item["offer_id"]).first()
         if not product or not offer:
             raise HTTPException(status_code=422, detail="منتج أو عرض غير صالح")
+        if not product.is_active:
+            raise HTTPException(status_code=422, detail="هذا المنتج غير متوفر حالياً")
+        if offer.product_id != product.id:
+            raise HTTPException(status_code=422, detail="العرض لا يطابق المنتج")
 
         extra_ids = item.get("extra_product_ids") or []
         expected_extras = max(0, offer.quantity - 1)

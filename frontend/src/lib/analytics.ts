@@ -27,51 +27,42 @@ export function trackAnalyticsClick(path: string, productSlug?: string | null) {
   });
 }
 
-const TOKEN_KEY = "gumuc_admin_token";
-
-export function getAdminToken(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(TOKEN_KEY);
-}
-
-export function setAdminToken(token: string) {
-  localStorage.setItem(TOKEN_KEY, token);
-}
-
-export function clearAdminToken() {
-  localStorage.removeItem(TOKEN_KEY);
-}
-
 async function adminFetch(path: string, init?: RequestInit) {
-  const token = getAdminToken();
-  if (!token || !API) throw new Error("Non authentifié");
-  const res = await fetch(`${API}/api/v1/admin${path}`, {
+  const res = await fetch(`/api/admin/${path}`, {
     ...init,
+    credentials: "same-origin",
     headers: {
-      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
       ...init?.headers,
     },
   });
   if (res.status === 401) {
-    clearAdminToken();
     throw new Error("Session expirée");
   }
   if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
+export async function checkAdminSession(): Promise<{ authenticated: boolean; username?: string }> {
+  const res = await fetch("/api/admin/session", { credentials: "same-origin", cache: "no-store" });
+  if (!res.ok) return { authenticated: false };
+  return res.json();
+}
+
 export async function adminLogin(username: string, password: string) {
-  const res = await fetch(`${API}/api/v1/admin/login`, {
+  const res = await fetch("/api/admin/login", {
     method: "POST",
+    credentials: "same-origin",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   });
   if (res.status === 429) throw new Error("Trop de tentatives. Réessayez dans une minute.");
   if (!res.ok) throw new Error("Identifiants invalides");
-  const data = await res.json();
-  setAdminToken(data.token);
-  return data.token;
+  return checkAdminSession();
+}
+
+export async function adminLogout() {
+  await fetch("/api/admin/logout", { method: "POST", credentials: "same-origin" });
 }
 
 export function fetchAdminMetrics(start?: string, end?: string) {
@@ -79,7 +70,7 @@ export function fetchAdminMetrics(start?: string, end?: string) {
   if (start) params.set("start", start);
   if (end) params.set("end", end);
   const q = params.toString();
-  return adminFetch(`/metrics${q ? `?${q}` : ""}`);
+  return adminFetch(`metrics${q ? `?${q}` : ""}`);
 }
 
 export function fetchAdminOrders(start?: string, end?: string) {
@@ -87,9 +78,9 @@ export function fetchAdminOrders(start?: string, end?: string) {
   if (start) params.set("start", start);
   if (end) params.set("end", end);
   const q = params.toString();
-  return adminFetch(`/orders${q ? `?${q}` : ""}`);
+  return adminFetch(`orders${q ? `?${q}` : ""}`);
 }
 
 export function fetchAdminOrder(orderNumber: string) {
-  return adminFetch(`/orders/${orderNumber}`);
+  return adminFetch(`orders/${orderNumber}`);
 }

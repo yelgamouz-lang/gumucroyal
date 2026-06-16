@@ -1,5 +1,7 @@
 from slowapi import Limiter
 
+from app.config import settings
 from app.utils.client_ip import get_client_ip
 
-limiter = Limiter(key_func=get_client_ip, storage_uri="memory://")
+_storage = settings.REDIS_URL or "memory://"
+limiter = Limiter(key_func=get_client_ip, storage_uri=_storage)

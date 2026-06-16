@@ -21,8 +21,15 @@ def admin_login(request: Request, payload: AdminLoginIn):
     return AdminLoginOut(token=create_admin_token(payload.username))
 
 
+@router.get("/me")
+def admin_me(admin: str = Depends(require_admin)):
+    return {"username": admin}
+
+
 @router.get("/metrics")
+@limiter.limit("120/minute")
 def admin_metrics(
+    request: Request,
     start: datetime | None = Query(None),
     end: datetime | None = Query(None),
     _admin: str = Depends(require_admin),
@@ -32,7 +39,9 @@ def admin_metrics(
 
 
 @router.get("/orders")
+@limiter.limit("120/minute")
 def admin_orders(
+    request: Request,
     start: datetime | None = Query(None),
     end: datetime | None = Query(None),
     limit: int = Query(500, le=500),
@@ -44,7 +53,9 @@ def admin_orders(
 
 
 @router.get("/orders/{order_number}")
+@limiter.limit("120/minute")
 def admin_order_detail(
+    request: Request,
     order_number: str,
     _admin: str = Depends(require_admin),
     db: Session = Depends(get_db),

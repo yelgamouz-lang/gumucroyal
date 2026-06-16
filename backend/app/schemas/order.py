@@ -102,6 +102,7 @@ class OrderCreatedOut(BaseModel):
     upsell_price_mad: float
     upsell_candidates: list[UpsellCandidateOut] = []
     event_id: str | None = None
+    checkout_token: str
 
 
 class UpsellUpdateIn(BaseModel):

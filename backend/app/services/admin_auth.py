@@ -11,7 +11,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from app.config import settings
 
 _bearer = HTTPBearer(auto_error=False)
-TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7
+TOKEN_TTL_SECONDS = 60 * 60 * 24  # 24 h
 
 
 def verify_admin_credentials(username: str, password: str) -> bool:

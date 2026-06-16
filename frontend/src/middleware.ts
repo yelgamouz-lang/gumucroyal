@@ -2,6 +2,28 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const CANONICAL_ORIGIN = "https://gumucroyal.store";
+const IS_PROD = process.env.NODE_ENV === "production";
+const API_ORIGIN = process.env.NEXT_PUBLIC_API_URL ?? "https://api.gumucroyal.store";
+
+function buildCsp(): string {
+  const scriptSrc = IS_PROD
+    ? `'self' 'unsafe-inline' https://connect.facebook.net https://analytics.tiktok.com https://sc-static.net`
+    : `'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://analytics.tiktok.com https://sc-static.net`;
+
+  return [
+    "default-src 'self'",
+    `script-src ${scriptSrc}`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https:",
+    "font-src 'self' data:",
+    `connect-src 'self' ${API_ORIGIN} https://connect.facebook.net https://analytics.tiktok.com https://tr.snapchat.com`,
+    "media-src 'self' blob:",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join("; ");
+}
 
 const SECURITY_HEADERS: Record<string, string> = {
   "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
@@ -10,18 +32,7 @@ const SECURITY_HEADERS: Record<string, string> = {
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "X-Permitted-Cross-Domain-Policies": "none",
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-  "Content-Security-Policy": [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://analytics.tiktok.com https://sc-static.net",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https:",
-    "font-src 'self' data:",
-    "connect-src 'self' https://api.gumucroyal.store https://connect.facebook.net https://analytics.tiktok.com https://tr.snapchat.com",
-    "media-src 'self' blob:",
-    "frame-ancestors 'none'",
-    "base-uri 'self'",
-    "form-action 'self'",
-  ].join("; "),
+  "Content-Security-Policy": buildCsp(),
 };
 
 function getHostname(request: NextRequest): string {

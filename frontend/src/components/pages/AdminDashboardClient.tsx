@@ -3,11 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   adminLogin,
-  clearAdminToken,
+  adminLogout,
+  checkAdminSession,
   fetchAdminMetrics,
   fetchAdminOrder,
   fetchAdminOrders,
-  getAdminToken,
 } from "@/lib/analytics";
 import { PriceDisplay } from "@/components/shared/UI";
 import { cn } from "@/lib/cn";
@@ -152,7 +152,8 @@ function BreakdownTable({
 }
 
 export function AdminDashboardClient() {
-  const [token, setToken] = useState<string | null>(null);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [sessionChecked, setSessionChecked] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -164,11 +165,13 @@ export function AdminDashboardClient() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setToken(getAdminToken());
+    checkAdminSession()
+      .then((session) => setAuthenticated(session.authenticated))
+      .finally(() => setSessionChecked(true));
   }, []);
 
   const loadData = useCallback(async () => {
-    if (!getAdminToken()) return;
+    if (!authenticated) return;
     setLoading(true);
     setError("");
     try {
@@ -182,31 +185,30 @@ export function AdminDashboardClient() {
       setOrders(o.orders || []);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
-      clearAdminToken();
-      setToken(null);
+      setAuthenticated(false);
     } finally {
       setLoading(false);
     }
-  }, [range]);
+  }, [range, authenticated]);
 
   useEffect(() => {
-    if (token) loadData();
-  }, [token, loadData]);
+    if (authenticated) loadData();
+  }, [authenticated, loadData]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     try {
-      const t = await adminLogin(username, password);
-      setToken(t);
+      const session = await adminLogin(username, password);
+      setAuthenticated(session.authenticated);
     } catch {
       setError("Identifiants invalides ou admin non configuré côté serveur.");
     }
   };
 
-  const handleLogout = () => {
-    clearAdminToken();
-    setToken(null);
+  const handleLogout = async () => {
+    await adminLogout();
+    setAuthenticated(false);
     setMetrics(null);
     setOrders([]);
     setSelected(null);
@@ -221,7 +223,11 @@ export function AdminDashboardClient() {
     }
   };
 
-  if (!token) {
+  if (!sessionChecked) {
+    return null;
+  }
+
+  if (!authenticated) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center px-4" dir="ltr">
         <form onSubmit={handleLogin} className="admin-login-panel w-full max-w-sm border border-brand-gold/30 p-8 bg-brand-charcoal space-y-4 rounded-lg">

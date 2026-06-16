@@ -39,6 +39,10 @@ htmlcov/
 pip-log.txt
 pip-delete-this-directory.txt
 
+# ─── Local SQLite dev database (never commit — may contain PII) ───
+backend/gumucroyal.db
+backend/*.db
+
 # ─── Environment & secrets (never commit) ───
 .env
 .env.*

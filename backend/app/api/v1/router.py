@@ -15,6 +15,7 @@ from app.schemas.order import (
     UpsellUpdateIn,
 )
 from app.schemas.product import ProductOut, ProductsListOut
+from app.services.checkout_auth import create_checkout_token, require_checkout_token
 from app.services.order_service import (
     confirm_order,
     create_order,
@@ -84,17 +85,34 @@ async def post_order(request: Request, payload: CreateOrderIn, db: Session = Dep
         upsell_price_mad=upsell_price_mad(),
         upsell_candidates=[UpsellCandidateOut(**c) for c in candidates],
         event_id=order.event_id,
+        checkout_token=create_checkout_token(order.id),
     )
 
 
 @router.patch("/orders/{order_id}", response_model=OrderOut)
-async def patch_order(order_id: UUID, payload: UpsellUpdateIn, db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+@limiter.limit("60/hour")
+async def patch_order(
+    request: Request,
+    order_id: UUID,
+    payload: UpsellUpdateIn,
+    db: Session = Depends(get_db),
+):
+    require_checkout_token(request, order_id)
     order = await update_upsell(db, order_id, payload.upsell_accepted)
     return _order_to_out(order)
 
 
 @router.post("/orders/{order_id}/confirm", response_model=OrderOut)
-async def post_confirm(order_id: UUID, payload: ConfirmOrderIn, db: Session = Depends(get_db)):
+@limiter.limit("10/minute")
+@limiter.limit("60/hour")
+async def post_confirm(
+    request: Request,
+    order_id: UUID,
+    payload: ConfirmOrderIn,
+    db: Session = Depends(get_db),
+):
+    require_checkout_token(request, order_id)
     order = await confirm_order(
         db,
         order_id,
@@ -108,4 +126,5 @@ async def post_confirm(order_id: UUID, payload: ConfirmOrderIn, db: Session = De
 @limiter.limit("30/minute")
 def get_order(request: Request, order_number: str, db: Session = Depends(get_db)):
     order = get_order_by_number(db, order_number)
+    require_checkout_token(request, order.id)
     return _order_to_out(order)

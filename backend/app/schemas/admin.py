@@ -14,5 +14,5 @@ class AdminLoginOut(BaseModel):
 
 class AnalyticsEventIn(BaseModel):
     event_type: str = Field(pattern="^(page_view|click)$")
-    path: str
-    product_slug: str | None = None
+    path: str = Field(min_length=1, max_length=500)
+    product_slug: str | None = Field(default=None, max_length=128)

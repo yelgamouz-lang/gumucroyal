@@ -79,6 +79,7 @@ export interface OrderResponse {
   upsell_price_mad?: number;
   upsell_candidates?: UpsellCandidate[];
   event_id?: string | null;
+  checkout_token?: string;
 }
 
 export interface TrackingParams {

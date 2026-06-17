@@ -2,6 +2,8 @@
   "nav": {
     "home": "Accueil",
     "collection": "Collection",
+    "collectionHeritage": "Collection Héritage",
+    "collectionSignature": "Collection Signature",
     "about": "La Maison",
     "contact": "Contact",
     "menu": "Menu",
@@ -85,6 +87,7 @@
     "feature3Title": "Paiement à la livraison",
     "feature3Desc": "Vous ne payez qu'à la réception de votre commande. Aucun paiement en ligne — simplicité et confiance.",
     "collectionTitle": "Nos pièces signature",
+    "bestSellersEyebrow": "Les plus demandées",
     "aboutTitle": "La Maison",
     "aboutP1": "GUMÜÇ ROYAL est une maison de joaillerie au service de la femme marocaine exigeante. Nous ne vendons pas des produits — nous contribuons à votre éclat.",
     "aboutP2": "Acier inoxydable, zircons taille brillant, finition dorée. Relation directe avec vous, du choix à la livraison.",
@@ -104,7 +107,33 @@
   },
   "collection": {
     "title": "Notre collection",
-    "subtitle": "3 pièces exclusives. Design By GUMÜÇ Royal — acier inoxydable finition dorée & zircons."
+    "subtitle": "3 pièces exclusives. Design By GUMÜÇ Royal — acier inoxydable finition dorée & zircons.",
+    "allTitle": "Toutes les collections",
+    "allSubtitle": "Découvrez nos pièces exclusives — Collection Héritage et Collection Signature."
+  },
+  "collections": {
+    "gatewayTitle": "Deux portes d'entrée",
+    "gatewaySubtitle": "Choisissez votre univers — Héritage ou Signature.",
+    "heritage": {
+      "name": "Collection Héritage",
+      "nameShort": "Héritage",
+      "tagline": "Racines marocaines, éclat intemporel",
+      "ambiance": "L'authenticité se porte.",
+      "description": "Des pièces inspirées du patrimoine marocain — symboles de chance et motifs ancestraux, rehaussés d'une touche dorée qui dure.",
+      "discover": "Découvrir Héritage",
+      "discoverOther": "Découvrir aussi la Collection Signature →",
+      "filterLabel": "Collection Héritage / Bijoux traditionnels marocains"
+    },
+    "signature": {
+      "name": "Collection Signature",
+      "nameShort": "Signature",
+      "tagline": "Élégance contemporaine, lignes architecturales",
+      "ambiance": "Votre signature, votre éclat.",
+      "description": "Des designs contemporains et affirmés — des pièces aux lignes épurées et zircons taille brillant, qui incarnent un luxe moderne.",
+      "discover": "Découvrir Signature",
+      "discoverOther": "Découvrir aussi la Collection Héritage →",
+      "filterLabel": "Collection Signature / Bijoux modernes"
+    }
   },
   "about": {
     "title": "La Maison",

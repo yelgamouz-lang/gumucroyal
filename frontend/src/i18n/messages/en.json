@@ -2,6 +2,8 @@
   "nav": {
     "home": "Home",
     "collection": "Collection",
+    "collectionHeritage": "Héritage Collection",
+    "collectionSignature": "Signature Collection",
     "about": "The Maison",
     "contact": "Contact",
     "menu": "Menu",
@@ -85,6 +87,7 @@
     "feature3Title": "Cash on delivery",
     "feature3Desc": "Pay only when your order arrives. No online payment — simplicity and trust.",
     "collectionTitle": "Our signature collection",
+    "bestSellersEyebrow": "Best sellers",
     "aboutTitle": "The Maison",
     "aboutP1": "GUMÜÇ Royal is a premium jewellery house dedicated to the Moroccan woman. We don't sell products — we contribute to your radiance.",
     "aboutP2": "Stainless steel, brilliant-cut zircons, gold-tone finish.",
@@ -104,7 +107,33 @@
   },
   "collection": {
     "title": "Our collection",
-    "subtitle": "3 exclusive pieces. Design By GUMÜÇ Royal — stainless steel gold-tone finish & zircons."
+    "subtitle": "3 exclusive pieces. Design By GUMÜÇ Royal — stainless steel gold-tone finish & zircons.",
+    "allTitle": "All collections",
+    "allSubtitle": "Explore our exclusive pieces from the Héritage and Signature collections."
+  },
+  "collections": {
+    "gatewayTitle": "Two doors to elegance",
+    "gatewaySubtitle": "Choose your world — Héritage or Signature.",
+    "heritage": {
+      "name": "Héritage Collection",
+      "nameShort": "Héritage",
+      "tagline": "Moroccan roots, timeless radiance",
+      "ambiance": "Authenticity, worn.",
+      "description": "Pieces inspired by Moroccan heritage — symbols of luck and ancestral motifs, adorned with a lasting golden touch.",
+      "discover": "Discover Héritage",
+      "discoverOther": "Discover the Signature Collection →",
+      "filterLabel": "Héritage Collection / Traditional Moroccan Jewellery"
+    },
+    "signature": {
+      "name": "Signature Collection",
+      "nameShort": "Signature",
+      "tagline": "Contemporary elegance, architectural lines",
+      "ambiance": "Your signature, your radiance.",
+      "description": "Bold contemporary designs — pieces with clean lines and brilliant-cut zircons that embody modern luxury.",
+      "discover": "Discover Signature",
+      "discoverOther": "Discover the Héritage Collection →",
+      "filterLabel": "Signature Collection / Modern Jewellery"
+    }
   },
   "about": {
     "title": "The Maison",

@@ -25,6 +25,7 @@ export interface Product {
   description_short: string;
   description_long: string;
   category: "bagues" | "colliers";
+  collection?: "heritage" | "signature";
   base_price_mad: number;
   compare_at_price_mad: number;
   material?: string | null;

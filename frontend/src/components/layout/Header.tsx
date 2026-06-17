@@ -31,7 +31,8 @@ export function Header() {
 
   const NAV = [
     { href: "/", label: t("nav.home") },
-    { href: "/collection", label: t("nav.collection") },
+    { href: "/collection/heritage", label: t("nav.collectionHeritage") },
+    { href: "/collection/signature", label: t("nav.collectionSignature") },
     { href: "/about", label: t("nav.about") },
     { href: "/contact", label: t("nav.contact") },
   ];

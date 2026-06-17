@@ -19,8 +19,13 @@ export function Footer() {
             <h3 className="font-display text-base tracking-wide text-brand-gold mb-4">{t("footer.shop")}</h3>
             <ul className="space-y-2 text-brand-white/70">
               <li>
-                <Link href="/collection" className="hover:text-brand-gold">
-                  {t("nav.collection")}
+                <Link href="/collection/heritage" className="hover:text-brand-gold">
+                  {t("nav.collectionHeritage")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/collection/signature" className="hover:text-brand-gold">
+                  {t("nav.collectionSignature")}
                 </Link>
               </li>
               <li>

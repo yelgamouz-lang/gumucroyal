@@ -7,6 +7,7 @@ import { HOME_SECTION_IMAGES } from "@/lib/products";
 import { ProductCard } from "@/components/product/ProductComponents";
 import { HeroVideoBackground } from "@/components/home/HeroVideoBackground";
 import { BrandCommitmentSection } from "@/components/home/BrandCommitmentSection";
+import { CollectionGateway } from "@/components/home/CollectionGateway";
 import { ReassuranceBar } from "@/components/shared/ReassuranceBar";
 import {
   Button,
@@ -49,13 +50,17 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
       {/* 2. Bande réassurance */}
       <ReassuranceBar />
 
-      {/* 3. Nos produits */}
-      <SectionWrapper compact className="pt-6 md:pt-8 cv-auto">
+      {/* 3. Deux portes d'entrée */}
+      <CollectionGateway />
+
+      {/* 4. Best-sellers */}
+      <SectionWrapper compact className="pt-0 pb-6 md:pb-8 cv-auto">
         <div className="text-center mb-8 md:mb-10">
+          <p className="luxury-eyebrow mb-3">{t("home.bestSellersEyebrow")}</p>
           <h2 className="luxury-title">{t("home.collectionTitle")}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {products.map((p) => (
+          {products.slice(0, 3).map((p) => (
             <div key={p.slug} className="min-w-0">
               <ProductCard product={p} premium />
             </div>
@@ -63,7 +68,7 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
         </div>
       </SectionWrapper>
 
-      {/* 4. Bénéfices / marque */}
+      {/* 5. Bénéfices / marque */}
       <SectionWrapper compact className="cv-auto">
         <SectionHeader
           eyebrow={t("home.qualityEyebrow")}

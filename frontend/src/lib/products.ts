@@ -21,7 +21,11 @@ export const PRODUCT_PHOTOS = {
     "/Produit/bague-lien-eternel-angle3.jpg",
   ],
   "collier-trefle-lumiere": ["/Produit/collier-trefle.jpg"],
-  "bague-double-signature": ["/Produit/bague-double-signature.jpg"],
+  "bague-double-signature": [
+    "/Produit/bague-double-signature.jpg",
+    "/Produit/bague-double-signature-angle2.jpg",
+    "/Produit/bague-double-signature-angle3.jpg",
+  ],
 } as const;
 
 export const PLACEHOLDER_IMAGES = { hero: HERO, lifestyle: LIFE, packaging: PACK };

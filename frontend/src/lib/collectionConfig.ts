@@ -15,10 +15,10 @@ export const COLLECTIONS: Record<CollectionSlug, CollectionMeta> = {
   heritage: {
     slug: "heritage",
     bannerImage: "/Produit/maison-1.jpg",
-    // Dedicated dark Héritage image to be provided by the client. Until then the
-    // fallback below keeps the card coherent with the dark Signature card.
-    cardImage: "/Produit/heritage-card.jpg",
-    cardImageFallback: "/Produit/maison-1.jpg",
+    // Real existing image used now. Swap cardImage to /Produit/heritage-card.jpg
+    // once you drop the dedicated dark photo in public/Produit/.
+    cardImage: "/Produit/collier-trefle.jpg",
+    cardImageFallback: "/Produit/collier-trefle.jpg",
     other: "signature",
   },
   signature: {

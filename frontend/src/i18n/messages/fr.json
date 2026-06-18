@@ -162,8 +162,18 @@
     "aboutUs": "La Maison",
     "contactUs": "Nous contacter",
     "whatsapp": "WhatsApp",
+    "infoSection": "Informations",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions de vente",
+    "shippingReturns": "Livraison & retours",
     "copyright": "© 2026 GUMÜÇ ROYAL — Maison de joaillerie accessible. Tous droits réservés.",
     "tagline": "Acier inoxydable finition dorée · Livraison 24-48h · Paiement à la livraison"
+  },
+  "legal": {
+    "privacyTitle": "Politique de confidentialité",
+    "termsTitle": "Conditions de vente",
+    "shippingTitle": "Livraison & retours",
+    "placeholder": "[TEXTE À COMPLÉTER] — Le contenu de cette page sera fourni par GUMÜÇ Royal."
   },
   "cart": {
     "title": "🛒 Votre panier ({count})",

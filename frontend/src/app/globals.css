@@ -29,11 +29,17 @@
   --color-brand-cream: var(--brand-cream);
   --color-scarcity: var(--color-scarcity);
   --color-trust: var(--color-trust);
+  /* Only two web fonts are loaded: Cormorant (Latin display) + Tajawal (Arabic).
+     The legacy variables are aliased so existing rules keep working without a
+     separate download. Latin body uses the system sans stack. */
+  --font-dm-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-playfair: var(--font-cormorant);
+  --font-amiri: var(--font-tajawal);
   --font-display: var(--font-cormorant);
-  --font-display-ar: var(--font-amiri);
-  --font-body: var(--font-dm-sans);
+  --font-display-ar: var(--font-tajawal);
+  --font-body: ui-sans-serif, system-ui, sans-serif;
   --font-body-ar: var(--font-tajawal);
-  --font-price: var(--font-playfair);
+  --font-price: var(--font-cormorant);
 }
 
 html[dir="ltr"] body {
@@ -1241,4 +1247,27 @@ html[dir="rtl"] .header-nav-link {
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Global accessibility: honor the OS "reduce motion" preference everywhere.
+   Neutralizes hover scale, transitions, looping animations and smooth scroll. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  /* Decorative hover zooms become static. */
+  .group:hover .group-hover\:scale-\[1\.03\],
+  .group:hover .group-hover\:scale-\[1\.04\] {
+    transform: none !important;
+  }
 }

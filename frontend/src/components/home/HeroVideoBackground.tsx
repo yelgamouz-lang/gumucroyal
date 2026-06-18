@@ -7,6 +7,7 @@ const POSTER_SRC = HERO_POSTER;
 const DESKTOP_MP4 = process.env.NEXT_PUBLIC_HERO_VIDEO_URL || HERO_DESKTOP_MP4;
 const MOBILE_MP4 = process.env.NEXT_PUBLIC_HERO_MOBILE_VIDEO_URL || HERO_MOBILE_MP4;
 const MOBILE_MQ = "(max-width: 767px)";
+const REDUCED_MOTION_MQ = "(prefers-reduced-motion: reduce)";
 
 function subscribeMobileMq(onChange: () => void) {
   const mq = window.matchMedia(MOBILE_MQ);
@@ -22,12 +23,31 @@ function getMobileMqServerSnapshot() {
   return false;
 }
 
+function subscribeReducedMotion(onChange: () => void) {
+  const mq = window.matchMedia(REDUCED_MOTION_MQ);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
+function getReducedMotionSnapshot() {
+  return window.matchMedia(REDUCED_MOTION_MQ).matches;
+}
+
+function getReducedMotionServerSnapshot() {
+  return false;
+}
+
 export function HeroVideoBackground() {
   const desktopRef = useRef<HTMLVideoElement>(null);
   const mobileRef = useRef<HTMLVideoElement>(null);
   const playRequested = useRef(false);
   const [posterVisible, setPosterVisible] = useState(true);
   const isMobile = useSyncExternalStore(subscribeMobileMq, getMobileMqSnapshot, getMobileMqServerSnapshot);
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    getReducedMotionServerSnapshot
+  );
 
   const revealVideo = useCallback(() => {
     setPosterVisible(false);
@@ -61,6 +81,14 @@ export function HeroVideoBackground() {
     const inactive = isMobile ? desktopRef.current : mobileRef.current;
 
     inactive?.pause();
+
+    // Respect reduced-motion: do not autoplay, keep the static poster.
+    if (prefersReducedMotion) {
+      desktopRef.current?.pause();
+      mobileRef.current?.pause();
+      setPosterVisible(true);
+      return undefined;
+    }
 
     if (!video) return undefined;
 
@@ -147,11 +175,11 @@ export function HeroVideoBackground() {
         cleanup();
       }
     };
-  }, [isMobile, revealVideo, tryPlay]);
+  }, [isMobile, prefersReducedMotion, revealVideo, tryPlay]);
 
   const sharedVideoProps = {
     style: { pointerEvents: "none" as const },
-    autoPlay: true,
+    autoPlay: !prefersReducedMotion,
     muted: true,
     loop: true,
     playsInline: true,
@@ -185,7 +213,7 @@ export function HeroVideoBackground() {
       <video
         ref={mobileRef}
         className="hero-video-element hero-video-element--mobile"
-        preload={isMobile ? "metadata" : "auto"}
+        preload={isMobile ? "metadata" : "none"}
         {...sharedVideoProps}
       >
         <source src={MOBILE_MP4} type="video/mp4" />

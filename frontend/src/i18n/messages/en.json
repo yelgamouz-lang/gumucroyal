@@ -162,8 +162,18 @@
     "aboutUs": "The Maison",
     "contactUs": "Contact us",
     "whatsapp": "WhatsApp",
+    "infoSection": "Information",
+    "privacy": "Privacy policy",
+    "terms": "Terms of sale",
+    "shippingReturns": "Shipping & returns",
     "copyright": "© 2026 GUMÜÇ Royal — Accessible jewellery house. All rights reserved.",
     "tagline": "Stainless steel gold-tone finish · 24-48h delivery · Cash on delivery"
+  },
+  "legal": {
+    "privacyTitle": "Privacy policy",
+    "termsTitle": "Terms of sale",
+    "shippingTitle": "Shipping & returns",
+    "placeholder": "[CONTENT TO BE ADDED] — The text of this page will be provided by GUMÜÇ Royal."
   },
   "cart": {
     "title": "🛒 Your cart ({count})",

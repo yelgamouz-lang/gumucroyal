@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="bg-brand-black border-t border-brand-gray/30 mt-auto">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           <div>
             <h3 className="font-display text-xl tracking-widest text-brand-gold mb-3">GUMÜÇROYAL</h3>
             <p className="text-brand-white/70">{t("footer.tagline")}</p>
@@ -59,6 +59,26 @@ export function Footer() {
               <li>
                 <Link href="/contact" className="hover:text-brand-gold">
                   {t("footer.contactUs")}
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-display text-base tracking-wide text-brand-gold mb-4">{t("footer.infoSection")}</h3>
+            <ul className="space-y-2 text-brand-white/70">
+              <li>
+                <Link href="/privacy" className="hover:text-brand-gold">
+                  {t("footer.privacy")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-brand-gold">
+                  {t("footer.terms")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping-returns" className="hover:text-brand-gold">
+                  {t("footer.shippingReturns")}
                 </Link>
               </li>
             </ul>

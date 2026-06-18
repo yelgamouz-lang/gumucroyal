@@ -8,6 +8,7 @@ import { ProductCard } from "@/components/product/ProductComponents";
 import { HeroVideoBackground } from "@/components/home/HeroVideoBackground";
 import { BrandCommitmentSection } from "@/components/home/BrandCommitmentSection";
 import { CollectionGateway } from "@/components/home/CollectionGateway";
+import { DiscoverCollectionsButton } from "@/components/home/DiscoverCollectionsButton";
 import { ReassuranceBar } from "@/components/shared/ReassuranceBar";
 import {
   Button,
@@ -18,11 +19,18 @@ import {
   FAQItem,
 } from "@/components/shared/UI";
 import { Reveal } from "@/components/shared/Reveal";
+import { scrollToCollectionsGateway, COLLECTIONS_GATEWAY_ID } from "@/lib/scrollToSection";
 import { useTranslation } from "@/i18n/I18nProvider";
+import { useEffect } from "react";
 
 export function HomePageClient({ initialProducts }: { initialProducts: Product[] }) {
   const { t } = useTranslation();
   const products = initialProducts;
+
+  useEffect(() => {
+    if (window.location.hash !== `#${COLLECTIONS_GATEWAY_ID}`) return;
+    requestAnimationFrame(() => scrollToCollectionsGateway());
+  }, []);
 
   return (
     <div className="bg-brand-black">
@@ -41,9 +49,7 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
             {t("home.heroSubtitle")}
           </p>
           <div className="flex justify-center pointer-events-auto">
-            <Link href="/collection/signature">
-              <Button>{t("common.discoverCollection")}</Button>
-            </Link>
+            <DiscoverCollectionsButton />
           </div>
           <p className="text-brand-gold/70 text-[11px] md:text-xs uppercase tracking-[0.25em] mt-5 font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
             {t("home.heroEyebrow")}

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Reveal } from "@/components/shared/Reveal";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { COLLECTIONS, type CollectionSlug } from "@/lib/collectionConfig";
+import { COLLECTIONS_GATEWAY_ID } from "@/lib/scrollToSection";
 import { cn } from "@/lib/cn";
 
 function CollectionCard({ slug }: { slug: CollectionSlug }) {
@@ -62,7 +63,7 @@ export function CollectionGateway() {
   const { t } = useTranslation();
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <section id={COLLECTIONS_GATEWAY_ID} className="scroll-mt-6 md:scroll-mt-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <Reveal>
         <div className="text-center mb-8 md:mb-10">
           <p className="luxury-eyebrow mb-3">{t("collections.gatewaySubtitle")}</p>

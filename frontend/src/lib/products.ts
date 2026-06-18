@@ -15,7 +15,11 @@ const HERO = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=192
  * leurs chemins ici (ex. ".../bague-lien-eternel-2.jpg", ".../bague-lien-eternel-porte.jpg").
  */
 export const PRODUCT_PHOTOS = {
-  "bague-lien-eternel": ["/Produit/bague-lien-eternel.jpg"],
+  "bague-lien-eternel": [
+    "/Produit/bague-lien-eternel.jpg",
+    "/Produit/bague-lien-eternel-angle2.jpg",
+    "/Produit/bague-lien-eternel-angle3.jpg",
+  ],
   "collier-trefle-lumiere": ["/Produit/collier-trefle.jpg"],
   "bague-double-signature": ["/Produit/bague-double-signature.jpg"],
 } as const;

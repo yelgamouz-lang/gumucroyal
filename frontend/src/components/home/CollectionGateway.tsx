@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Reveal } from "@/components/shared/Reveal";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { COLLECTIONS, type CollectionSlug } from "@/lib/collectionConfig";
-import { Reveal } from "@/components/shared/ScrollReveal";
 import { cn } from "@/lib/cn";
 
-function CollectionCard({ slug, stagger }: { slug: CollectionSlug; stagger: number }) {
+function CollectionCard({ slug }: { slug: CollectionSlug }) {
   const { t } = useTranslation();
   const meta = COLLECTIONS[slug];
   const name = t(`collections.${slug}.name`);
@@ -15,19 +15,18 @@ function CollectionCard({ slug, stagger }: { slug: CollectionSlug; stagger: numb
   const discover = t(`collections.${slug}.discover`);
 
   return (
-    <Reveal stagger={stagger} className="min-w-0">
-      <Link
-        href={`/collection/${slug}`}
-        className="luxury-card group relative block overflow-hidden rounded-sm border border-brand-gold/10 hover:border-brand-gold/30"
-        style={{ aspectRatio: "4 / 5" }}
-      >
-        <Image
-          src={meta.cardImage}
-          alt={name}
-          fill
-          className="luxury-card__media-inner object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
+    <Link
+      href={`/collection/${slug}`}
+      className="luxury-card group relative block overflow-hidden rounded-sm border border-brand-gold/10 hover:border-brand-gold/30"
+      style={{ aspectRatio: "4 / 5" }}
+    >
+      <Image
+        src={meta.cardImage}
+        alt={name}
+        fill
+        className="luxury-card__image object-cover"
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
 
       {/* Dark gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-brand-black/90 via-brand-black/30 to-brand-black/10 pointer-events-none" />
@@ -56,7 +55,6 @@ function CollectionCard({ slug, stagger }: { slug: CollectionSlug; stagger: numb
         </span>
       </div>
     </Link>
-    </Reveal>
   );
 }
 
@@ -65,14 +63,20 @@ export function CollectionGateway() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <Reveal className="text-center mb-8 md:mb-10">
-        <p className="luxury-eyebrow mb-3">{t("collections.gatewaySubtitle")}</p>
-        <h2 className="luxury-title">{t("collections.gatewayTitle")}</h2>
+      <Reveal>
+        <div className="text-center mb-8 md:mb-10">
+          <p className="luxury-eyebrow mb-3">{t("collections.gatewaySubtitle")}</p>
+          <h2 className="luxury-title">{t("collections.gatewayTitle")}</h2>
+        </div>
       </Reveal>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-        <CollectionCard slug="heritage" stagger={0} />
-        <CollectionCard slug="signature" stagger={0.1} />
+        <Reveal staggerIndex={0}>
+          <CollectionCard slug="heritage" />
+        </Reveal>
+        <Reveal staggerIndex={1}>
+          <CollectionCard slug="signature" />
+        </Reveal>
       </div>
     </section>
   );

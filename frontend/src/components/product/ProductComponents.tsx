@@ -45,7 +45,7 @@ export function ProductCard({ product, premium }: { product: Product; premium?: 
           width={720}
           height={900}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
-          className="luxury-card__media-inner w-full h-full"
+          className="luxury-card__image w-full h-full"
         />
         {product.badge && (
           <div className="absolute top-3 end-3">

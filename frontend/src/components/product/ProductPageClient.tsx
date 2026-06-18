@@ -45,7 +45,9 @@ import { useProductContent, useProductFaq, useProductObjections, useTranslation 
 
 import { LazyWhenVisible } from "@/components/shared/LazyWhenVisible";
 
-import { Reveal } from "@/components/shared/ScrollReveal";
+import { Reveal } from "@/components/shared/Reveal";
+
+
 
 export function ProductPageClient({ product, allProducts }: { product: Product; allProducts: Product[] }) {
 
@@ -179,13 +181,13 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 min-w-0">
 
-          <Reveal stagger={0}>
+          <Reveal staggerIndex={0}>
 
             <ProductGallery images={product.images} productName={productName} priority />
 
           </Reveal>
 
-          <Reveal stagger={0.1}>
+          <Reveal staggerIndex={1}>
 
             <ProductHeroCard
 
@@ -327,7 +329,7 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
           {faq.map((item, i) => (
 
-            <Reveal key={item.q} stagger={Math.min(i * 0.08, 0.24)}>
+            <Reveal key={item.q} staggerIndex={i}>
 
               <FAQItem question={item.q} answer={item.a} defaultOpen={i === 0} />
 

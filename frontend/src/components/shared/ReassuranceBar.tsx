@@ -3,7 +3,6 @@
 import { ShieldCheck, Sparkles, Truck } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { GoldIcon } from "@/components/shared/UI";
-import { Reveal } from "@/components/shared/ScrollReveal";
 import { cn } from "@/lib/cn";
 import { useTranslation } from "@/i18n/I18nProvider";
 
@@ -21,23 +20,21 @@ export function ReassuranceBar() {
   const items = useReassuranceItems();
 
   return (
-    <Reveal>
-      <div className="w-full bg-brand-black border-y border-brand-gold/10 py-5">
-        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-center gap-y-4">
-          {items.map((item, i) => (
-            <div key={item.text} className="flex items-center">
-              {i > 0 && <span className="hidden sm:inline w-px h-5 bg-brand-gold/15 mx-5 md:mx-8" aria-hidden />}
-              <span className="flex items-center gap-2.5 px-2 max-w-xs">
-                <GoldIcon icon={item.icon} className="w-[18px] h-[18px] shrink-0 opacity-80" />
-                <span className="text-brand-gold/70 text-xs md:text-sm font-light leading-snug text-center">
-                  {item.text}
-                </span>
+    <div className="w-full bg-brand-black border-y border-brand-gold/10 py-5">
+      <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-center gap-y-4">
+        {items.map((item, i) => (
+          <div key={item.text} className="flex items-center">
+            {i > 0 && <span className="hidden sm:inline w-px h-5 bg-brand-gold/15 mx-5 md:mx-8" aria-hidden />}
+            <span className="flex items-center gap-2.5 px-2 max-w-xs">
+              <GoldIcon icon={item.icon} className="w-[18px] h-[18px] shrink-0 opacity-80" />
+              <span className="text-brand-gold/70 text-xs md:text-sm font-light leading-snug text-center">
+                {item.text}
               </span>
-            </div>
-          ))}
-        </div>
+            </span>
+          </div>
+        ))}
       </div>
-    </Reveal>
+    </div>
   );
 }
 

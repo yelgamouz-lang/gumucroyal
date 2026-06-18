@@ -4,8 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/types/product";
 import { ProductCard } from "@/components/product/ProductComponents";
+import { Reveal } from "@/components/shared/Reveal";
 import { SectionWrapper } from "@/components/shared/UI";
-import { Reveal } from "@/components/shared/ScrollReveal";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { COLLECTIONS, type CollectionSlug } from "@/lib/collectionConfig";
 
@@ -69,21 +69,24 @@ export function CollectionPageClient({ initialProducts, collection }: Props) {
           ) : (
             <div className="grid md:grid-cols-3 gap-8 cv-auto">
               {products.map((p, i) => (
-                <Reveal key={p.slug} stagger={i * 0.1} className="min-w-0">
+                <Reveal key={p.slug} staggerIndex={i} className="min-w-0">
                   <ProductCard product={p} />
                 </Reveal>
               ))}
             </div>
           )}
 
-          <Reveal className="mt-14 md:mt-16 pt-8 border-t border-brand-gold/10 text-center">
-            <Link
-              href={`/collection/${otherSlug}`}
-              className="text-brand-white/50 hover:text-brand-gold text-sm uppercase tracking-[0.15em] transition-colors duration-300"
-              aria-label={`${discoverOther} — ${otherName}`}
-            >
-              {discoverOther}
-            </Link>
+          {/* Lien discret vers l'autre collection */}
+          <Reveal>
+            <div className="mt-14 md:mt-16 pt-8 border-t border-brand-gold/10 text-center">
+              <Link
+                href={`/collection/${otherSlug}`}
+                className="text-brand-white/50 hover:text-brand-gold text-sm uppercase tracking-[0.15em] transition-colors duration-300"
+                aria-label={`${discoverOther} — ${otherName}`}
+              >
+                {discoverOther}
+              </Link>
+            </div>
           </Reveal>
         </SectionWrapper>
       </div>
@@ -98,7 +101,7 @@ export function CollectionPageClient({ initialProducts, collection }: Props) {
       </Reveal>
       <div className="grid md:grid-cols-3 gap-8 cv-auto">
         {products.map((p, i) => (
-          <Reveal key={p.slug} stagger={i * 0.1} className="min-w-0">
+          <Reveal key={p.slug} staggerIndex={i} className="min-w-0">
             <ProductCard product={p} />
           </Reveal>
         ))}
@@ -106,10 +109,10 @@ export function CollectionPageClient({ initialProducts, collection }: Props) {
 
       <div className="mt-12 grid md:grid-cols-2 gap-4 border-t border-brand-gold/10 pt-10">
         {(["heritage", "signature"] as CollectionSlug[]).map((slug, i) => (
-          <Reveal key={slug} stagger={i * 0.1}>
+          <Reveal key={slug} staggerIndex={i}>
             <Link
               href={`/collection/${slug}`}
-              className="luxury-card flex flex-col items-center justify-center gap-2 border border-brand-gold/20 hover:border-brand-gold/50 p-6 text-center"
+              className="flex flex-col items-center justify-center gap-2 border border-brand-gold/20 hover:border-brand-gold/50 p-6 transition-colors duration-300 text-center"
             >
               <span className="luxury-eyebrow">{t(`collections.${slug}.tagline`)}</span>
               <span className="font-display text-xl text-brand-gold">{t(`collections.${slug}.name`)}</span>

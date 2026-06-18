@@ -9,7 +9,6 @@ import { HeroVideoBackground } from "@/components/home/HeroVideoBackground";
 import { BrandCommitmentSection } from "@/components/home/BrandCommitmentSection";
 import { CollectionGateway } from "@/components/home/CollectionGateway";
 import { ReassuranceBar } from "@/components/shared/ReassuranceBar";
-import { Reveal } from "@/components/shared/ScrollReveal";
 import {
   Button,
   SectionWrapper,
@@ -18,6 +17,7 @@ import {
   FeatureCard,
   FAQItem,
 } from "@/components/shared/UI";
+import { Reveal } from "@/components/shared/Reveal";
 import { useTranslation } from "@/i18n/I18nProvider";
 
 export function HomePageClient({ initialProducts }: { initialProducts: Product[] }) {
@@ -26,7 +26,7 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
 
   return (
     <div className="bg-brand-black">
-      {/* 1. Hero vidéo — pas de reveal (above the fold) */}
+      {/* 1. Hero vidéo */}
       <section className="hero-home relative min-h-[72dvh] md:min-h-[80vh] flex items-center justify-center text-center overflow-hidden md:isolate z-0">
         <HeroVideoBackground />
         <div className="hero-home-content relative z-10 px-4 py-10 max-w-3xl pointer-events-none">
@@ -52,20 +52,24 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
       </section>
 
       {/* 2. Bande réassurance */}
-      <ReassuranceBar />
+      <Reveal>
+        <ReassuranceBar />
+      </Reveal>
 
-      {/* 3. Deux portes d'entrée (reveal + stagger interne) */}
+      {/* 3. Deux portes d'entrée */}
       <CollectionGateway />
 
       {/* 4. Best-sellers */}
       <SectionWrapper compact className="pt-0 pb-6 md:pb-8 cv-auto">
-        <Reveal className="text-center mb-8 md:mb-10">
-          <p className="luxury-eyebrow mb-3">{t("home.bestSellersEyebrow")}</p>
-          <h2 className="luxury-title">{t("home.collectionTitle")}</h2>
+        <Reveal>
+          <div className="text-center mb-8 md:mb-10">
+            <p className="luxury-eyebrow mb-3">{t("home.bestSellersEyebrow")}</p>
+            <h2 className="luxury-title">{t("home.collectionTitle")}</h2>
+          </div>
         </Reveal>
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
           {products.slice(0, 3).map((p, i) => (
-            <Reveal key={p.slug} stagger={i * 0.1} className="min-w-0">
+            <Reveal key={p.slug} staggerIndex={i} className="min-w-0">
               <ProductCard product={p} premium />
             </Reveal>
           ))}
@@ -83,13 +87,13 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
           />
         </Reveal>
         <div className="grid md:grid-cols-3 gap-5 md:gap-6 mt-8 md:mt-10">
-          <Reveal stagger={0}>
+          <Reveal staggerIndex={0}>
             <FeatureCard icon={Gem} title={t("home.feature1Title")} description={t("home.feature1Desc")} />
           </Reveal>
-          <Reveal stagger={0.1}>
+          <Reveal staggerIndex={1}>
             <FeatureCard icon={Truck} title={t("home.feature2Title")} description={t("home.feature2Desc")} />
           </Reveal>
-          <Reveal stagger={0.2}>
+          <Reveal staggerIndex={2}>
             <FeatureCard icon={ShieldCheck} title={t("home.feature3Title")} description={t("home.feature3Desc")} />
           </Reveal>
         </div>
@@ -118,24 +122,26 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
           <SectionHeader title={t("home.faqTitle")} description={t("home.faqDescription")} premium />
         </Reveal>
         <div className="mt-8 space-y-4 max-w-3xl mx-auto">
-          <Reveal stagger={0}>
+          <Reveal staggerIndex={0}>
             <FAQItem question={t("home.faq1Q")} answer={t("home.faq1A")} />
           </Reveal>
-          <Reveal stagger={0.1}>
+          <Reveal staggerIndex={1}>
             <FAQItem question={t("home.faq2Q")} answer={t("home.faq2A")} />
           </Reveal>
-          <Reveal stagger={0.1}>
+          <Reveal staggerIndex={2}>
             <FAQItem question={t("home.faq3Q")} answer={t("home.faq3A")} />
           </Reveal>
         </div>
       </SectionWrapper>
 
       <SectionWrapper compact className="pb-16 md:pb-20">
-        <Reveal className="text-center">
-          <h2 className="luxury-title mb-6 md:mb-8">{t("home.ctaTitle")}</h2>
-          <Link href="/collection">
-            <Button>{t("common.shopNow")}</Button>
-          </Link>
+        <Reveal>
+          <div className="text-center">
+            <h2 className="luxury-title mb-6 md:mb-8">{t("home.ctaTitle")}</h2>
+            <Link href="/collection">
+              <Button>{t("common.shopNow")}</Button>
+            </Link>
+          </div>
         </Reveal>
       </SectionWrapper>
     </div>

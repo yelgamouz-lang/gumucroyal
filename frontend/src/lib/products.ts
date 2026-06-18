@@ -128,7 +128,7 @@ const STATIC_PRODUCTS_RAW: Product[] = [
     description_short: "Une double chaîne délicate ponctuée de quatre trèfles porte-bonheur pavés de zircons étincelants.",
     description_long: "Une double chaîne délicate ponctuée de quatre trèfles porte-bonheur pavés de zircons étincelants.",
     category: "colliers",
-    collection: "heritage",
+    collection: "signature",
     material: "Acier inoxydable finition dorée",
     badge: "Nouveau",
     benefits: [],

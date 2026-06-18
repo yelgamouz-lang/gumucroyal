@@ -7,11 +7,17 @@ const LIFE = "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800
 const PACK = "https://images.unsplash.com/photo-1543294001-fd4a5d7a84a7?w=800&q=80";
 const HERO = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1920&q=80";
 
-/** Photos produits — frontend/public/Produit/ */
+/**
+ * Photos produits — frontend/public/Produit/
+ * Tableau par produit : la 1ʳᵉ image est la principale (priorité de chargement),
+ * les suivantes sont les angles + la photo portée (lazy) affichées dans la galerie.
+ * Pour ajouter des photos : déposez les fichiers dans public/Produit/ puis ajoutez
+ * leurs chemins ici (ex. ".../bague-lien-eternel-2.jpg", ".../bague-lien-eternel-porte.jpg").
+ */
 export const PRODUCT_PHOTOS = {
-  "bague-lien-eternel": "/Produit/bague-lien-eternel.jpg",
-  "collier-trefle-lumiere": "/Produit/collier-trefle.jpg",
-  "bague-double-signature": "/Produit/bague-double-signature.jpg",
+  "bague-lien-eternel": ["/Produit/bague-lien-eternel.jpg"],
+  "collier-trefle-lumiere": ["/Produit/collier-trefle.jpg"],
+  "bague-double-signature": ["/Produit/bague-double-signature.jpg"],
 } as const;
 
 export const PLACEHOLDER_IMAGES = { hero: HERO, lifestyle: LIFE, packaging: PACK };
@@ -93,7 +99,7 @@ function buildStaticProduct(
     slug,
     base_price_mad: base,
     compare_at_price_mad: base,
-    images: partial.images ?? [{ url: PRODUCT_PHOTOS[slug], alt: partial.name_fr, sort_order: 0 }],
+    images: partial.images ?? PRODUCT_PHOTOS[slug].map((url, i) => ({ url, alt: partial.name_fr, sort_order: i })),
     offers: stubOffers(slug, partial.sku),
   });
 }
@@ -153,12 +159,17 @@ export function getProductBySlug(slug: string): Product | undefined {
 }
 
 export function withLocalProductPhotos(product: Product): Product {
-  const url = PRODUCT_PHOTOS[product.slug as keyof typeof PRODUCT_PHOTOS];
+  const photos = (PRODUCT_PHOTOS as Record<string, readonly string[]>)[product.slug];
   const badge = product.badge === "Best Seller" ? "Nouveau" : product.badge;
-  const priced = applyCatalogPricing({ ...product, badge });
-  if (!url) return priced;
+  // Backfill the collection from static data so collection pages work even when
+  // products are served by the API (which may not expose the field yet).
+  const collection =
+    product.collection ?? STATIC_PRODUCTS.find((p) => p.slug === product.slug)?.collection;
+  const priced = applyCatalogPricing({ ...product, badge, collection });
+  if (!photos || photos.length === 0) return priced;
   const alt = priced.images[0]?.alt ?? priced.name_fr;
-  return applyCatalogPricing({ ...priced, images: [{ url, alt, sort_order: 0 }] });
+  const images = photos.map((url, i) => ({ url, alt, sort_order: i }));
+  return applyCatalogPricing({ ...priced, images });
 }
 
 export function withLocalProductPhotosList(products: Product[]): Product[] {

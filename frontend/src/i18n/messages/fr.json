@@ -189,6 +189,7 @@
     "submitting": "Confirmation en cours...",
     "confirmCod": "✅ Confirmer — paiement à la livraison",
     "continueSinglePiece": "Ou continuez avec une seule pièce",
+    "codReassurance": "🔒 Vous ne payez rien maintenant. Réglez seulement à la réception, chez vous.",
     "error": "Une erreur est survenue"
   },
   "addPiece": {
@@ -238,7 +239,8 @@
     "faqTitle": "Pour être rassurée avant de commander",
     "heroCod": "💰 Paiement à la livraison · 🚚 Livraison 24–48h",
     "desire_line": "Pour une touche dorée élégante, qui ne quitte jamais votre allure.",
-    "zirconHighlight": "Acier inoxydable finition dorée + zircons"
+    "zirconHighlight": "Acier inoxydable finition dorée + zircons",
+    "objectionsTitle": "Pour être totalement rassurée"
   },
   "products": {
     "bague-lien-eternel": {
@@ -272,7 +274,13 @@
       ]
     }
   },
+  "productObjections": [
+    { "q": "Est-ce que ça va se ternir ?", "a": "Non. Acier 316L plaqué — il ne rouille pas et ne verdit pas la peau." },
+    { "q": "Ce prix est-il réel ?", "a": "Oui — l'éclat de l'or, sans le prix de l'or." },
+    { "q": "Puis-je retourner ?", "a": "TEXTE_POLITIQUE_RETOUR" }
+  ],
   "productFaq": [
+    { "q": "Comment passer commande ?", "a": "Choisissez la pièce, ajoutez-la au panier, indiquez votre nom, téléphone et ville. Paiement à la livraison partout au Maroc." },
     { "q": "L'acier doré ternit-il ?", "a": "Non — acier inoxydable avec finition dorée. Ne rouille pas, ne ternit pas." },
     { "q": "Comment payer ?", "a": "Paiement à la livraison uniquement. Vous payez à réception. Aucun paiement en ligne." },
     { "q": "Quel délai de livraison ?", "a": "Livraison entre 24h et 48h dans toutes les villes du Maroc ; en cas de retard, nous vous informons." },

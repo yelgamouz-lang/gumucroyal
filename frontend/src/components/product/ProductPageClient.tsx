@@ -30,8 +30,6 @@ import { ProductGallery, OfferSelector, ProductHeroCard } from "@/components/pro
 
 import { ProductStickyCTA, ProductStickySpacer } from "@/components/product/ProductStickyCTA";
 
-import { Steel316LSection } from "@/components/product/Steel316LSection";
-
 import { Button, SectionWrapper, AlternatingSection, FAQItem, ProductTrustBar, AddToCartLabel } from "@/components/shared/UI";
 
 import { generateEventId } from "@/lib/format";
@@ -41,7 +39,7 @@ import { trackAddToCart, trackViewContent } from "@/lib/tracking";
 import { trackAnalyticsClick } from "@/lib/analytics";
 import { prefetchCartDrawer } from "@/lib/prefetchOverlays";
 
-import { useProductContent, useProductFaq, useTranslation } from "@/i18n/I18nProvider";
+import { useProductContent, useProductFaq, useProductObjections, useTranslation } from "@/i18n/I18nProvider";
 
 
 
@@ -56,6 +54,8 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
   const { subtitle, desireLine, benefits } = useProductContent(product.slug);
 
   const faq = useProductFaq();
+
+  const objections = useProductObjections();
 
   const heroSentinelRef = useRef<HTMLDivElement>(null);
 
@@ -259,11 +259,35 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
 
 
-      <div className="cv-auto">
+      <SectionWrapper className="cv-auto">
 
-        <Steel316LSection imageUrl={product.images[2]?.url || product.images[0]?.url || PLACEHOLDER_IMAGES.packaging} />
+        <AlternatingSection
+          title={t("productPage.objectionsTitle")}
+          image={product.images[2]?.url || product.images[0]?.url || PLACEHOLDER_IMAGES.packaging}
+          imageAlt={t("productPage.objectionsTitle")}
+          reverse
+          priority={false}
+        >
 
-      </div>
+          <div className="space-y-6 min-w-0">
+
+            {objections.map((o) => (
+
+              <div key={o.q} className="min-w-0">
+
+                <p className="font-display text-brand-gold text-lg mb-1.5 break-words [overflow-wrap:anywhere]">{o.q}</p>
+
+                <p className="text-brand-white/70 leading-relaxed break-words [overflow-wrap:anywhere]">{o.a}</p>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </AlternatingSection>
+
+      </SectionWrapper>
 
 
 
@@ -273,29 +297,43 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
         <div className="max-w-2xl mx-auto space-y-3 mb-12 min-w-0">
 
-          {faq.map((item) => (
+          {faq.map((item, i) => (
 
-            <FAQItem key={item.q} question={item.q} answer={item.a} />
+            <FAQItem key={item.q} question={item.q} answer={item.a} defaultOpen={i === 0} />
 
           ))}
 
         </div>
 
-        <div className="max-w-xl mx-auto text-center border border-brand-gold/30 p-8 bg-brand-black/50 min-w-0">
+        <div className="max-w-xl mx-auto border border-brand-gold/30 p-6 md:p-8 bg-brand-black/50 min-w-0">
 
-          <LazyWhenVisible minHeight="22rem">
+          <div className="flex items-start gap-3 rounded-lg border border-brand-gold/20 bg-brand-gold/[0.04] p-4 mb-6 text-start">
 
-            <h3 className="font-display text-2xl text-brand-gold mb-6">{t("offers.chooseOffer")}</h3>
+            <p className="text-sm md:text-base text-brand-white/85 leading-relaxed break-words [overflow-wrap:anywhere]">
 
-            <OfferSelector {...offerSelectorProps} />
+              {t("checkout.codReassurance")}
 
-            <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
+            </p>
 
-              <AddToCartLabel amount={displayPrice} />
+          </div>
 
-            </Button>
+          <div className="text-center">
 
-          </LazyWhenVisible>
+            <LazyWhenVisible minHeight="20rem">
+
+              <h3 className="font-display text-2xl text-brand-gold mb-6">{t("offers.chooseOffer")}</h3>
+
+              <OfferSelector {...offerSelectorProps} />
+
+              <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
+
+                <AddToCartLabel amount={displayPrice} />
+
+              </Button>
+
+            </LazyWhenVisible>
+
+          </div>
 
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import type { Offer, Product } from "@/types/product";
 import { Badge, Button, AddToCartLabel, Price, PriceDesireLine, PriceDisplay } from "@/components/shared/UI";
@@ -66,6 +66,19 @@ export function ProductCard({ product, premium }: { product: Product; premium?: 
   );
 }
 
+function GalleryPlaceholder({ name }: { name: string }) {
+  return (
+    <div className="aspect-square relative overflow-hidden bg-brand-black rounded-lg border border-brand-gold/15 flex items-center justify-center">
+      <div className="text-center px-6">
+        <div className="mx-auto mb-4 h-14 w-14 rounded-full border border-brand-gold/30" aria-hidden />
+        <p className="font-display text-brand-gold/60 text-sm tracking-wide break-words [overflow-wrap:anywhere]">
+          {name}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function ProductGallery({
   images,
   productName,
@@ -76,38 +89,105 @@ export function ProductGallery({
   priority?: boolean;
 }) {
   const [active, setActive] = useState(0);
-  const main = images[active] || images[0];
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  const valid = images.filter((img) => img && img.url);
+
+  if (valid.length === 0) {
+    return <GalleryPlaceholder name={productName} />;
+  }
+
+  const main = valid[active] || valid[0];
+  const multi = valid.length > 1;
+
+  const scrollToIndex = (i: number) => {
+    const el = scrollerRef.current;
+    if (el) el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+    setActive(i);
+  };
+
+  const handleScroll = () => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const idx = Math.round(el.scrollLeft / el.clientWidth);
+    setActive(Math.max(0, Math.min(valid.length - 1, idx)));
+  };
 
   return (
-    <div>
-      <div className="aspect-square relative overflow-hidden bg-brand-black mb-3">
-        {main && (
-          <OptimizedImage
-            src={main.url}
-            alt={main.alt || productName}
-            fill
-            priority={priority}
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-        )}
-      </div>
-      {images.length > 1 && (
-        <div className="grid grid-cols-4 gap-2">
-          {images.map((img, i) => (
-            <button
+    <div className="min-w-0">
+      {/* Mobile — swipeable carousel */}
+      <div className="md:hidden">
+        <div
+          ref={scrollerRef}
+          onScroll={handleScroll}
+          className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-lg"
+        >
+          {valid.map((img, i) => (
+            <div
               key={img.url}
-              type="button"
-              onClick={() => setActive(i)}
-              className={cn(
-                "aspect-square relative overflow-hidden border-2 transition-colors",
-                i === active ? "border-brand-gold" : "border-transparent opacity-70 hover:opacity-100"
-              )}
+              className="snap-center shrink-0 basis-full aspect-square relative overflow-hidden bg-brand-black"
             >
-              <OptimizedImage src={img.url} alt={img.alt} fill sizes="80px" />
-            </button>
+              <OptimizedImage
+                src={img.url}
+                alt={img.alt || productName}
+                fill
+                priority={priority && i === 0}
+                sizes="100vw"
+              />
+            </div>
           ))}
         </div>
-      )}
+        {multi && (
+          <div className="flex justify-center gap-2 mt-3">
+            {valid.map((img, i) => (
+              <button
+                key={img.url}
+                type="button"
+                onClick={() => scrollToIndex(i)}
+                aria-label={`${productName} ${i + 1}`}
+                aria-current={i === active}
+                className={cn(
+                  "h-2 rounded-full transition-all duration-300",
+                  i === active ? "w-6 bg-brand-gold" : "w-2 bg-brand-gold/30"
+                )}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Desktop — main image + thumbnails */}
+      <div className="hidden md:block">
+        <div className="aspect-square relative overflow-hidden bg-brand-black mb-3 rounded-lg">
+          {main && (
+            <OptimizedImage
+              src={main.url}
+              alt={main.alt || productName}
+              fill
+              priority={priority}
+              sizes="50vw"
+            />
+          )}
+        </div>
+        {multi && (
+          <div className="grid grid-cols-4 gap-2">
+            {valid.map((img, i) => (
+              <button
+                key={img.url}
+                type="button"
+                onClick={() => setActive(i)}
+                aria-label={`${productName} ${i + 1}`}
+                className={cn(
+                  "aspect-square relative overflow-hidden rounded-md border-2 transition-colors",
+                  i === active ? "border-brand-gold" : "border-transparent opacity-70 hover:opacity-100"
+                )}
+              >
+                <OptimizedImage src={img.url} alt={img.alt || productName} fill sizes="120px" />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

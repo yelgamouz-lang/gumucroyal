@@ -189,6 +189,7 @@
     "submitting": "Confirming...",
     "confirmCod": "✅ Confirm order — cash on delivery",
     "continueSinglePiece": "Or continue with a single piece",
+    "codReassurance": "🔒 You pay nothing now. Pay only on delivery, at your door.",
     "error": "An error occurred"
   },
   "addPiece": {
@@ -238,7 +239,8 @@
     "faqTitle": "Be reassured before you order",
     "heroCod": "💰 Cash on delivery · 🚚 Delivery 24–48h",
     "desire_line": "For an elegant golden touch that never leaves your look.",
-    "zirconHighlight": "Stainless steel gold-tone finish + zircons"
+    "zirconHighlight": "Stainless steel gold-tone finish + zircons",
+    "objectionsTitle": "So you can order with confidence"
   },
   "products": {
     "bague-lien-eternel": {
@@ -272,7 +274,13 @@
       ]
     }
   },
+  "productObjections": [
+    { "q": "Will it tarnish?", "a": "No. Plated 316L steel — it doesn't rust and won't turn your skin green." },
+    { "q": "Is this price real?", "a": "Yes — the glow of gold, without the price of gold." },
+    { "q": "Can I return it?", "a": "TEXTE_POLITIQUE_RETOUR" }
+  ],
   "productFaq": [
+    { "q": "How do I order?", "a": "Choose your piece, add it to the cart, enter your name, phone and city. Cash on delivery everywhere in Morocco." },
     { "q": "Does the gold-tone finish tarnish?", "a": "No — stainless steel with gold-tone finish. Never rusts, never tarnishes." },
     { "q": "How do I pay?", "a": "Cash on delivery only. Pay when your order arrives. No online payment." },
     { "q": "What is the delivery time?", "a": "Delivery within 24h to 48h across all Moroccan cities; if there is any delay, we will inform you." },

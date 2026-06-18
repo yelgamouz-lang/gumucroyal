@@ -116,6 +116,11 @@ export function useProductFaq(): FaqItem[] {
   return tArray<FaqItem>("productFaq");
 }
 
+export function useProductObjections(): FaqItem[] {
+  const { tArray } = useTranslation();
+  return tArray<FaqItem>("productObjections");
+}
+
 export function getOfferLabelKey(quantity: number): string {
   if (quantity === 1) return "offers.single";
   if (quantity === 2) return "offers.duo";

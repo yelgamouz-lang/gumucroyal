@@ -308,7 +308,14 @@ export function CheckoutPopup() {
           </div>
         )}
 
-        {/* 3) Champs client */}
+        {/* 3) Réassurance COD — paiement uniquement à la réception */}
+        <div className="flex items-start gap-2 rounded-lg border border-brand-gold/20 bg-brand-gold/[0.05] p-3 mb-4">
+          <p className="text-sm text-brand-white/85 leading-relaxed break-words [overflow-wrap:anywhere]">
+            {t("checkout.codReassurance")}
+          </p>
+        </div>
+
+        {/* 4) Champs client */}
         <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-4">
           <div>
             <label className="block text-sm mb-2">{t("checkout.fullName")}</label>

@@ -1232,3 +1232,13 @@ html[dir="rtl"] .header-nav-link {
     transform: scale(1.06);
   }
 }
+
+/* Hide scrollbar (mobile gallery carousel) while keeping scroll/swipe */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

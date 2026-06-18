@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "@/i18n/I18nProvider";
@@ -12,6 +13,7 @@ function CollectionCard({ slug }: { slug: CollectionSlug }) {
   const name = t(`collections.${slug}.name`);
   const ambiance = t(`collections.${slug}.ambiance`);
   const discover = t(`collections.${slug}.discover`);
+  const [src, setSrc] = useState(meta.cardImage);
 
   return (
     <Link
@@ -20,9 +22,12 @@ function CollectionCard({ slug }: { slug: CollectionSlug }) {
       style={{ aspectRatio: "4 / 5" }}
     >
       <Image
-        src={meta.cardImage}
+        src={src}
         alt={name}
         fill
+        onError={() => {
+          if (src !== meta.cardImageFallback) setSrc(meta.cardImageFallback);
+        }}
         className="object-cover transition-transform duration-700 will-change-transform group-hover:scale-[1.04]"
         sizes="(max-width: 768px) 100vw, 50vw"
       />

@@ -273,8 +273,8 @@ export function FeatureCard({
   );
 }
 
-export function FAQItem({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false);
+export function FAQItem({ question, answer, defaultOpen = false }: { question: string; answer: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const { dir } = useTranslation();
   return (
     <div className="border border-brand-gold/10 bg-brand-card rounded-lg p-5">

@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useTranslation } from "@/i18n/I18nProvider";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export function Footer() {
   const { t } = useTranslation();
-  const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212600000000";
+  const waLink = getWhatsAppLink();
 
   return (
     <footer className="bg-brand-black border-t border-brand-gray/30 mt-auto">
@@ -43,11 +44,13 @@ export function Footer() {
           <div>
             <h3 className="font-display text-base tracking-wide text-brand-gold mb-4">{t("footer.contactSection")}</h3>
             <ul className="space-y-2 text-brand-white/70">
-              <li>
-                <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold">
-                  {t("footer.whatsapp")}
-                </a>
-              </li>
+              {waLink && (
+                <li>
+                  <a href={waLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold">
+                    {t("footer.whatsapp")}
+                  </a>
+                </li>
+              )}
               <li>
                 <Link href="/about" className="hover:text-brand-gold">
                   {t("footer.aboutUs")}

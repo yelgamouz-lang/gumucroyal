@@ -35,8 +35,6 @@ class ProductOut(BaseModel):
     base_price_mad: float
     compare_at_price_mad: float
     material: str | None = None
-    rating: float
-    review_count: int
     badge: str | None = None
     images: list[ProductImage]
     benefits: list[str]

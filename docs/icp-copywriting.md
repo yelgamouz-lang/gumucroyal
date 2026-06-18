@@ -123,7 +123,7 @@ Utiliser un mix **Arabe + Darija + Français courant au Maroc** — c'est nature
 ### Produit 2 — Collier Trèfle de Lumière
 - **H1:** قلادة البرسيم المضيء — By GUMÜÇROYAL
 - **Sub:** Quatre trèfles porte-bonheur pavés de zircons. Double chaîne délicate.
-- **Emotional hook:** "Porte-bonheur li kayban. Chance li katlمع."
+- **Emotional hook:** "Porte-bonheur li kayban. Chance li katlma3."
 
 ### Produit 3 — Bague Double Signature
 - **H1:** خاتم التوقيع المزدوج — By GUMÜÇROYAL

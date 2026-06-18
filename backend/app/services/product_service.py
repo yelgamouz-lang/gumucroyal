@@ -31,8 +31,6 @@ def serialize_product(product: Product) -> ProductOut:
         base_price_mad=base_price,
         compare_at_price_mad=base_price,
         material=product.material,
-        rating=float(product.rating),
-        review_count=product.review_count,
         badge=product.badge,
         images=images,
         benefits=product.benefits or [],

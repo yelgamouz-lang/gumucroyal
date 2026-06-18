@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { OptimizedImage } from "@/components/shared/OptimizedImage";
 import { useTranslation } from "@/i18n/I18nProvider";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost";
@@ -197,50 +198,6 @@ export function ProductTrustBar() {
   );
 }
 
-export function SocialProofCounter({ count }: { count: number }) {
-  const { t } = useTranslation();
-  return (
-    <p className="text-center text-lg">
-      <span className="text-brand-gold text-3xl font-semibold tabular-nums tracking-wide">+{count.toLocaleString("fr-MA")}</span>
-      <span className="text-brand-white/60 ms-2 font-light">{t("productPage.socialProofSuffix")}</span>
-    </p>
-  );
-}
-
-export function ReviewCardPhoto({
-  name,
-  city,
-  text,
-  photo,
-}: {
-  name: string;
-  city: string;
-  text: string;
-  rating: number;
-  photo: string;
-}) {
-  return (
-    <div className="bg-brand-card border border-brand-gold/10 rounded-lg overflow-hidden h-full flex flex-col">
-      <div className="aspect-[4/3] md:aspect-[5/6] relative min-h-[220px] md:min-h-[360px]">
-        <OptimizedImage src={photo} alt={`avis ${name}`} fill sizes="(max-width:768px) 100vw, 33vw" />
-      </div>
-      <div className="p-6 flex-1 flex flex-col">
-        <p className="text-brand-white/60 italic leading-relaxed flex-1 font-light text-sm">&ldquo;{text}&rdquo;</p>
-        <p className="mt-4 text-xs text-brand-gold uppercase tracking-[0.15em]">— {name}, {city}</p>
-      </div>
-    </div>
-  );
-}
-
-export function ReviewCard({ name, city, text }: { name: string; city: string; text: string; rating: number }) {
-  return (
-    <div className="bg-brand-card border border-brand-gold/10 rounded-lg p-6 h-full">
-      <p className="text-brand-white/60 italic leading-relaxed font-light text-sm">&ldquo;{text}&rdquo;</p>
-      <p className="mt-4 text-xs text-brand-gold uppercase tracking-[0.15em]">— {name}, {city}</p>
-    </div>
-  );
-}
-
 export function SectionWrapper({
   children,
   className,
@@ -339,14 +296,15 @@ export function WhatsAppCTA() {
   const { t, dir } = useTranslation();
   const pathname = usePathname();
   const isMobile = useIsMobile();
-  const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212600000000";
+  const href = getWhatsAppLink();
 
+  if (!href) return null;
   if (isMobile && pathname?.startsWith("/products/")) return null;
 
   return (
     <div className="fixed bottom-4 start-4 z-50 rounded-full border border-brand-gold/30 bg-brand-black/95 shadow-2xl shadow-black/40 p-4 backdrop-blur-lg">
       <a
-        href={`https://wa.me/${number}`}
+        href={href}
         target="_blank"
         rel="noreferrer"
         className="flex items-center gap-3 text-brand-gold"

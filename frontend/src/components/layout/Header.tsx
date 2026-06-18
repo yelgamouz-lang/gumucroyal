@@ -90,8 +90,8 @@ export function Header() {
           </button>
         </div>
 
-        {/* Desktop — inchangé */}
-        <div className="hidden md:flex items-center justify-between gap-4 ps-[5.25rem] h-[4rem] sm:h-[4.25rem]">
+        {/* Desktop */}
+        <div className="hidden md:flex items-center justify-between gap-4 h-[4rem] sm:h-[4.25rem]">
           {brand}
 
           <nav className="flex items-center gap-10 lg:gap-12">
@@ -106,26 +106,30 @@ export function Header() {
             ))}
           </nav>
 
-          <button
-            type="button"
-            className="relative p-2.5 header-cart-btn"
-            onPointerEnter={prefetchCartDrawer}
-            onFocus={prefetchCartDrawer}
-            onClick={() => setCartOpen(true)}
-            aria-label={t("nav.cart")}
-          >
-            <ShoppingBag size={22} strokeWidth={1.5} className="header-cart-icon" />
-            {count > 0 && (
-              <span
-                className={cn(
-                  "absolute -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border border-[#C9A227]/60 bg-brand-black px-1 text-[10px] font-semibold text-[#E6C766]",
-                  dir === "rtl" ? "-left-0.5" : "-right-0.5"
-                )}
-              >
-                {count}
-              </span>
-            )}
-          </button>
+          <div className="flex items-center gap-5">
+            <LanguageSwitcher className="header-desktop-lang" />
+            <span className="w-px h-4 bg-brand-gold/15" aria-hidden />
+            <button
+              type="button"
+              className="relative p-2.5 header-cart-btn"
+              onPointerEnter={prefetchCartDrawer}
+              onFocus={prefetchCartDrawer}
+              onClick={() => setCartOpen(true)}
+              aria-label={t("nav.cart")}
+            >
+              <ShoppingBag size={22} strokeWidth={1.5} className="header-cart-icon" />
+              {count > 0 && (
+                <span
+                  className={cn(
+                    "absolute -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full border border-[#C9A227]/60 bg-brand-black px-1 text-[10px] font-semibold text-[#E6C766]",
+                    dir === "rtl" ? "-left-0.5" : "-right-0.5"
+                  )}
+                >
+                  {count}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

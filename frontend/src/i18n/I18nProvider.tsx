@@ -11,7 +11,7 @@ import {
 } from "react";
 import ar from "./messages/ar.json";
 import { DEFAULT_LOCALE, getDir, getHtmlLang, LOCALE_STORAGE_KEY } from "./config";
-import type { FaqItem, Locale, ReviewMessage, WhatsAppProof } from "./types";
+import type { FaqItem, Locale } from "./types";
 import { getNestedValue, interpolate } from "./utils";
 
 type Messages = typeof ar;
@@ -111,19 +111,9 @@ export function useTranslation() {
   return ctx;
 }
 
-export function useReviews(): ReviewMessage[] {
-  const { tArray } = useTranslation();
-  return tArray<ReviewMessage>("reviews");
-}
-
 export function useProductFaq(): FaqItem[] {
   const { tArray } = useTranslation();
   return tArray<FaqItem>("productFaq");
-}
-
-export function useWhatsAppProofs(): WhatsAppProof[] {
-  const { tArray } = useTranslation();
-  return tArray<WhatsAppProof>("whatsappProofs");
 }
 
 export function getOfferLabelKey(quantity: number): string {

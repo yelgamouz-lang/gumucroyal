@@ -1,27 +1,26 @@
-import { formatPrice } from "@/lib/format";
-import type { Locale } from "@/i18n/types";
+/**
+ * Shared WhatsApp helpers.
+ *
+ * The number comes exclusively from NEXT_PUBLIC_WHATSAPP_NUMBER (set in EasyPanel).
+ * If it is missing or empty, every WhatsApp link/button must be hidden — we never
+ * show a fake or placeholder number.
+ */
 
-export function buildWhatsAppConfirmUrl(params: {
-  phone: string;
-  customerName: string;
-  orderNumber: string;
-  totalMad: number;
-  itemsSummary?: string;
-  locale?: Locale;
-}): string {
-  const number = params.phone.replace(/\D/g, "");
-  const totalLabel = formatPrice(params.totalMad, params.locale ?? "ar");
-  const lines = [
-    "سلام، أنا",
-    params.customerName + ".",
-    "بغيت نأكد الطلب ديالي:",
-    `📦 ${params.orderNumber}`,
-    params.itemsSummary ? `🛍️ ${params.itemsSummary}` : "",
-    `💰 المجموع: ${totalLabel} (الدفع عند الاستلام)`,
-    "مرحبا بكم تتصلو بيا للتأكيد. شكراً! 🙏",
-  ]
-    .filter(Boolean)
-    .join("\n");
+const RAW_NUMBER = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "").replace(/\D/g, "");
 
-  return `https://wa.me/${number}?text=${encodeURIComponent(lines)}`;
+/** Digits-only WhatsApp number, or empty string when not configured. */
+export function getWhatsAppNumber(): string {
+  return RAW_NUMBER;
+}
+
+/** True when a real WhatsApp number is configured. */
+export function hasWhatsApp(): boolean {
+  return RAW_NUMBER.length > 0;
+}
+
+/** Builds a wa.me link (optionally with a prefilled message), or null when unavailable. */
+export function getWhatsAppLink(message?: string): string | null {
+  if (!RAW_NUMBER) return null;
+  const base = `https://wa.me/${RAW_NUMBER}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }

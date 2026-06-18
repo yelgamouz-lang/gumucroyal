@@ -177,7 +177,7 @@ Pas de formulaire contact (WhatsApp only) — réduire friction.
 | H1 | "شكراً لثقتك! 🎉" |
 | Order ID | GR-20260602-0042 |
 | Summary | Produits + total |
-| Next steps | "غادي نعيطو ليك باش نconfirmiw" |
+| Next steps | "غادي نعيطو ليك باش نأكّدو" |
 | WhatsApp | "عندك سؤال? راسلنا" |
 | Social | "Partage experience dialk" (future UGC) |
 | Pixel | Purchase event fire here |

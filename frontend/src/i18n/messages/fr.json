@@ -56,8 +56,8 @@
     "packUltimate": "Pack complet",
     "packSubtitle": "3 pièces",
     "bestForGift": "Meilleur pour offrir",
-    "duoSubtext": "Ajoutez une 2ᵉ pièce de votre choix pour seulement {addPrice} — et gagnez {savings}",
-    "packSubtext": "2 pièces de plus à {addPrice} chacune — gagnez {savings} au total",
+    "duoSubtext": "Ajoutez une 2ᵉ pièce à {addPrice} au lieu de son prix normal — vous gagnez {savings}",
+    "packSubtext": "Chaque pièce en plus à {addPrice} au lieu de son prix normal — vous gagnez {savings} au total",
     "pickPieceN": "Pièce {n}",
     "chooseOffer": "Choisissez votre offre",
     "completeSelection": "Choisissez toutes les pièces pour continuer"
@@ -74,8 +74,9 @@
     "singlePiece": "1 pièce — prix d'ajout"
   },
   "home": {
-    "heroTitle": "Une élégance qui se voit, un éclat qui dure.",
-    "heroSubtitle": "Une collection de bijoux marocaine au design raffiné. Paiement à la livraison.",
+    "heroEyebrow": "Maison de joaillerie marocaine · Paiement à la livraison",
+    "heroTitle": "Des bijoux qui vous subliment, un éclat qui ne ternit pas",
+    "heroSubtitle": "Acier finition dorée — l'élégance au quotidien, livrée chez vous. Vous ne payez qu'à la réception.",
     "collectionEyebrow": "Collection",
     "qualityEyebrow": "Sans compromis",
     "qualityTitle": "Des détails précis, une matière qui dure, une expérience d'exception",
@@ -191,10 +192,10 @@
     "error": "Une erreur est survenue"
   },
   "addPiece": {
-    "headlinePrefix": "Ajoutez une pièce de votre choix pour seulement",
-    "maxSavings": "Et gagnez jusqu'à {amount}",
-    "pickSubtitle": "Touchez une photo pour choisir votre pièce — seulement 69 Dhs.",
-    "onlyPrice": "seulement {price}",
+    "headlinePrefix": "Ajoutez une pièce de votre choix à",
+    "maxSavings": "La pièce en plus jusqu'à {amount} moins chère",
+    "pickSubtitle": "Touchez une photo pour choisir votre pièce — chaque pièce en plus à 69 Dhs au lieu de son prix normal.",
+    "onlyPrice": "Pièce en plus à {price}",
     "takenInPack": "Déjà dans ce pack",
     "savings": "Vous gagnez {amount}",
     "cumulativeSavings": "Vous gagnez au total {amount}",
@@ -237,7 +238,6 @@
     "faqTitle": "Pour être rassurée avant de commander",
     "heroCod": "💰 Paiement à la livraison · 🚚 Livraison 24–48h",
     "desire_line": "Pour une touche dorée élégante, qui ne quitte jamais votre allure.",
-    "socialProofSuffix": "clientes conquises",
     "zirconHighlight": "Acier inoxydable finition dorée + zircons"
   },
   "products": {
@@ -272,19 +272,6 @@
       ]
     }
   },
-  "reviews": [
-    { "name": "Sarah", "city": "Casablanca", "text": "Reçu en 2 jours, les zircons sont magnifiques sur l'acier doré !", "rating": 5 },
-    { "name": "Nour", "city": "Rabat", "text": "3 mois sans ternir, l'éclat de l'acier doré est intact.", "rating": 5 },
-    { "name": "Amine", "city": "Marrakech", "text": "Commandé 2 pièces — une pour moi, une pour ma sœur. Paiement à la livraison parfait.", "rating": 5 },
-    { "name": "Fatima", "city": "Tanger", "text": "Équipe réactive sur WhatsApp, livraison rapide.", "rating": 5 },
-    { "name": "Yasmine", "city": "Fès", "text": "Qualité soignée, parfait pour offrir.", "rating": 5 },
-    { "name": "Leila", "city": "Agadir", "text": "Des compliments chaque jour depuis que je le porte 💫", "rating": 5 }
-  ],
-  "whatsappProofs": [
-    { "name": "Khadija", "city": "Casablanca", "text": "Reçu aujourd'hui, qualité exceptionnelle ! Merci GUMÜÇ Royal 🥰" },
-    { "name": "Meriem", "city": "Rabat", "text": "Commande confirmée — je recommanderai à nouveau" },
-    { "name": "Salma", "city": "Marrakech", "text": "L'acier doré est aussi beau en vrai qu'en photo" }
-  ],
   "productFaq": [
     { "q": "L'acier doré ternit-il ?", "a": "Non — acier inoxydable avec finition dorée. Ne rouille pas, ne ternit pas." },
     { "q": "Comment payer ?", "a": "Paiement à la livraison uniquement. Vous payez à réception. Aucun paiement en ligne." },

@@ -26,21 +26,24 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
   return (
     <div className="bg-brand-black">
       {/* 1. Hero vidéo */}
-      <section className="hero-home relative min-h-[calc(100dvh-var(--header-mobile-height,4rem))] md:min-h-[80vh] flex items-center justify-center text-center overflow-hidden md:isolate z-0">
+      <section className="hero-home relative min-h-[72dvh] md:min-h-[80vh] flex items-center justify-center text-center overflow-hidden md:isolate z-0">
         <HeroVideoBackground />
-        <div className="hero-home-content relative z-10 px-4 max-w-3xl pointer-events-none">
-          <div className="hero-brand mb-6 md:mb-8 pointer-events-none">
+        <div className="hero-home-content relative z-10 px-4 py-10 max-w-3xl pointer-events-none">
+          <p className="text-brand-gold/80 text-[11px] md:text-xs uppercase tracking-[0.25em] mb-4 md:mb-5 font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+            {t("home.heroEyebrow")}
+          </p>
+          <div className="hero-brand mb-5 md:mb-7 pointer-events-none">
             <span className="hero-brand-gumuc">GUMÜÇ</span>
             <span className="hero-brand-royal">ROYAL</span>
           </div>
-          <h1 className="font-display text-4xl md:text-6xl mb-5 md:mb-6 text-brand-white font-normal tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+          <h1 className="font-display text-[1.75rem] leading-snug md:text-6xl mb-4 md:mb-6 text-brand-white font-normal tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             {t("home.heroTitle")}
           </h1>
-          <p className="text-brand-white/75 text-base md:text-lg mb-10 font-light tracking-wide leading-relaxed max-w-xl mx-auto">
+          <p className="text-brand-white/75 text-sm md:text-lg mb-8 md:mb-10 font-light tracking-wide leading-relaxed max-w-xl mx-auto">
             {t("home.heroSubtitle")}
           </p>
           <div className="flex justify-center pointer-events-auto">
-            <Link href="/collection">
+            <Link href="/collection/signature">
               <Button>{t("common.discoverCollection")}</Button>
             </Link>
           </div>

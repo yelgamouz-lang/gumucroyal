@@ -56,8 +56,8 @@
     "packUltimate": "Complete pack",
     "packSubtitle": "3 pieces",
     "bestForGift": "Best for gifting",
-    "duoSubtext": "Add a 2nd piece of your choice for only {addPrice} — save {savings}",
-    "packSubtext": "2 more pieces at {addPrice} each — save {savings} total",
+    "duoSubtext": "Add a 2nd piece at {addPrice} instead of its full price — you save {savings}",
+    "packSubtext": "Each extra piece at {addPrice} instead of its full price — you save {savings} total",
     "pickPieceN": "Piece {n}",
     "chooseOffer": "Choose your offer",
     "completeSelection": "Pick all pieces to continue"
@@ -74,8 +74,9 @@
     "singlePiece": "1 piece — add-on price"
   },
   "home": {
-    "heroTitle": "Elegance that shows, a shine that lasts.",
-    "heroSubtitle": "A refined Moroccan jewelry collection. Cash on delivery.",
+    "heroEyebrow": "Moroccan jewellery house · Cash on delivery",
+    "heroTitle": "Jewellery that elevates you, a shine that never fades",
+    "heroSubtitle": "Gold-tone steel — everyday elegance, delivered to your door. You only pay on receipt.",
     "collectionEyebrow": "Collection",
     "qualityEyebrow": "No compromise",
     "qualityTitle": "Precise details, lasting material, an exceptional experience",
@@ -191,11 +192,11 @@
     "error": "An error occurred"
   },
   "addPiece": {
-    "headlinePrefix": "Add a piece of your choice for only",
-    "maxSavings": "And save up to {amount}",
-    "pickSubtitle": "Tap a photo to choose your piece — only 69 Dhs.",
-    "onlyPrice": "only {price}",
-    "takenInPack": "Déjà dans ce pack",
+    "headlinePrefix": "Add a piece of your choice at",
+    "maxSavings": "The extra piece up to {amount} cheaper",
+    "pickSubtitle": "Tap a photo to choose your piece — each extra piece at 69 Dhs instead of its full price.",
+    "onlyPrice": "Extra piece at {price}",
+    "takenInPack": "Already in this pack",
     "savings": "You save {amount}",
     "cumulativeSavings": "You save {amount} in total",
     "totalSavings": "Total savings: {amount}",
@@ -237,7 +238,6 @@
     "faqTitle": "Be reassured before you order",
     "heroCod": "💰 Cash on delivery · 🚚 Delivery 24–48h",
     "desire_line": "For an elegant golden touch that never leaves your look.",
-    "socialProofSuffix": "delighted clients",
     "zirconHighlight": "Stainless steel gold-tone finish + zircons"
   },
   "products": {
@@ -272,19 +272,6 @@
       ]
     }
   },
-  "reviews": [
-    { "name": "Sarah", "city": "Casablanca", "text": "Arrived in 2 days, the zircons look stunning on the gold-tone steel!", "rating": 5 },
-    { "name": "Nour", "city": "Rabat", "text": "3 months without tarnishing, the gold-tone finish is still perfect.", "rating": 5 },
-    { "name": "Amine", "city": "Marrakech", "text": "Ordered 2 — one for me, one for my sister. Cash on delivery was seamless.", "rating": 5 },
-    { "name": "Fatima", "city": "Tangier", "text": "Responsive team on WhatsApp, fast delivery.", "rating": 5 },
-    { "name": "Yasmine", "city": "Fez", "text": "Beautiful quality, perfect for gifting.", "rating": 5 },
-    { "name": "Leila", "city": "Agadir", "text": "Compliments every day since I started wearing it 💫", "rating": 5 }
-  ],
-  "whatsappProofs": [
-    { "name": "Khadija", "city": "Casablanca", "text": "Received today, top quality! Thank you GUMÜÇ Royal 🥰" },
-    { "name": "Meriem", "city": "Rabat", "text": "Confirmed my order — will order again" },
-    { "name": "Salma", "city": "Marrakech", "text": "The gold-tone steel looks as good in person as in photos" }
-  ],
   "productFaq": [
     { "q": "Does the gold-tone finish tarnish?", "a": "No — stainless steel with gold-tone finish. Never rusts, never tarnishes." },
     { "q": "How do I pay?", "a": "Cash on delivery only. Pay when your order arrives. No online payment." },

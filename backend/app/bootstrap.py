@@ -22,7 +22,7 @@ IMG_BAGE_SIGNATURE = "/Produit/bague-double-signature.jpg"
 PRODUCT_PHOTOS: dict[str, dict] = {
     "bague-lien-eternel": {"url": IMG_BAGE_LIEN, "alt": "خاتم الرابط الأبدي", "sort_order": 0},
     "collier-trefle-lumiere": {"url": IMG_COLLIER_TREFLE, "alt": "قلادة البرسيم", "sort_order": 0},
-    "bague-double-signature": {"url": IMG_BAGE_SIGNATURE, "alt": "خاتم التوقيع المزdوج", "sort_order": 0},
+    "bague-double-signature": {"url": IMG_BAGE_SIGNATURE, "alt": "خاتم التوقيع المزدوج", "sort_order": 0},
 }
 
 
@@ -96,8 +96,6 @@ def _seed(db: Session) -> None:
             base_price_mad=float(catalog["bague-lien-eternel"]["base_price_mad"]),
             compare_at_price_mad=float(catalog["bague-lien-eternel"]["base_price_mad"]),
             material="Acier inoxydable 316L finition dorée",
-            rating=0,
-            review_count=0,
             badge="Nouveau",
             images=[PRODUCT_PHOTOS["bague-lien-eternel"]],
             benefits=["✨ éclat diamant", "💎 zircons pavés", "🔒 acier 316L", "📐 ajustable", "🎁 boîte cadeau"],
@@ -117,8 +115,6 @@ def _seed(db: Session) -> None:
             base_price_mad=float(catalog["collier-trefle-lumiere"]["base_price_mad"]),
             compare_at_price_mad=float(catalog["collier-trefle-lumiere"]["base_price_mad"]),
             material="Acier inoxydable 316L finition dorée",
-            rating=0,
-            review_count=0,
             badge="Porte-Bonheur",
             images=[PRODUCT_PHOTOS["collier-trefle-lumiere"]],
             benefits=["🍀 4 trèfles", "✨ double chaîne", "💫 zircons", "🔒 inoxydable", "🎁 cadeau"],
@@ -138,8 +134,6 @@ def _seed(db: Session) -> None:
             base_price_mad=float(catalog["bague-double-signature"]["base_price_mad"]),
             compare_at_price_mad=float(catalog["bague-double-signature"]["base_price_mad"]),
             material="Acier inoxydable 316L finition dorée",
-            rating=0,
-            review_count=0,
             badge="Nouveau",
             images=[PRODUCT_PHOTOS["bague-double-signature"]],
             benefits=["💎 design unique", "✨ zircons", "📐 ajustable", "🔒 316L", "🎁 cadeau"],

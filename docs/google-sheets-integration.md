@@ -33,7 +33,7 @@ Create a Google Sheet named: **GUMÜÇROYAL Orders**
 | G | items_count | number | 2 |
 | H | subtotal_mad | number | 429.00 |
 | I | upsell_accepted | boolean | TRUE |
-| J | upsell_product | string | قلادة البرسيم المضiء |
+| J | upsell_product | string | قلادة البرسيم المضيء |
 | K | upsell_amount_mad | number | 69.00 |
 | L | total_mad | number | 498.00 |
 | M | payment_method | string | COD |
@@ -64,14 +64,14 @@ Deploy as **Web App**:
   "secret": "YOUR_WEBHOOK_SECRET",
   "order_number": "GR-20260602-0042",
   "created_at": "2026-06-02T14:30:00Z",
-  "customer_name": "فاطمة الزahrاء",
+  "customer_name": "فاطمة الزهراء",
   "customer_phone": "06 12 34 56 78",
   "customer_phone_normalized": "212612345678",
-  "products": "خاتم الرابط الأبدi x2 (عرض زوجي)",
+  "products": "خاتم الرابط الأبدي x2 (عرض زوجي)",
   "items_count": 2,
   "subtotal_mad": 429.00,
   "upsell_accepted": true,
-  "upsell_product": "قلادة البرسيم المضiء",
+  "upsell_product": "قلادة البرسيم المضيء",
   "upsell_amount_mad": 69.00,
   "total_mad": 498.00,
   "payment_method": "COD",

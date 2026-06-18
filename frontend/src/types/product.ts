@@ -29,8 +29,6 @@ export interface Product {
   base_price_mad: number;
   compare_at_price_mad: number;
   material?: string | null;
-  rating: number;
-  review_count: number;
   badge?: string | null;
   images: ProductImage[];
   benefits: string[];

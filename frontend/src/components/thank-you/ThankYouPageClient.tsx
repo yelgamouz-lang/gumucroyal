@@ -9,6 +9,7 @@ import { OptimizedImage } from "@/components/shared/OptimizedImage";
 import { trackPurchase } from "@/lib/tracking";
 import { getProductName } from "@/lib/products";
 import { useTranslation } from "@/i18n/I18nProvider";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 import { useCartStore } from "@/stores/cartStore";
 import { useUIStore } from "@/stores/uiStore";
 import type { Product } from "@/types/product";
@@ -95,7 +96,6 @@ export function ThankYouPageClient({ orderId, initialProducts }: { orderId: stri
   const clearCart = useCartStore((s) => s.clearCart);
   const resetCheckoutFlow = useUIStore((s) => s.resetCheckoutFlow);
 
-  const waNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212600000000";
 
   useEffect(() => {
     clearCart();
@@ -121,7 +121,6 @@ export function ThankYouPageClient({ orderId, initialProducts }: { orderId: stri
   }, [order, products]);
 
   const whatsappUrl = useMemo(() => {
-    const number = waNumber.replace(/\D/g, "");
     const text =
       locale === "ar"
         ? order
@@ -130,8 +129,8 @@ export function ThankYouPageClient({ orderId, initialProducts }: { orderId: stri
         : order
           ? `Bonjour, j'ai une question sur la commande ${order.order_number}.`
           : "Bonjour, j'ai une question.";
-    return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
-  }, [order, waNumber, locale]);
+    return getWhatsAppLink(text);
+  }, [order, locale]);
 
   const reassurance = [
     { icon: Banknote, text: t("thankYou.reassuranceCod") },
@@ -232,16 +231,18 @@ export function ThankYouPageClient({ orderId, initialProducts }: { orderId: stri
             )}
 
             {/* 7. WhatsApp discret */}
-            <div className="text-center pt-2 border-t border-brand-gold/10">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-brand-white/45 hover:text-brand-gold/70 transition-colors underline underline-offset-4 decoration-brand-gold/25"
-              >
-                {t("thankYou.whatsappHint")}
-              </a>
-            </div>
+            {whatsappUrl && (
+              <div className="text-center pt-2 border-t border-brand-gold/10">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-brand-white/45 hover:text-brand-gold/70 transition-colors underline underline-offset-4 decoration-brand-gold/25"
+                >
+                  {t("thankYou.whatsappHint")}
+                </a>
+              </div>
+            )}
           </>
         )}
 

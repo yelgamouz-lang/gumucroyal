@@ -21,8 +21,6 @@ class Product(Base):
     base_price_mad: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     compare_at_price_mad: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     material: Mapped[str | None] = mapped_column(Text)
-    rating: Mapped[float] = mapped_column(Numeric(2, 1), default=4.9)
-    review_count: Mapped[int] = mapped_column(Integer, default=0)
     badge: Mapped[str | None] = mapped_column(String(50))
     images: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
     benefits: Mapped[list] = mapped_column(JSON, nullable=False, default=list)

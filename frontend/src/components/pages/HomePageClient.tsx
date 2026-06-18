@@ -29,9 +29,6 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
       <section className="hero-home relative min-h-[72dvh] md:min-h-[80vh] flex items-center justify-center text-center overflow-hidden md:isolate z-0">
         <HeroVideoBackground />
         <div className="hero-home-content relative z-10 px-4 py-10 max-w-3xl pointer-events-none">
-          <p className="text-brand-gold/80 text-[11px] md:text-xs uppercase tracking-[0.25em] mb-4 md:mb-5 font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
-            {t("home.heroEyebrow")}
-          </p>
           <div className="hero-brand mb-5 md:mb-7 pointer-events-none">
             <span className="hero-brand-gumuc">GUMÜÇ</span>
             <span className="hero-brand-royal">ROYAL</span>
@@ -47,6 +44,9 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
               <Button>{t("common.discoverCollection")}</Button>
             </Link>
           </div>
+          <p className="text-brand-gold/70 text-[11px] md:text-xs uppercase tracking-[0.25em] mt-5 font-light drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
+            {t("home.heroEyebrow")}
+          </p>
         </div>
       </section>
 

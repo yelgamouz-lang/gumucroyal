@@ -1249,6 +1249,47 @@ html[dir="rtl"] .header-nav-link {
   display: none;
 }
 
+/* ── Scroll reveal (opacity + transform only, GPU-friendly) ── */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Premium card hover / tap (product + collection cards) ── */
+.luxury-card {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.luxury-card:hover {
+  box-shadow: 0 12px 48px rgba(201, 162, 39, 0.14);
+}
+
+.luxury-card:active {
+  transform: scale(0.985);
+}
+
+.luxury-card__media-inner {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.luxury-card:hover .luxury-card__media-inner {
+  transform: scale(1.03);
+}
+
 /* Global accessibility: honor the OS "reduce motion" preference everywhere.
    Neutralizes hover scale, transitions, looping animations and smooth scroll. */
 @media (prefers-reduced-motion: reduce) {
@@ -1263,6 +1304,24 @@ html[dir="rtl"] .header-nav-link {
 
   html {
     scroll-behavior: auto !important;
+  }
+
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .luxury-card:hover {
+    box-shadow: none;
+  }
+
+  .luxury-card:active {
+    transform: none;
+  }
+
+  .luxury-card:hover .luxury-card__media-inner {
+    transform: none;
   }
 
   /* Decorative hover zooms become static. */

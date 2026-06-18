@@ -32,9 +32,9 @@ export function ProductCard({ product, premium }: { product: Product; premium?: 
     <Link
       href={`/products/${product.slug}`}
       className={cn(
-        "group block min-w-0 w-full overflow-hidden transition-all duration-500",
+        "luxury-card group block min-w-0 w-full overflow-hidden",
         premium
-          ? "bg-brand-black border border-brand-gold/10 rounded-lg hover:border-brand-gold/45 hover:shadow-[0_0_40px_rgba(201,169,39,0.06)]"
+          ? "bg-brand-black border border-brand-gold/10 rounded-lg hover:border-brand-gold/45"
           : "bg-brand-black border border-brand-gold/10 rounded-lg hover:border-brand-gold/30"
       )}
     >
@@ -45,7 +45,7 @@ export function ProductCard({ product, premium }: { product: Product; premium?: 
           width={720}
           height={900}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
-          className="w-full h-full group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+          className="luxury-card__media-inner w-full h-full"
         />
         {product.badge && (
           <div className="absolute top-3 end-3">

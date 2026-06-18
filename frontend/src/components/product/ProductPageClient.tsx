@@ -45,7 +45,7 @@ import { useProductContent, useProductFaq, useProductObjections, useTranslation 
 
 import { LazyWhenVisible } from "@/components/shared/LazyWhenVisible";
 
-
+import { Reveal } from "@/components/shared/ScrollReveal";
 
 export function ProductPageClient({ product, allProducts }: { product: Product; allProducts: Product[] }) {
 
@@ -179,21 +179,29 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 min-w-0">
 
-          <ProductGallery images={product.images} productName={productName} priority />
+          <Reveal stagger={0}>
 
-          <ProductHeroCard
+            <ProductGallery images={product.images} productName={productName} priority />
 
-            product={product}
+          </Reveal>
 
-            subtitle={subtitle}
+          <Reveal stagger={0.1}>
 
-            desireLine={desireLine}
+            <ProductHeroCard
 
-            selectedOffer={selectedOffer}
+              product={product}
 
-            onAddToCart={handleAddToCart}
+              subtitle={subtitle}
 
-          />
+              desireLine={desireLine}
+
+              selectedOffer={selectedOffer}
+
+              onAddToCart={handleAddToCart}
+
+            />
+
+          </Reveal>
 
         </div>
 
@@ -205,55 +213,67 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
       <SectionWrapper className="cv-auto">
 
-        <h2 className="font-display text-2xl text-brand-gold mb-6 text-center">{t("offers.chooseOffer")}</h2>
+        <Reveal>
 
-        <div className="max-w-xl mx-auto min-w-0">
+          <h2 className="font-display text-2xl text-brand-gold mb-6 text-center">{t("offers.chooseOffer")}</h2>
 
-          <OfferSelector {...offerSelectorProps} />
+          <div className="max-w-xl mx-auto min-w-0">
 
-          <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
+            <OfferSelector {...offerSelectorProps} />
 
-            <AddToCartLabel amount={displayPrice} />
+            <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
 
-          </Button>
+              <AddToCartLabel amount={displayPrice} />
 
-        </div>
+            </Button>
+
+          </div>
+
+        </Reveal>
 
       </SectionWrapper>
 
 
 
-      <ProductTrustBar />
+      <Reveal>
+
+        <ProductTrustBar />
+
+      </Reveal>
 
 
 
       <SectionWrapper dark className="cv-auto">
 
-        <AlternatingSection
+        <Reveal>
 
-          title={t("productPage.whyTitle")}
+          <AlternatingSection
 
-          image={product.images[1]?.url || product.images[0]?.url || PLACEHOLDER_IMAGES.lifestyle}
+            title={t("productPage.whyTitle")}
 
-          imageAlt="benefits"
+            image={product.images[1]?.url || product.images[0]?.url || PLACEHOLDER_IMAGES.lifestyle}
 
-          priority={false}
+            imageAlt="benefits"
 
-        >
+            priority={false}
 
-          <ul className="space-y-3">
+          >
 
-            {benefits.map((b) => (
+            <ul className="space-y-3">
 
-              <li key={b} className="text-lg break-words">{b}</li>
+              {benefits.map((b) => (
 
-            ))}
+                <li key={b} className="text-lg break-words">{b}</li>
 
-          </ul>
+              ))}
 
-          <p className="text-brand-gold font-semibold mt-4">{t("productPage.whyHighlight")}</p>
+            </ul>
 
-        </AlternatingSection>
+            <p className="text-brand-gold font-semibold mt-4">{t("productPage.whyHighlight")}</p>
+
+          </AlternatingSection>
+
+        </Reveal>
 
       </SectionWrapper>
 
@@ -261,31 +281,35 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
       <SectionWrapper className="cv-auto">
 
-        <AlternatingSection
-          title={t("productPage.objectionsTitle")}
-          image={product.images[2]?.url || product.images[0]?.url || PLACEHOLDER_IMAGES.packaging}
-          imageAlt={t("productPage.objectionsTitle")}
-          reverse
-          priority={false}
-        >
+        <Reveal>
 
-          <div className="space-y-6 min-w-0">
+          <AlternatingSection
+            title={t("productPage.objectionsTitle")}
+            image={product.images[2]?.url || product.images[0]?.url || PLACEHOLDER_IMAGES.packaging}
+            imageAlt={t("productPage.objectionsTitle")}
+            reverse
+            priority={false}
+          >
 
-            {objections.map((o) => (
+            <div className="space-y-6 min-w-0">
 
-              <div key={o.q} className="min-w-0">
+              {objections.map((o) => (
 
-                <p className="font-display text-brand-gold text-lg mb-1.5 break-words [overflow-wrap:anywhere]">{o.q}</p>
+                <div key={o.q} className="min-w-0">
 
-                <p className="text-brand-white/70 leading-relaxed break-words [overflow-wrap:anywhere]">{o.a}</p>
+                  <p className="font-display text-brand-gold text-lg mb-1.5 break-words [overflow-wrap:anywhere]">{o.q}</p>
 
-              </div>
+                  <p className="text-brand-white/70 leading-relaxed break-words [overflow-wrap:anywhere]">{o.a}</p>
 
-            ))}
+                </div>
 
-          </div>
+              ))}
 
-        </AlternatingSection>
+            </div>
+
+          </AlternatingSection>
+
+        </Reveal>
 
       </SectionWrapper>
 
@@ -293,49 +317,61 @@ export function ProductPageClient({ product, allProducts }: { product: Product; 
 
       <SectionWrapper dark className="cv-auto">
 
-        <h2 className="font-display text-3xl text-center text-brand-gold mb-8">{t("productPage.faqTitle")}</h2>
+        <Reveal>
+
+          <h2 className="font-display text-3xl text-center text-brand-gold mb-8">{t("productPage.faqTitle")}</h2>
+
+        </Reveal>
 
         <div className="max-w-2xl mx-auto space-y-3 mb-12 min-w-0">
 
           {faq.map((item, i) => (
 
-            <FAQItem key={item.q} question={item.q} answer={item.a} defaultOpen={i === 0} />
+            <Reveal key={item.q} stagger={Math.min(i * 0.08, 0.24)}>
+
+              <FAQItem question={item.q} answer={item.a} defaultOpen={i === 0} />
+
+            </Reveal>
 
           ))}
 
         </div>
 
-        <div className="max-w-xl mx-auto border border-brand-gold/30 p-6 md:p-8 bg-brand-black/50 min-w-0">
+        <Reveal>
 
-          <div className="flex items-start gap-3 rounded-lg border border-brand-gold/20 bg-brand-gold/[0.04] p-4 mb-6 text-start">
+          <div className="max-w-xl mx-auto border border-brand-gold/30 p-6 md:p-8 bg-brand-black/50 min-w-0">
 
-            <p className="text-sm md:text-base text-brand-white/85 leading-relaxed break-words [overflow-wrap:anywhere]">
+            <div className="flex items-start gap-3 rounded-lg border border-brand-gold/20 bg-brand-gold/[0.04] p-4 mb-6 text-start">
 
-              {t("checkout.codReassurance")}
+              <p className="text-sm md:text-base text-brand-white/85 leading-relaxed break-words [overflow-wrap:anywhere]">
 
-            </p>
+                {t("checkout.codReassurance")}
+
+              </p>
+
+            </div>
+
+            <div className="text-center">
+
+              <LazyWhenVisible minHeight="20rem">
+
+                <h3 className="font-display text-2xl text-brand-gold mb-6">{t("offers.chooseOffer")}</h3>
+
+                <OfferSelector {...offerSelectorProps} />
+
+                <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
+
+                  <AddToCartLabel amount={displayPrice} />
+
+                </Button>
+
+              </LazyWhenVisible>
+
+            </div>
 
           </div>
 
-          <div className="text-center">
-
-            <LazyWhenVisible minHeight="20rem">
-
-              <h3 className="font-display text-2xl text-brand-gold mb-6">{t("offers.chooseOffer")}</h3>
-
-              <OfferSelector {...offerSelectorProps} />
-
-              <Button fullWidth className="mt-6 hidden md:flex" onClick={handleAddToCart} disabled={!canAddToCart}>
-
-                <AddToCartLabel amount={displayPrice} />
-
-              </Button>
-
-            </LazyWhenVisible>
-
-          </div>
-
-        </div>
+        </Reveal>
 
       </SectionWrapper>
 

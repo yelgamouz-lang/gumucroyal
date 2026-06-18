@@ -9,6 +9,7 @@ import { HeroVideoBackground } from "@/components/home/HeroVideoBackground";
 import { BrandCommitmentSection } from "@/components/home/BrandCommitmentSection";
 import { CollectionGateway } from "@/components/home/CollectionGateway";
 import { ReassuranceBar } from "@/components/shared/ReassuranceBar";
+import { Reveal } from "@/components/shared/ScrollReveal";
 import {
   Button,
   SectionWrapper,
@@ -25,7 +26,7 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
 
   return (
     <div className="bg-brand-black">
-      {/* 1. Hero vidéo */}
+      {/* 1. Hero vidéo — pas de reveal (above the fold) */}
       <section className="hero-home relative min-h-[72dvh] md:min-h-[80vh] flex items-center justify-center text-center overflow-hidden md:isolate z-0">
         <HeroVideoBackground />
         <div className="hero-home-content relative z-10 px-4 py-10 max-w-3xl pointer-events-none">
@@ -53,69 +54,89 @@ export function HomePageClient({ initialProducts }: { initialProducts: Product[]
       {/* 2. Bande réassurance */}
       <ReassuranceBar />
 
-      {/* 3. Deux portes d'entrée */}
+      {/* 3. Deux portes d'entrée (reveal + stagger interne) */}
       <CollectionGateway />
 
       {/* 4. Best-sellers */}
       <SectionWrapper compact className="pt-0 pb-6 md:pb-8 cv-auto">
-        <div className="text-center mb-8 md:mb-10">
+        <Reveal className="text-center mb-8 md:mb-10">
           <p className="luxury-eyebrow mb-3">{t("home.bestSellersEyebrow")}</p>
           <h2 className="luxury-title">{t("home.collectionTitle")}</h2>
-        </div>
+        </Reveal>
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {products.slice(0, 3).map((p) => (
-            <div key={p.slug} className="min-w-0">
+          {products.slice(0, 3).map((p, i) => (
+            <Reveal key={p.slug} stagger={i * 0.1} className="min-w-0">
               <ProductCard product={p} premium />
-            </div>
+            </Reveal>
           ))}
         </div>
       </SectionWrapper>
 
       {/* 5. Bénéfices / marque */}
       <SectionWrapper compact className="cv-auto">
-        <SectionHeader
-          eyebrow={t("home.qualityEyebrow")}
-          title={t("home.qualityTitle")}
-          description={t("home.qualityDescription")}
-          premium
-        />
+        <Reveal>
+          <SectionHeader
+            eyebrow={t("home.qualityEyebrow")}
+            title={t("home.qualityTitle")}
+            description={t("home.qualityDescription")}
+            premium
+          />
+        </Reveal>
         <div className="grid md:grid-cols-3 gap-5 md:gap-6 mt-8 md:mt-10">
-          <FeatureCard icon={Gem} title={t("home.feature1Title")} description={t("home.feature1Desc")} />
-          <FeatureCard icon={Truck} title={t("home.feature2Title")} description={t("home.feature2Desc")} />
-          <FeatureCard icon={ShieldCheck} title={t("home.feature3Title")} description={t("home.feature3Desc")} />
+          <Reveal stagger={0}>
+            <FeatureCard icon={Gem} title={t("home.feature1Title")} description={t("home.feature1Desc")} />
+          </Reveal>
+          <Reveal stagger={0.1}>
+            <FeatureCard icon={Truck} title={t("home.feature2Title")} description={t("home.feature2Desc")} />
+          </Reveal>
+          <Reveal stagger={0.2}>
+            <FeatureCard icon={ShieldCheck} title={t("home.feature3Title")} description={t("home.feature3Desc")} />
+          </Reveal>
         </div>
       </SectionWrapper>
 
       <SectionWrapper compact>
-        <AlternatingSection title={t("home.aboutTitle")} image={HOME_SECTION_IMAGES.about} imageAlt="GUMÜÇROYAL">
-          <p className="font-light tracking-wide">{t("home.aboutP1")}</p>
-          <p className="font-light tracking-wide">{t("home.aboutP2")}</p>
-          <Link href="/about" className="inline-block mt-6 text-brand-gold text-sm uppercase tracking-[0.2em] hover:text-brand-gold-light transition-colors">
-            {t("common.readMore")}
-          </Link>
-        </AlternatingSection>
+        <Reveal>
+          <AlternatingSection title={t("home.aboutTitle")} image={HOME_SECTION_IMAGES.about} imageAlt="GUMÜÇROYAL">
+            <p className="font-light tracking-wide">{t("home.aboutP1")}</p>
+            <p className="font-light tracking-wide">{t("home.aboutP2")}</p>
+            <Link href="/about" className="inline-block mt-6 text-brand-gold text-sm uppercase tracking-[0.2em] hover:text-brand-gold-light transition-colors">
+              {t("common.readMore")}
+            </Link>
+          </AlternatingSection>
+        </Reveal>
       </SectionWrapper>
 
       <SectionWrapper compact>
-        <BrandCommitmentSection />
+        <Reveal>
+          <BrandCommitmentSection />
+        </Reveal>
       </SectionWrapper>
 
       <SectionWrapper compact className="cv-auto">
-        <SectionHeader title={t("home.faqTitle")} description={t("home.faqDescription")} premium />
+        <Reveal>
+          <SectionHeader title={t("home.faqTitle")} description={t("home.faqDescription")} premium />
+        </Reveal>
         <div className="mt-8 space-y-4 max-w-3xl mx-auto">
-          <FAQItem question={t("home.faq1Q")} answer={t("home.faq1A")} />
-          <FAQItem question={t("home.faq2Q")} answer={t("home.faq2A")} />
-          <FAQItem question={t("home.faq3Q")} answer={t("home.faq3A")} />
+          <Reveal stagger={0}>
+            <FAQItem question={t("home.faq1Q")} answer={t("home.faq1A")} />
+          </Reveal>
+          <Reveal stagger={0.1}>
+            <FAQItem question={t("home.faq2Q")} answer={t("home.faq2A")} />
+          </Reveal>
+          <Reveal stagger={0.1}>
+            <FAQItem question={t("home.faq3Q")} answer={t("home.faq3A")} />
+          </Reveal>
         </div>
       </SectionWrapper>
 
       <SectionWrapper compact className="pb-16 md:pb-20">
-        <div className="text-center">
+        <Reveal className="text-center">
           <h2 className="luxury-title mb-6 md:mb-8">{t("home.ctaTitle")}</h2>
           <Link href="/collection">
             <Button>{t("common.shopNow")}</Button>
           </Link>
-        </div>
+        </Reveal>
       </SectionWrapper>
     </div>
   );

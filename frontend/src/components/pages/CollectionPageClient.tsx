@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { Product } from "@/types/product";
 import { ProductCard } from "@/components/product/ProductComponents";
 import { SectionWrapper } from "@/components/shared/UI";
+import { Reveal } from "@/components/shared/ScrollReveal";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { COLLECTIONS, type CollectionSlug } from "@/lib/collectionConfig";
 
@@ -62,19 +63,20 @@ export function CollectionPageClient({ initialProducts, collection }: Props) {
 
         <SectionWrapper dark>
           {products.length === 0 ? (
-            <p className="text-brand-white/50 text-center py-12">{t("collection.subtitle")}</p>
+            <Reveal>
+              <p className="text-brand-white/50 text-center py-12">{t("collection.subtitle")}</p>
+            </Reveal>
           ) : (
             <div className="grid md:grid-cols-3 gap-8 cv-auto">
-              {products.map((p) => (
-                <div key={p.slug} className="min-w-0">
+              {products.map((p, i) => (
+                <Reveal key={p.slug} stagger={i * 0.1} className="min-w-0">
                   <ProductCard product={p} />
-                </div>
+                </Reveal>
               ))}
             </div>
           )}
 
-          {/* Lien discret vers l'autre collection */}
-          <div className="mt-14 md:mt-16 pt-8 border-t border-brand-gold/10 text-center">
+          <Reveal className="mt-14 md:mt-16 pt-8 border-t border-brand-gold/10 text-center">
             <Link
               href={`/collection/${otherSlug}`}
               className="text-brand-white/50 hover:text-brand-gold text-sm uppercase tracking-[0.15em] transition-colors duration-300"
@@ -82,7 +84,7 @@ export function CollectionPageClient({ initialProducts, collection }: Props) {
             >
               {discoverOther}
             </Link>
-          </div>
+          </Reveal>
         </SectionWrapper>
       </div>
     );
@@ -90,29 +92,32 @@ export function CollectionPageClient({ initialProducts, collection }: Props) {
 
   return (
     <SectionWrapper dark>
-      <h1 className="font-display text-4xl text-brand-gold mb-2">{t("collection.allTitle")}</h1>
-      <p className="text-brand-white/70 mb-10">{t("collection.allSubtitle")}</p>
+      <Reveal>
+        <h1 className="font-display text-4xl text-brand-gold mb-2">{t("collection.allTitle")}</h1>
+        <p className="text-brand-white/70 mb-10">{t("collection.allSubtitle")}</p>
+      </Reveal>
       <div className="grid md:grid-cols-3 gap-8 cv-auto">
-        {products.map((p) => (
-          <div key={p.slug} className="min-w-0">
+        {products.map((p, i) => (
+          <Reveal key={p.slug} stagger={i * 0.1} className="min-w-0">
             <ProductCard product={p} />
-          </div>
+          </Reveal>
         ))}
       </div>
 
       <div className="mt-12 grid md:grid-cols-2 gap-4 border-t border-brand-gold/10 pt-10">
-        {(["heritage", "signature"] as CollectionSlug[]).map((slug) => (
-          <Link
-            key={slug}
-            href={`/collection/${slug}`}
-            className="flex flex-col items-center justify-center gap-2 border border-brand-gold/20 hover:border-brand-gold/50 p-6 transition-colors duration-300 text-center"
-          >
-            <span className="luxury-eyebrow">{t(`collections.${slug}.tagline`)}</span>
-            <span className="font-display text-xl text-brand-gold">{t(`collections.${slug}.name`)}</span>
-            <span className="text-brand-white/50 text-xs uppercase tracking-[0.15em] mt-1">
-              {t(`collections.${slug}.discover`)} →
-            </span>
-          </Link>
+        {(["heritage", "signature"] as CollectionSlug[]).map((slug, i) => (
+          <Reveal key={slug} stagger={i * 0.1}>
+            <Link
+              href={`/collection/${slug}`}
+              className="luxury-card flex flex-col items-center justify-center gap-2 border border-brand-gold/20 hover:border-brand-gold/50 p-6 text-center"
+            >
+              <span className="luxury-eyebrow">{t(`collections.${slug}.tagline`)}</span>
+              <span className="font-display text-xl text-brand-gold">{t(`collections.${slug}.name`)}</span>
+              <span className="text-brand-white/50 text-xs uppercase tracking-[0.15em] mt-1">
+                {t(`collections.${slug}.discover`)} →
+              </span>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </SectionWrapper>

@@ -9,10 +9,9 @@ const HERO = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=192
 
 /**
  * Photos produits — frontend/public/Produit/
- * Tableau par produit : la 1ʳᵉ image est la principale (priorité de chargement),
- * les suivantes sont les angles + la photo portée (lazy) affichées dans la galerie.
- * Pour ajouter des photos : déposez les fichiers dans public/Produit/ puis ajoutez
- * leurs chemins ici (ex. ".../bague-lien-eternel-2.jpg", ".../bague-lien-eternel-porte.jpg").
+ * Tableau par produit :
+ * - images[0] = photo principale (cartes home/collection uniquement)
+ * - images[1+] = angles affichés sur la page produit (galerie swipe)
  */
 export const PRODUCT_PHOTOS = {
   "bague-lien-eternel": [

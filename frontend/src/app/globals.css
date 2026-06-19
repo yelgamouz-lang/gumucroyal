@@ -1249,6 +1249,13 @@ html[dir="rtl"] .header-nav-link {
   display: none;
 }
 
+/* Product gallery — native swipe carousel (mobile) */
+.product-gallery-track {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
 /* ── Scroll reveal (opacity + transform only, GPU-friendly) ── */
 .reveal {
   opacity: 0;

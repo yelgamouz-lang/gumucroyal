@@ -79,6 +79,14 @@ function GalleryPlaceholder({ name }: { name: string }) {
   );
 }
 
+/** PDP gallery slides: supplementary angles only (images[1+]). Card grids use images[0] separately. */
+function getGallerySlides(images: Product["images"]) {
+  const valid = images.filter((img) => img?.url);
+  if (valid.length === 0) return [];
+  if (valid.length === 1) return valid;
+  return valid.slice(1);
+}
+
 export function ProductGallery({
   images,
   productName,
@@ -88,17 +96,16 @@ export function ProductGallery({
   productName: string;
   priority?: boolean;
 }) {
+  const slides = getGallerySlides(images);
   const [active, setActive] = useState(0);
   const scrollerRef = useRef<HTMLDivElement>(null);
 
-  const valid = images.filter((img) => img && img.url);
-
-  if (valid.length === 0) {
+  if (slides.length === 0) {
     return <GalleryPlaceholder name={productName} />;
   }
 
-  const main = valid[active] || valid[0];
-  const multi = valid.length > 1;
+  const current = slides[active] ?? slides[0];
+  const multi = slides.length > 1;
 
   const scrollToIndex = (i: number) => {
     const el = scrollerRef.current;
@@ -108,28 +115,30 @@ export function ProductGallery({
 
   const handleScroll = () => {
     const el = scrollerRef.current;
-    if (!el) return;
+    if (!el || el.clientWidth === 0) return;
     const idx = Math.round(el.scrollLeft / el.clientWidth);
-    setActive(Math.max(0, Math.min(valid.length - 1, idx)));
+    setActive(Math.max(0, Math.min(slides.length - 1, idx)));
   };
 
   return (
-    <div className="min-w-0">
-      {/* Mobile — swipeable carousel */}
+    <div className="min-w-0" role="region" aria-label={productName}>
+      {/* Mobile — swipe between supplementary angles only */}
       <div className="md:hidden">
         <div
           ref={scrollerRef}
           onScroll={handleScroll}
-          className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-lg"
+          className="product-gallery-track flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-lg touch-pan-x"
+          aria-roledescription="carousel"
         >
-          {valid.map((img, i) => (
+          {slides.map((img, i) => (
             <div
               key={img.url}
-              className="snap-center shrink-0 basis-full aspect-square relative overflow-hidden bg-brand-black"
+              className="snap-start snap-always shrink-0 basis-full aspect-square relative overflow-hidden bg-brand-black"
+              aria-hidden={i !== active}
             >
               <OptimizedImage
                 src={img.url}
-                alt={img.alt || productName}
+                alt={img.alt || `${productName} — ${i + 1}`}
                 fill
                 priority={priority && i === 0}
                 sizes="100vw"
@@ -138,14 +147,15 @@ export function ProductGallery({
           ))}
         </div>
         {multi && (
-          <div className="flex justify-center gap-2 mt-3">
-            {valid.map((img, i) => (
+          <div className="flex justify-center gap-2 mt-3" role="tablist" aria-label={`${productName} photos`}>
+            {slides.map((img, i) => (
               <button
                 key={img.url}
                 type="button"
+                role="tab"
                 onClick={() => scrollToIndex(i)}
                 aria-label={`${productName} ${i + 1}`}
-                aria-current={i === active}
+                aria-selected={i === active}
                 className={cn(
                   "h-2 rounded-full transition-all duration-300",
                   i === active ? "w-6 bg-brand-gold" : "w-2 bg-brand-gold/30"
@@ -156,13 +166,13 @@ export function ProductGallery({
         )}
       </div>
 
-      {/* Desktop — main image + thumbnails */}
+      {/* Desktop — active angle + thumbnail strip (no duplicate of card hero photo) */}
       <div className="hidden md:block">
         <div className="aspect-square relative overflow-hidden bg-brand-black mb-3 rounded-lg">
-          {main && (
+          {current && (
             <OptimizedImage
-              src={main.url}
-              alt={main.alt || productName}
+              src={current.url}
+              alt={current.alt || productName}
               fill
               priority={priority}
               sizes="50vw"
@@ -170,16 +180,17 @@ export function ProductGallery({
           )}
         </div>
         {multi && (
-          <div className="grid grid-cols-4 gap-2">
-            {valid.map((img, i) => (
+          <div className={cn("grid gap-2", slides.length === 2 ? "grid-cols-2" : "grid-cols-4")}>
+            {slides.map((img, i) => (
               <button
                 key={img.url}
                 type="button"
                 onClick={() => setActive(i)}
                 aria-label={`${productName} ${i + 1}`}
+                aria-current={i === active}
                 className={cn(
-                  "aspect-square relative overflow-hidden rounded-md border-2 transition-colors",
-                  i === active ? "border-brand-gold" : "border-transparent opacity-70 hover:opacity-100"
+                  "aspect-square relative overflow-hidden rounded-md border-2 transition-all duration-300",
+                  i === active ? "border-brand-gold opacity-100" : "border-transparent opacity-70 hover:opacity-100"
                 )}
               >
                 <OptimizedImage src={img.url} alt={img.alt || productName} fill sizes="120px" />
